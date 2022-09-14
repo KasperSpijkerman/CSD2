@@ -1,1 +1,2 @@
-Dit is de repository voor CSD2 van Kasper. Hierin komen alle huiswerk opdrachten van dit jaar.  
+This is the git repository for CSD2 from Kasper Spijkerman. All the assignments of the 2nd year 
+will be located here.   
