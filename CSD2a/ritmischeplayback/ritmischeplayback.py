@@ -14,14 +14,14 @@ rhythm = []
 #verschillende waardes voor in de lijst
 #vullen lijsten met hoe vaak de gebruiker invult.
 for i in range(0,numPlaybackTimes):
-    playtime = float(input("Fill in the time in (s) between the samples and press enter: "))
+    noteValue = float(input("Fill in the time in (s) between the samples and press enter: "))
 
-    rhythm.append(playtime)
+    rhythm.append(noteValue)
 
 print(rhythm)
-bpm = float(input("Fill in the bpm for the speed (120 is regular): ") )
-bpm = bpm/120
-rhythmBpm = [rhythmInS / bpm for rhythmInS in rhythm]
+bpm = float(input("Fill in the bpm for the speed: ") )
+timeperbeat = 60/bpm
+rhythmBpm = [rhythmInS * timeperbeat for rhythmInS in rhythm]
 print(rhythmBpm)
 
 # bestand kiezen voor sample
