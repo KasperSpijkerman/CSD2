@@ -20,17 +20,17 @@ for i in range(0,numPlaybackTimes):
 
 print(rhythm)
 bpm = float(input("Fill in the bpm for the speed: ") )
-timeperbeat = 60/bpm
-rhythmBpm = [rhythmInS * timeperbeat for rhythmInS in rhythm]
-print(rhythmBpm)
+dur_quarter = 60/bpm
+timeDurations = [rhythmInS * dur_quarter for rhythmInS in rhythm]
+print(timeDurations)
 
 # bestand kiezen voor sample
 wave_obj = sa.WaveObject.from_wave_file("assets/SD_Kick_Onset.wav")
 
 #sample afspelen aantal keer dat die is ingevoerd en wachten tot het klaar is.
-for numPlaybackTimes in range(len(rhythmBpm)):
+for numPlaybackTimes in range(len(timeDurations)):
     play_obj = wave_obj.play()
-    play_obj.wait_done()
-    time.sleep(rhythmBpm[numPlaybackTimes])
+    # play_obj.wait_done()
+    time.sleep(timeDurations[numPlaybackTimes])
         
 
