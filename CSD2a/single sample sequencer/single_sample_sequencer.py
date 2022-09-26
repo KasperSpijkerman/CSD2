@@ -4,43 +4,64 @@ import time
 #input username for walk through user
 username = input("Enter Username: ")
 print("Hello " + username) 
-print('This is a rhythmical sample player')
+print('This is a Single Sample Sequencer')
+bpm = 120
+quarterNoteDuration = 60 / bpm
+sixteenthNoteDuration = quarterNoteDuration/4
+print("The default bpm is:", bpm)
+bpm = int(input("Input the bpm: "))
+
+# empty timestamp list, will be filled in based on bpm and timestamps in 16th
+timestamps = []
+
+#empty list for 16th timestamps
+timestamps16th = []
+
+#list with possible notedurations
+noteDurations = []
 
 #input for amount of playback times
-numPlaybackTimes = int(input('Fill in the times of playback of the sample: '))
-#empty list for the time between the samples
-rhythm = []
+sampleAmount = int(input("Input the amount of samples: "))
+loopPlayback = int(input("Input the amount of loops: "))
 
-#verschillende waardes voor in de lijst
-#vullen lijsten met hoe vaak de gebruiker invult.
-for i in range(0,numPlaybackTimes):
-    noteValue = float(input("Fill in the note durations "))
 
-    rhythm.append(noteValue)
+#input for notedurations
+for i in range(0,sampleAmount):
+    noteDuration = float(input("Fill in the note durations "))
 
-print(rhythm)
-bpm = float(input("Fill in the bpm for the duration of a quarter note ") )
-dur_quarter = 60/bpm
-time_Durations = [rhythmInS * dur_quarter for rhythmInS in rhythm]
-print(time_Durations)
+    noteDurations.append(noteDuration) 
+print("Note durations are: ", noteDurations)
 
-#transform time durations into timestamp sequence. 
-seq_Timestamps = []
+#function for converting durations to 16th timestamps.
+def durationsToTimestamps16th(noteduration):
+    sum = 0
+    timestamps16th.append(sum)
+    for  noteduration in noteDurations:
+        sum = sum + 4* noteduration 
+        timestamps16th.append(sum)
+    return(timestamps16th)
 
-#sum the durations for time sequence
-sum = 0
-for time_dur in time_Durations:
-    seq_Timestamps.append(sum)
-    sum = sum + time_dur
-print(seq_Timestamps)
+timestamps16th = durationsToTimestamps16th(noteDurations)
+print("Timestamps in 16thn notes are: ", timestamps16th)
+
+
+def timestampBPMinput(bpm, timestamps16th):
+    quarterNoteDuration = 60 / bpm
+    sixteenthNoteDuration = quarterNoteDuration/4
+    for timestamp in timestamps16th:
+        timestamps.append(timestamp * sixteenthNoteDuration)
+
+    print("The timestamps based on bpm are: ",timestamps)
+
+timestampBPMinput(bpm, timestamps16th)
 
 
 # choose sample file
 wave_obj = sa.WaveObject.from_wave_file("assets/SD_Kick_Onset.wav")
 
 #get the timestamp 
-if seq_Timestamps:
-    ts = seq_Timestamps.pop(0)
+if timestamps:
+    ts = timestamps.pop(0)
 else:
     print("no timestamps so sequence stops")
 
@@ -56,12 +77,13 @@ while True:
     #check if the timestamp has been reached and play sample if so, stop loop if no timestamps.
     if(now >= ts):
         play_obj = wave_obj.play()
-        if(seq_Timestamps):
-            ts = seq_Timestamps.pop(0)
+        if(timestamps):
+            ts = timestamps.pop(0)
         else:
             break
-    time.sleep(0.001)
+        time.sleep(0.001)
+    
 
-time.sleep(time_Durations[-1])
+#  time.sleep(noteDurations[-1])
 
 
