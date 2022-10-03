@@ -7,7 +7,7 @@ Kick = sa.WaveObject.from_wave_file("assets/SD_Kick_Battalion.wav"),
 Snare = sa.WaveObject.from_wave_file("assets/SD_Snare_Bewitch.wav"),
 Hat  =  sa.WaveObject.from_wave_file("assets/SD_ClHat_Cherry.wav")
 
-#Events
+#Link the samples to a name in a dictionary
 kick_event = {
     "Name": "Kick",
     "Instrument": Kick
@@ -22,10 +22,7 @@ hat_event = {
     "Name": "Hat",
     "Instrument": Hat,
     }
-
-#list with note durations
-note_durations = []
-time_stamps = []
+#input BPM
 #gebasseerd op de les
 correctInput = False
 bpm = 120
@@ -48,7 +45,10 @@ while (not correctInput):
 
 print("Bpm is: ", bpm)
 
-note_durations = [1,2,1,1]
+#Note durations pre generated, to do - > input
+note_durations_kick = [1,2,1,1]
+note_durations_snare = [2,1,3,1]
+note_durations_hat = [0.5,0.5,0.5,0.5]
 
 #function for converting notedurations to timedurations.
 def note_dur_to_td(note_durations,bpm):
@@ -61,8 +61,13 @@ def note_dur_to_td(note_durations,bpm):
     return time_durations
 
 #fill the time durations array with time durations calculated from note durations
-time_durations = note_dur_to_td(note_durations,bpm)
-print(time_durations)
+#for every seperate sample
+time_durations_kick = note_dur_to_td(note_durations_kick,bpm)
+time_durations_snare = note_dur_to_td(note_durations_snare,bpm)
+time_durations_hat = note_dur_to_td(note_durations_hat,bpm)
+print("Kick Time durations: ", time_durations_kick)
+print("Snare Time durations: ", time_durations_snare)
+print("Hat Time durations: ", time_durations_hat)
 
 #function converting time durations to timestamps
 def time_dur_to_ts(time_durations):
@@ -75,78 +80,69 @@ def time_dur_to_ts(time_durations):
         timestamp += time_dur
 
     return time_stamps
-time_stamps = time_dur_to_ts(time_durations)
-
-print(time_stamps)
-
-#Function for adding timestamp to kickevent
-def create_events(event):
-    for i in range(len(time_stamps)):
-        event['Timestamp'+str(i)] = time_stamps[i]
 
 
-# events_sequence = {"Sample": "", "ts": 0.0}
-# def add_timestamp(timestamp,event,eventnumber):
-#     for i in range(len(time_stamps)):
-#         event["Timestamp"] = time_stamps[]
+time_stamps_kick = time_dur_to_ts(time_durations_kick)
+time_stamps_snare = time_dur_to_ts(time_durations_snare)
+time_stamps_hat = time_dur_to_ts(time_durations_hat)
 
-create_events(kick_event)
-create_events(snare_event)
-print(kick_event)
-print(snare_event)
-# add_timestamp(time_stamps,kick_event)
-# print(events_sequence)
-        
-# for sample, timestamp in kick_event.items()
-#         events_sequence["Sample"] = event["Name"]
-#         events_sequence["ts"] = time_stamps
+#printing the different timestamps 
+print("Timestamps Kick: ",time_stamps_kick)
+print("Timestamps Snare: ",time_stamps_snare)
+print("Timestamps Hat: ",time_stamps_hat)
 
 
+#Function for adding timestamp to event dictionairies
+#Input the name of the instrument and the timestamp
+def create_events(nametag,timestamps):
+    #dictionary for event
+    event_dict = {}
+    #list with different events
+    events_list = []
+    #Create different dictionaries and add them to a list
+    for i in range(len(timestamps)): 
+        event_dict = {"sample":nametag, "Ts": timestamps[i]}
+        events_list.append(event_dict.copy())
+    return events_list
 
 
+#executing the functions to generate different lists with timestamps per instrument
+ts_kick_events = create_events(kick_event["Name"],time_stamps_kick)
+ts_snare_events = create_events(snare_event["Name"],time_stamps_snare)
+ts_hat_events = create_events(hat_event["Name"],time_stamps_hat)
+#printing the function outputs
+print(ts_kick_events)
+print(ts_snare_events)
+print(ts_hat_events)
 
 
-
-
+#merge events
+def merge_samples(kickevent,snareevent,hatevent):
+	merged_events = kickevent | snareevent | hatevent
+	return merged_events
+events_sequence = merge_samples(kick_event,snare_event,hat_event)
+print(events_sequence)
 
 #Function for playing the sample on timestamp
 
-# def play_samples(event):
-#     event['instrument'].play()
+# def play_samples(event,timestamp):
+#     event['Name'].play()
 # # print("the Timestamps are: ",time_stamps)
-
-#sequence maken die bestaat uit events
-#sample select maken bij verschillende timestamps
-# for timestamps in time_stamps:
-#     samples["TimestampKick"] = time_stamps[0]
-#     samples["TimestampKick"] = time_stamps[1]
-#     samples["TimestampKick"] = time_stamps[3]
-
-# print(samples["TimestampKick"])
-# #to do: dictionary maken met samples, namen en timestamps
-# #minimaal 16 events 
-# #koppeling timestamp en sample 
-
-# #get the timestamp 
-# if time_stamps:
-#     ts = time_stamps.pop(0)
-# else:
-#     print("No timestamps so sequence stops")
-
 
 # # store the current time
 # time_start = time.time()
 # print("time zero:", time_start)
 
-#afspelen van de sequence ->nog aanpassen
+# # afspelen van de sequence ->nog aanpassen
 # while True:
 #     now = time.time() - time_start
+#     if()
 #     #check if the timestamp has been reached and play sample if so, stop loop if no timestamps.
-#     if(now >= ):
-#         play_obj = samples[].play()
-#         if(time_stamps):
-#             ts = time_stamps.pop(0)
-#         else:
-#             break
-#         time.sleep(0.001)
+# #     if(now >= tim ):
+# #         play_obj = samples[].play()
+# #         if(time_stamps):
+# #             ts = time_stamps.pop(0)
+# #         else:
+# #             break
+# #         time.sleep(0.001)
 
