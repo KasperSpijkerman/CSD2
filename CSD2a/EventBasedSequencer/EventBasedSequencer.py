@@ -3,14 +3,14 @@ import simpleaudio as sa
 import random as ra
 
 #Samples 
-Kick = sa.WaveObject.from_wave_file("assets/SD_Kick_Battalion.wav"),
-Snare = sa.WaveObject.from_wave_file("assets/SD_Snare_Bewitch.wav"),
-Hat  =  sa.WaveObject.from_wave_file("assets/SD_ClHat_Cherry.wav")
+Kick= sa.WaveObject.from_wave_file("assets/SD_Kick_Battalion.wav")
+Snare= sa.WaveObject.from_wave_file("assets/SD_Snare_Bewitch.wav")
+Hat=  sa.WaveObject.from_wave_file("assets/SD_ClHat_Cherry.wav")
 
 #Link the samples to a name in a dictionary
 kick_event = {
     "Name": "Kick",
-    "Instrument": Kick
+    "Instrument": Kick,
     }
 
 snare_event = {
@@ -92,57 +92,59 @@ print("Timestamps Snare: ",time_stamps_snare)
 print("Timestamps Hat: ",time_stamps_hat)
 
 
-#Function for adding timestamp to event dictionairies
-#Input the name of the instrument and the timestamp
+#function for adding timestamp to event dictionairies
+#input the name of the instrument and the timestamp
 def create_events(nametag,timestamps):
-    #dictionary for event
+    #dictionary for 1 event
     event_dict = {}
-    #list with different events
+    #empty list for different events
     events_list = []
-    #Create different dictionaries and add them to a list
+    #create different dictionaries and add them to a list
+    #creating copies of the event dict otherwise it will just output 1 dict.
     for i in range(len(timestamps)): 
-        event_dict = {"sample":nametag, "Ts": timestamps[i]}
+        event_dict = {"Sample":nametag, "Ts": timestamps[i]}
         events_list.append(event_dict.copy())
     return events_list
 
 
 #executing the functions to generate different lists with timestamps per instrument
-ts_kick_events = create_events(kick_event["Name"],time_stamps_kick)
-ts_snare_events = create_events(snare_event["Name"],time_stamps_snare)
-ts_hat_events = create_events(hat_event["Name"],time_stamps_hat)
+ts_kick_events = create_events(kick_event["Instrument"],time_stamps_kick)
+ts_snare_events = create_events(snare_event["Instrument"],time_stamps_snare)
+ts_hat_events = create_events(hat_event["Instrument"],time_stamps_hat)
 #printing the function outputs
-print(ts_kick_events)
-print(ts_snare_events)
-print(ts_hat_events)
+print("The Kick events: ",ts_kick_events)
+print("The Snare events: ",ts_snare_events)
+print("The Hat events: ", ts_hat_events)
+
+#merge all seperate events to 1 list
+all_events_list = ts_kick_events + ts_snare_events + ts_hat_events
+
+print("All Events: ",all_events_list)
+
+#sort the event list based on timestamp
+all_sortedevents_list = sorted(all_events_list, key=lambda d: d['Ts']) 
+
+print("All events sorted", all_sortedevents_list)
+
+#a function for playing the sample
+def play_event(event):
+    print(event['Sample'])
+    event['Sample'].play()
 
 
-#merge events
-def merge_samples(kickevent,snareevent,hatevent):
-	merged_events = kickevent | snareevent | hatevent
-	return merged_events
-events_sequence = merge_samples(kick_event,snare_event,hat_event)
-print(events_sequence)
+# store the current time
+time_start = time.time()
+print("Start ", time_start)
 
-#Function for playing the sample on timestamp
+#Play sequence according to timestamp and instrument
+while True:
+    now = time.time() - time_start
+    for i in range(len(all_sortedevents_list)):
+        if now >= all_sortedevents_list[i]["Ts"]:
+            play_event(all_sortedevents_list[i])
+            time.sleep(0.1)
+            play_event(all_sortedevents_list[i])
 
-# def play_samples(event,timestamp):
-#     event['Name'].play()
-# # print("the Timestamps are: ",time_stamps)
-
-# # store the current time
-# time_start = time.time()
-# print("time zero:", time_start)
-
-# # afspelen van de sequence ->nog aanpassen
-# while True:
-#     now = time.time() - time_start
-#     if()
-#     #check if the timestamp has been reached and play sample if so, stop loop if no timestamps.
-# #     if(now >= tim ):
-# #         play_obj = samples[].play()
-# #         if(time_stamps):
-# #             ts = time_stamps.pop(0)
-# #         else:
-# #             break
-# #         time.sleep(0.001)
+            
+            
 
