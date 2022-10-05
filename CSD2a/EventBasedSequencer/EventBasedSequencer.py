@@ -9,17 +9,17 @@ Hat=  sa.WaveObject.from_wave_file("assets/SD_ClHat_Cherry.wav")
 
 #Link the samples to a name in a dictionary
 kick_event = {
-    "Name": "Kick",
+    'Name': "Kick",
     "Instrument": Kick,
     }
 
 snare_event = {
-    "Name": "Snare",
+    'Name': "Snare",
     "Instrument": Snare,
     }
 
 hat_event = {
-    "Name": "Hat",
+    'Name': "Hat",
     "Instrument": Hat,
     }
 #input BPM
@@ -94,7 +94,7 @@ print("Timestamps Hat: ",time_stamps_hat)
 
 #function for adding timestamp to event dictionairies
 #input the name of the instrument and the timestamp
-def create_events(nametag,timestamps):
+def create_events(sample,timestamps,name):
     #dictionary for 1 event
     event_dict = {}
     #empty list for different events
@@ -102,15 +102,15 @@ def create_events(nametag,timestamps):
     #create different dictionaries and add them to a list
     #creating copies of the event dict otherwise it will just output 1 dict.
     for i in range(len(timestamps)): 
-        event_dict = {"Sample":nametag, "Ts": timestamps[i]}
+        event_dict = {"Sample":sample, "Name":name, "Ts": timestamps[i]}
         events_list.append(event_dict.copy())
     return events_list
 
 
 #executing the functions to generate different lists with timestamps per instrument
-ts_kick_events = create_events(kick_event["Instrument"],time_stamps_kick)
-ts_snare_events = create_events(snare_event["Instrument"],time_stamps_snare)
-ts_hat_events = create_events(hat_event["Instrument"],time_stamps_hat)
+ts_kick_events = create_events(kick_event["Instrument"],time_stamps_kick,kick_event["Name"])
+ts_snare_events = create_events(snare_event["Instrument"],time_stamps_snare,snare_event["Name"] )
+ts_hat_events = create_events(hat_event["Instrument"],time_stamps_hat,hat_event["Name"])
 #printing the function outputs
 print("The Kick events: ",ts_kick_events)
 print("The Snare events: ",ts_snare_events)
@@ -128,8 +128,18 @@ print("All events sorted", all_sortedevents_list)
 
 #a function for playing the sample
 def play_event(event):
-    print(event['Sample'])
+    print(event["Name"])
+    print(event["Ts"])
     event['Sample'].play()
+
+#UI input for turning the sequence on
+on = False
+switch_seq = input("Play the sequence? y/n:")
+if switch_seq == "y":
+    on = True
+
+if switch_seq == "n":
+    on = False
 
 
 # store the current time
@@ -137,13 +147,13 @@ time_start = time.time()
 print("Start ", time_start)
 
 #Play sequence according to timestamp and instrument
-while True:
+while on == True:
     now = time.time() - time_start
     for i in range(len(all_sortedevents_list)):
         if now >= all_sortedevents_list[i]["Ts"]:
             play_event(all_sortedevents_list[i])
             time.sleep(0.1)
-            play_event(all_sortedevents_list[i])
+            # play_event(all_sortedevents_list[i])
 
             
             
