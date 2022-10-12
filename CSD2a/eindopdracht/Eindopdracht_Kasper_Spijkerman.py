@@ -18,7 +18,7 @@ Kick= sa.WaveObject.from_wave_file("assets/SD_Kick_Battalion.wav")
 Snare= sa.WaveObject.from_wave_file("assets/SD_Snare_Bewitch.wav")
 Hat=  sa.WaveObject.from_wave_file("assets/SD_ClHat_Cherry.wav")
 
-#Events with names
+#Dicts with names
 kick_dict = {
     'Name': "Kick",
     "Instrument": Kick,
@@ -33,6 +33,14 @@ hat_dict = {
     'Name': "Hat",
     "Instrument": Hat,
     }
+
+#setting default values for midi export
+velocity= 80
+track = 0
+channel = 10 # corresponds to channel 10 drums
+
+
+
 
 #list with instruments dicts to choose from 
 instruments = [kick_dict,snare_dict,hat_dict]
@@ -73,10 +81,10 @@ def calculate_durations(steps,notes):
 def note_dur_to_td(note_durations,bpm):
     
     time_durations = []
-    dur_bpm = 60/bpm
+    dur_quarter = 60/bpm
 
     for note_dur in note_durations:
-        time_durations.append(note_dur * dur_bpm)
+        time_durations.append(note_dur * dur_quarter)
     return time_durations
 
 #function for calculating timestamps
@@ -139,6 +147,55 @@ while (not correctInput):
 
 print("Bpm is: ", bpm)
 
+#executing functions for converting values to timestamps
+time_durations = note_dur_to_td(note_durations,bpm)
+print("The Time Durations between the notes are:",time_durations)
+timestamps = time_dur_to_ts(time_durations)
+print("The timestamps are:",timestamps)
+
+ts_kick_events = create_events(kick_dict["Instrument"],timestamps,kick_dict["Name"])
+
+#print the events
+print("The Kick events: ",ts_kick_events)
+
+
+#add all the events to a combined list
+all_events_list = ts_kick_events #+ ts_snare_events + ts_hat_events
+
+#sort the list based on timestamps
+all_sortedevents_list = sorted(all_events_list, key=lambda d: d['Ts']) 
+
+#play the sequence when the user inputs y
+on = False
+switch_seq = input("Play the sequence? y/n:")
+if switch_seq == "y":
+    on = True
+
+if switch_seq == "n":
+    on = False
+
+
+def play_event(event):
+    print(event["Name"])
+    print(event["Ts"])
+    event['Sample'].play()
+
+# store the current time
+time_start = time.time()
+print("Start ", time_start)
+
+#Play sequence according to timestamp and instrument
+while on == True:
+    now = time.time() - time_start
+    for i in range(len(all_sortedevents_list)):
+        if now >= all_sortedevents_list[i]["Ts"]:
+            play_event(all_sortedevents_list[i])
+            all_sortedevents_list.pop(0)
+            time.sleep(0.1)
+            # play_event(all_sortedevents_list[i])
+
+
+
 
 
 #input for storing midifile
@@ -149,29 +206,33 @@ if store == "Y":
     #Function for exporting the midi ->
 
 
-# #setting default values for midi export
-# velocity= 80
-# track = 0
-# channel = 10 # corresponds to channel 10 drums
+# create the MIDIfile object, to which we can add notes
+midi_file = MIDIFile(1)
+# set name and tempo
+time_beginning = 0
+midi_file.addTrackName(track, time_beginning, "Beat Sample Track")
+midi_file.addTempo(track, time_beginning, bpm)
 
 
-# # create the MIDIfile object, to which we can add notes
-# mf = MIDIFile(1)
-# # set name and tempo
-# time_beginning = 0
-# mf.addTrackName(track, time_beginning, "Beat Sample Track")
-# mf.addTempo(track, time_beginning, bpm)
+#additional values
+quarter_note_dur = 60 / bpm
+instr_midi_pitch = {
+    "Kick": 35,
+    "Snare": 38,
+    "Hat": 40
+}
 
 
-# for event in events:
-#     # transform time (sec) to (qnote)
-#     qnote_time = event["timestamp"] / qnote_dur
-#     instr_name = event["instr_name"]
-#     mf.addNote(track, channel, instr_midi_pitch[instr_name], qnote_time,
-#         event['note_dur'], velocity)
+def add_events_to_midi(events):
+    for event in events:
+        # transform time (sec) to (qnote)
+        qnote_time = event["timestamp"] / quarter_note_dur
+        instr_name = event["instr_name"]
+        midi_file.addNote(track, channel, instr_midi_pitch[instr_name], qnote_time,
+            event['note_dur'], velocity)
 
-# with open("events_lists.midi",'wb') as outf:
-#     mf.writeFile(outf)
+with open("events_lists.midi",'wb') as outf:
+    midi_file.writeFile(outf)
 
 
 
