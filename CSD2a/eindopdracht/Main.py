@@ -6,6 +6,7 @@
 
 #import modules
 import time
+from timeit import repeat
 import simpleaudio as sa
 import random as ra
 from midiutil import MIDIFile
@@ -29,41 +30,15 @@ while True:
     print("Time Signature is: ", time_sig)
     #checking the user input and executing the function
     #To do fix correctinput
+    keep_default = ui.keep_default
+    bpm = ui.bpm
     
     #UI for loop amount
     loop_amount = ui.loop_amount
     print("Loop amount is: ", loop_amount)
 
-    #input for bpm
-    correctInput = False
-    bpm = 120
-    #Check the bpm and see if it is the right value. 
-
-    default_bpm = True
-
-    keep_default = ui.keep_default
-
-    if keep_default == "n":
-        default_bpm = False
-    else:
-        default_bpm = True
 
 
-    if default_bpm == False:
-        while (not correctInput):
-            user_bpm = ui.user_bpm
-
-            # check if we 'received' an empty string
-            if not user_bpm:
-                # empty string --> use default
-                correctInput = True
-            else:
-                try:
-                    bpm = float(user_bpm)
-                    correctInput = True
-                except:
-                    print("Incorrect input - please enter a bpm (or enter nothing - default bpm)")
-    print("Bpm is: ", bpm)
 
  
     #executing the functions all together to make a list of events based on time signature.
@@ -90,18 +65,8 @@ while True:
         on = False
 
 
-    #input for storing midifile
-    export_true = False
-    store = ui.store
 
-    if store == "y":
-        export_true = True
-        #Function for exporting the midi ->
-    else:
-        export_true = False
-
-    if export_true == True:
-        fnc.add_events_to_midi(all_sortedevents_list,fnc.quarter_note_dur)
+    fnc.add_events_to_midi(all_sortedevents_list,fnc.quarter_note_dur)
 
     # store the current time
     time_start = time.time()
@@ -110,7 +75,7 @@ while True:
 
 
     #Play sequence according to timestamp and instrument
-    while True:
+    while on == True:
             now = time.time() - time_start
             #play samples if timestamp is reached
             if now >= all_sortedevents_list[i]["Ts"]:
@@ -121,12 +86,26 @@ while True:
                     break
             #if every sample has played quit.
             if(i == len(all_sortedevents_list)):
+                on = False
                 break   
+            time.sleep(0.001)
 
+
+    #input for storing midifile
+    export_true = False
+    if on == False:
+        store = input("Would you like to export the sequence into a Midifile? y/n ")
+
+    if store == "y":
+        export_true = True
+        #Function for exporting the midi ->
+    else:
+        export_true = False
         
-    with open("events_lists.midi",'wb') as outf:
-        fnc.midi_file.writeFile(outf)
-    if input("Would you like another sequence? n will stop the program ") == "n":
+    if export_true == True:
+        with open("events_lists.midi",'wb') as outf:
+            fnc.midi_file.writeFile(outf)
+    if input("Would you like to repeat the sequence? n will stop ") == "n":
         break
 
 
