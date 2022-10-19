@@ -8,49 +8,26 @@
 import time
 import simpleaudio as sa
 import random as ra
-from random import randint
 from midiutil import MIDIFile
 import UI_file as ui
 import Functions as fnc
 
-#Samples 
-Kick= sa.WaveObject.from_wave_file("assets/SD_Kick_Battalion.wav")
-Snare= sa.WaveObject.from_wave_file("assets/SD_Snare_Bewitch.wav")
-Hat=  sa.WaveObject.from_wave_file("assets/SD_ClHat_Cherry.wav")
-
-#Dicts with names
-kick_dict = {
-    'Name': "Kick",
-    "Instrument": Kick,
-    }
-
-snare_dict = {
-    'Name': "Snare",
-    "Instrument": Snare,
-    }
-
-hat_dict = {
-    'Name': "Hat",
-    "Instrument": Hat,
-    }
-
-
-
-#list with instruments dicts to choose from 
-instruments = [kick_dict,snare_dict,hat_dict]
 
 #input username and explanation of rhythm generator
 username = ui.username
 print("Hello " + username) 
 print('This is the Irregular Beat Generator 3000')
 
-    #rhythm generation
-    #euclidean steps for time signatures
-num_steps_78 = 7
-num_steps_54 = 5
-#euclidean notes per steps
-num_notes_54 = 4
-num_notes_78 = 8
+
+#rhythm generation
+#euclidean steps for time signatures
+num_amount_78 = 7
+num_amount_54 = 5
+#euclidean notevalues 
+num_value_54 = 4
+num_value_78 = 8
+
+
 #the program placed in a while loop to be able to keep creating different sequences.
 while True:
 
@@ -60,17 +37,19 @@ while True:
     print("Time Signature is: ", time_sig)
 
     #function for creating events based on timestamps, sample, name and time durations
-    def create_events(sample,timestamps,name,notedur):
-        #dictionary for 1 event
-        event_dict = {}
-        #empty list for different events
-        events_list = []
-        #create different dictionaries and add them to a list
-        #creating copies of the event dict otherwise it will just output 1 dict.
-        for i in range(len(timestamps)): 
-            event_dict = {"Sample":sample, "Name":name, "Ts": timestamps[i], "Nd":notedur[i]}
-            events_list.append(event_dict.copy())
-        return events_list
+    # def create_events(sample,timestamps,name,notedur):
+    #     #dictionary for 1 event
+    #     event_dict = {}
+    #     #empty list for different events
+    #     events_list = []
+    #     #create different dictionaries and add them to a list
+    #     #creating copies of the event dict otherwise it will just output 1 dict.
+    #     for i in range(len(timestamps)): 
+    #         event_dict = {"Sample":sample, "Name":name, "Ts": timestamps[i], "Nd":notedur[i]}
+    #         events_list.append(event_dict.copy())
+    #     return events_list
+    
+    
 
 
 
@@ -135,21 +114,9 @@ while True:
                     print("Incorrect input - please enter a bpm (or enter nothing - default bpm)")
     print("Bpm is: ", bpm)
 
-    #executing functions for converting values to timestamps
-    time_durations_kick = fnc.note_dur_to_td(note_durations_kick,bpm)
-    time_durations_snare = fnc.note_dur_to_td(note_durations_snare,bpm)
-    time_durations_hat = fnc.note_dur_to_td(note_durations_hat,bpm)
-    # print("The Time Durations between the notes are:",time_durations)
-    timestamps_kick = fnc.time_dur_to_ts(time_durations_kick)
-    timestamps_snare = fnc.time_dur_to_ts(time_durations_snare)
-    timestamps_hat = fnc.time_dur_to_ts(time_durations_hat)
-    # print("The timestamps are:",timestamps)
-    ts_kick_events = create_events(kick_dict["Instrument"],timestamps_kick,kick_dict["Name"],note_durations_kick)
-    ts_snare_events = create_events(snare_dict["Instrument"],timestamps_snare,snare_dict["Name"],note_durations_snare)
-    ts_hat_events = create_events(hat_dict["Instrument"],timestamps_hat,hat_dict["Name"],note_durations_hat)
+ 
+ 
 
-    #add all the events to a combined list
-    all_events_list = ts_kick_events + ts_snare_events + ts_hat_events
 
     #sort the list based on timestamps
     all_sortedevents_list = sorted(all_events_list, key=lambda d: d['Ts']) 
