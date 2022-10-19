@@ -39,17 +39,18 @@ def time_dur_to_ts(time_durations):
     return time_stamps
 
     #function for creating events based on timestamps, sample, name and time durations
-# def create_events(sample,timestamps,name,notedur):
-#     #dictionary for 1 event
-#     event_dict = {}
-#     #empty list for different events
-#     events_list = []
-#     #create different dictionaries and add them to a list
-#     #creating copies of the event dict otherwise it will just output 1 dict.
-#     for i in range(len(timestamps)): 
-#         event_dict = {"Sample":sample, "Name":name, "Ts": timestamps[i], "Nd":notedur[i]}
-#         events_list.append(event_dict.copy())
-#     return events_list
+def create_events(sample,timestamps,notedur):
+    print('create_events', sample,timestamps,notedur)
+    #dictionary for 1 event
+    event_dict = {}
+    #empty list for different events
+    events_list = []
+    #create different dictionaries and add them to a list
+    #creating copies of the event dict otherwise it will just output 1 dict.
+    for i in range(len(timestamps)): 
+        event_dict = {"Sample":sample, "Ts": timestamps[i], "Nd":notedur[i]}
+        events_list.append(event_dict.copy())
+    return events_list
 
     #function for repeating the sequence according to amount of loops
 def loop_dur_list(note_durations,loop_amount,):
@@ -62,15 +63,15 @@ def loop_dur_list(note_durations,loop_amount,):
 
 #Samples 
 samples = {
-    'kick' : sa.WaveObject.from_wave_file("assets/SD_Kick_Battalion.wav"),
+    'kick': sa.WaveObject.from_wave_file("assets/SD_Kick_Battalion.wav"),
     'snare': sa.WaveObject.from_wave_file("assets/SD_Snare_Bewitch.wav"),
     'hat': sa.WaveObject.from_wave_file("assets/SD_ClHat_Cherry.wav")
 }
 
 note_densities = {
     'kick': [0.2, 0.3],
-    'snare': [0.1, 0.4],
-    'hihat': [0.5, 0.9]
+    'snare': [0.3, 0.4],
+    'hat': [0.5, 0.9]
 }
 
 #list with instruments dicts to choose from 
@@ -86,27 +87,32 @@ num_value_54 = 4
 num_value_78 = 8
 
 
-def create_events(name,timestamps,num_amount,num_value):
+def execute_functions(names,num_amount,num_value,loop_amount):
+        event_list = [] 
         for name in names:
         # calculate the range for the number of notes to generate
         # using the number of beats as maximum number of pulses
         # and applying the range of the given instrument
             num_notes_min = round(num_amount * note_densities[name][0])
-            num_notes_max = round(num_value * note_densities[name][1])
+            num_notes_max = round(num_amount * note_densities[name][1])
             num_notes = ra.randint(num_notes_min, num_notes_max)
 
             # retrieve the durations
-            durations = calculate_durations(num_beats, num_notes)
+            durations = calculate_durations(num_amount, num_notes)
 
             # repeat the bar - loop_amount times
-            loop_dur_list(durations, loop_amount)
+            durations = loop_dur_list(durations, loop_amount)
 
             #transform to events
             time_durations = note_dur_to_td(durations,bpm)
-            timestamps = time_dur_to_ts(time_durations, bpm)
+            timestamps = time_dur_to_ts(time_durations)
             # NOTE: slightly adapted events format - see samples dictionary above,
             # name is sufficient to playback correct sample
-            events.append(create_events(timestamps, name, durations))
+            event_list.append(create_events(name, timestamps, durations))
+            #adding the different lists to a combined one
+        event_list = [x for l in event_list for x in l]
+        return event_list
+
 
 
 
@@ -114,17 +120,18 @@ def create_events(name,timestamps,num_amount,num_value):
 
 #function for playing the events and displaying name + ts
 def play_event(event,i):
-    event[i]['Sample'].play()
-    print(event[i]["Name"])
+    sampleName = event[i]["Sample"]
+    samples[sampleName].play()
+    print(event[i]["Sample"])
     print(event[i]["Ts"])
 
 bpm = ui.bpm
 #additional midi values
 quarter_note_dur = 60 / bpm
 instr_midi_pitch = {
-    "Kick": 35,
-    "Snare": 38,
-    "Hat": 42,
+    "kick": 35,
+    "snare": 38,
+    "hat": 42,
     }
 
 #print(all_sortedevents_list)
@@ -145,5 +152,5 @@ def add_events_to_midi(events,quarter_note_dur):
     for event in events:
         # transform time (sec) to (qnote)
         qnote_time = event["Ts"] / quarter_note_dur
-        instr_name = event["Name"]
+        instr_name = event["Sample"]
         midi_file.addNote(track, channel, instr_midi_pitch[instr_name], qnote_time,event["Nd"], velocity)

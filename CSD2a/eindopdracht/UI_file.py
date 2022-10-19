@@ -15,7 +15,7 @@ print("Time Signature is: ", time_sig)
 
 
 #UI for loop amount
-loop_amount = int(input("Enter the amount of loops: "))
+loop_amount = int((input("Enter the amount of loops: ")))
 
 #input for bpm
 correctInput = False

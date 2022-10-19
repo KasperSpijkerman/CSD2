@@ -19,14 +19,6 @@ print("Hello " + username)
 print('This is the Irregular Beat Generator 3000')
 
 
-#rhythm generation
-#euclidean steps for time signatures
-num_amount_78 = 7
-num_amount_54 = 5
-#euclidean notevalues 
-num_value_54 = 4
-num_value_78 = 8
-
 
 #the program placed in a while loop to be able to keep creating different sequences.
 while True:
@@ -35,53 +27,12 @@ while True:
     time_sig = ui.time_sig
 
     print("Time Signature is: ", time_sig)
-
-    #function for creating events based on timestamps, sample, name and time durations
-    # def create_events(sample,timestamps,name,notedur):
-    #     #dictionary for 1 event
-    #     event_dict = {}
-    #     #empty list for different events
-    #     events_list = []
-    #     #create different dictionaries and add them to a list
-    #     #creating copies of the event dict otherwise it will just output 1 dict.
-    #     for i in range(len(timestamps)): 
-    #         event_dict = {"Sample":sample, "Name":name, "Ts": timestamps[i], "Nd":notedur[i]}
-    #         events_list.append(event_dict.copy())
-    #     return events_list
-    
-    
-
-
-
-
     #checking the user input and executing the function
     #To do fix correctinput
-
-
-    if time_sig == "5/4":
-        note_durations_kick =fnc.calculate_durations(num_steps_54,num_notes_54)
-        note_durations_snare = fnc.calculate_durations(num_steps_54,ra.randrange(1,4))
-        note_durations_hat = fnc.calculate_durations(num_steps_54,ra.randrange(1,4))
-        print(note_durations_kick)
-        print(note_durations_snare)
-        print(note_durations_hat)
-
-    if time_sig == "7/8":
-        note_durations_kick = fnc.calculate_durations(num_steps_78,num_notes_78)
-        note_durations_snare = fnc.calculate_durations(num_steps_78,ra.randrange(1,8))
-        note_durations_hat = fnc.calculate_durations(num_steps_78,ra.randrange(1,8))
-        print(note_durations_kick)
-        print(note_durations_snare)
-        print(note_durations_hat)
-
-
+    
     #UI for loop amount
     loop_amount = ui.loop_amount
-
-    #loop lists 
-    fnc.loop_dur_list(note_durations_kick,loop_amount)
-    fnc.loop_dur_list(note_durations_snare,loop_amount)
-    fnc.loop_dur_list(note_durations_hat,loop_amount)
+    print("Loop amount is: ", loop_amount)
 
     #input for bpm
     correctInput = False
@@ -90,7 +41,7 @@ while True:
 
     default_bpm = True
 
-    keep_default = input("Default Bpm is 120, would you like to keep it? y/n ")
+    keep_default = ui.keep_default
 
     if keep_default == "n":
         default_bpm = False
@@ -100,7 +51,7 @@ while True:
 
     if default_bpm == False:
         while (not correctInput):
-            user_bpm = input("Enter a bpm: ")
+            user_bpm = ui.user_bpm
 
             # check if we 'received' an empty string
             if not user_bpm:
@@ -115,15 +66,23 @@ while True:
     print("Bpm is: ", bpm)
 
  
- 
+    #executing the functions all together to make a list of events based on time signature.
+    if time_sig == "5/4":
+        events =  fnc.execute_functions(fnc.names,fnc.num_amount_54,fnc.num_value_54,loop_amount)
+        print(events)
+
+    if time_sig == "7/8":
+        events =  fnc.execute_functions(fnc.names,fnc.num_amount_78,fnc.num_value_78,loop_amount)
+        print(events)
+    
 
 
     #sort the list based on timestamps
-    all_sortedevents_list = sorted(all_events_list, key=lambda d: d['Ts']) 
+    all_sortedevents_list = sorted(events, key=lambda d: d['Ts']) 
 
     #play the sequence when the user inputs y
     on = False
-    switch_seq = input("Play the sequence? y/n: ")
+    switch_seq = ui.switch_seq
     if switch_seq == "y":
         on = True
 
@@ -133,7 +92,7 @@ while True:
 
     #input for storing midifile
     export_true = False
-    store = input("Would you like to export the sequence into a Midifile? y/n ")
+    store = ui.store
 
     if store == "y":
         export_true = True
