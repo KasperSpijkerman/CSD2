@@ -61,6 +61,27 @@ def bpm_input():
                 except:
                     print("Incorrect input - please enter a bpm (or enter nothing - default bpm)")
     return(bpm)
+def dens_input():
+    correct_dens = False
+    while not correct_dens:
+        try:
+            note_dens = input("Fill in the density for the beats, low, med or high. Start with kick, snare then hat. ")
+            if note_dens == "low":
+                correct_dens = True
+                note_dens = "1"
+            if note_dens == "med":
+                correct_dens = True
+                note_dens = "2"
+            if note_dens == "high":
+                correct_dens = True
+                note_dens = "3"
+                
+            print(note_dens)
+        except KeyboardInterrupt:
+            sys.exit()
+        except:
+            print("Incorrect number please enter 1, 2, 3 for low or high density") 
+    return(note_dens)
 def loop_input():
     #UI for loop amount
     #making sure the user can only input a whole number

@@ -4,6 +4,7 @@ from midiutil import MIDIFile
 import time
 import simpleaudio as sa
 import random as ra
+import UI_file as ui
 #Samples dictionary
 samples = {
     'kick': sa.WaveObject.from_wave_file("assets/SD_Kick_Battalion.wav"),
@@ -18,17 +19,30 @@ names = ['kick','snare','hat']
 #euclidean amount of steps for time signatures
 num_amount_78 = 7
 num_amount_54 = 5
-#euclidean notevalues 
-num_value_54 = 4
-num_value_78 = 8
 
 #densities for different rhythms
 note_densities = {
     'kick': [0.2, 0.3],
-    'snare': [0.3, 0.4],
+    'snare': [0.8, 0.9],
     'hat': [0.5, 0.9]
 }
-#Functions
+#a function for repeating 
+def ask_note_dens(name):
+        note_dens = ui.dens_input()
+        print(name,"density =", note_dens)
+        return(note_dens)
+
+def change_note_dens(name,dens):
+    if dens == "1":
+        note_densities[name] = [0.2,0.3]
+    if dens == "2":
+        note_densities[name] = [0.4,0.6]
+    if dens == "3":
+        note_densities[name] = [0.8,0.9]
+    return(name)
+
+
+
 def calculate_durations(steps,notes):
     note_durations = []
     duration16th = int(steps/notes)
@@ -62,7 +76,6 @@ def time_dur_to_ts(time_durations):
     return time_stamps
 #function for creating events based on timestamps, sample, name and time durations
 def create_events(sample,timestamps,notedur):
-    print('create_events', sample,timestamps,notedur)
     #dictionary for 1 event
     event_dict = {}
     #empty list for different events
@@ -74,20 +87,26 @@ def create_events(sample,timestamps,notedur):
         events_list.append(event_dict.copy())
     return events_list
 #function for repeating the sequence according to amount of loops
+
+
 def loop_dur_list(note_durations,loop_amount):
     note_durations_loop = list(note_durations)
+    print(note_durations_loop)
     for i in range(loop_amount):
-        for element in note_durations_loop:
-            note_durations.append(element)
+        for e in note_durations_loop:
+            note_durations.append(e)
+            print(e)
+    print(note_durations)
     #print("Looped list:", note_durations)
     return note_durations
 #function for executing the different functions al together to create events.
 def execute_functions(names,num_amount,loop_amount,bpm,sig):
         event_list = [] 
         for name in names:
-        # calculate the range for the number of notes to generate
-        # using the number of beats as maximum number of pulses
-        # and applying the range of the given instrument
+            #Ask the user for note density per instrument
+            note_dens = ask_note_dens(name)
+            #change the note density according to user input
+            change_note_dens(name,note_dens)
             num_notes_min = round(num_amount * note_densities[name][0])
             num_notes_max = round(num_amount * note_densities[name][1])
             num_notes = ra.randint(num_notes_min, num_notes_max)
@@ -100,6 +119,7 @@ def execute_functions(names,num_amount,loop_amount,bpm,sig):
 
             #transform to timestamps
             time_durations = note_dur_to_td(durations,bpm,sig)
+            print(time_durations)
             timestamps = time_dur_to_ts(time_durations)
             #create events add them to a list
             event_list.append(create_events(name, timestamps, durations))
@@ -110,8 +130,15 @@ def execute_functions(names,num_amount,loop_amount,bpm,sig):
 def play_event(event,i):
     sampleName = event[i]["Sample"]
     samples[sampleName].play()
-    print(event[i]["Sample"])
-    print(event[i]["Ts"])
+    #printing different symbols for visualisation
+    if event[i]["Sample"] == 'kick':
+        print('0')
+    if event[i]["Sample"] == 'snare':
+        print('=')
+    if event[i]["Sample"] == 'hat':
+        print('-')
+        
+    #print(event[i]["Ts"])
 #function for adding events to midi
 def add_events_to_midi(events,quarter_note_dur,midi_file,track,channel,instr_midi_pitch,velocity):
     for event in events:

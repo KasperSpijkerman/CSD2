@@ -40,7 +40,12 @@ while True:
     #checking the user input and executing the function
     #To do fix correctinput
     bpm = ui.bpm_input()
-    print(bpm)
+    print("The chosen bpm is: ",bpm)
+
+    
+
+    # note_dens_s = ui.dens_input()
+    # note_dens_h = ui.dens_input()
     
     #UI for loop amount
     loop_amount = ui.loop_input()
@@ -85,7 +90,6 @@ while True:
     # store the current time
     time_start = time.time()
     i = 0
-    print("Start ", time_start)
 
 
     #Play sequence according to timestamp and instrument
