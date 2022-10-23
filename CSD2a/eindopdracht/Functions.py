@@ -5,6 +5,7 @@ import time
 import simpleaudio as sa
 import random as ra
 import UI_file as ui
+import random
 #Samples dictionary
 samples = {
     'kick': sa.WaveObject.from_wave_file("assets/SD_Kick_Battalion.wav"),
@@ -26,25 +27,10 @@ note_densities = {
     'kick': [0.2, 0.3],
     'snare': [0.3, 0.5],
     'hat': [0.5, 0.9],
-    'fx': [0.2,0.3]
+    'fx': [0.2,0.2]
 
 }
-def inst_input(names):
-    for name in names:
-        print (name)
-        correct_inst = False
-        while not correct_inst:
-            try:
-                keep_inst = input("Would you like to have this instrument in the sequence? y/n")
-                if keep_inst == "y":
-                    correct_inst = True
-                if keep_inst == "n":
-                    names.pop(name)
-                    correct_inst = True
-            except KeyboardInterrupt:
-                sys.exit()
-            except:
-                print("Incorrect input enter y/n") 
+
 #function for calculating the durations based on steps and notes
 def calculate_durations(steps,notes):
     note_durations = []
@@ -106,21 +92,26 @@ def change_note_dens(name,dens):
         note_densities[name] = [0.7,0.8]
     if dens == "5":
         note_densities[name] = [0.8,1]
+    if dens == "0":
+        note_densities[name]
     return(name)
+def ask_randomizer():
+    rand_input = ui.randomizer_input()
+    return(rand_input)
 #function for repeating the sequence according to amount of loops
-def loop_dur_list(note_durations,loop_amount):
+def loop_dur_list(note_durations,loop_amount,rand_input):
     note_durations_loop = list(note_durations)
-    print(note_durations_loop)
     for i in range(loop_amount):
         for e in note_durations_loop:
             note_durations.append(e)
-            print(e)
-    print(note_durations)
-    #print("Looped list:", note_durations)
+    if rand_input == "adventure":
+        random.shuffle(note_durations)
     return note_durations
 #function for executing the different functions al together to create events.
 def execute_functions(names,num_amount,loop_amount,bpm,sig):
         event_list = [] 
+        #executing the randomizer function once
+        rand_input = ask_randomizer()
         for name in names:
             #Ask the user for note density per instrument
             note_dens = ask_note_dens(name)
@@ -131,14 +122,13 @@ def execute_functions(names,num_amount,loop_amount,bpm,sig):
             num_notes = ra.randint(num_notes_min, num_notes_max)
 
             # retrieve the durations
-            durations = calculate_durations(num_amount, num_notes)
+            durations = calculate_durations(num_amount, num_notes,)
 
             # repeat the bar - loop_amount times
-            durations = loop_dur_list(durations, loop_amount)
+            durations = loop_dur_list(durations, loop_amount,rand_input)
 
             #transform to timestamps
             time_durations = note_dur_to_td(durations,bpm,sig)
-            print(time_durations)
             timestamps = time_dur_to_ts(time_durations)
             #create events add them to a list
             event_list.append(create_events(name, timestamps, durations))

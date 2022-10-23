@@ -1,6 +1,4 @@
-#to do's: 
-#Variatie maken in het algoritme van verdeling maten
-#Verschillende bestanden uit laten schrijven. 
+#Verschillende midi bestanden uit laten schrijven. 
 
 #import modules
 import time
@@ -17,7 +15,7 @@ instr_midi_pitch = {
         "kick": 35,
         "snare": 38,
         "hat": 42,
-        "fx": 45
+        "fx": 56
         }
 velocity= 80
 track = 0
@@ -29,6 +27,8 @@ tags = ["E   ", "En  ", "Ent ", "Ente","Enter", "Enteri  ", "Enterin", "Entering
 animation = animation.Wait(tags, color="blue", speed=1)
 animation.start()
 time.sleep(3)
+#playing the space sound at the beginning 
+fnc.samples['fx'].play()
 animation.stop()
 
 
