@@ -9,11 +9,12 @@ import UI_file as ui
 samples = {
     'kick': sa.WaveObject.from_wave_file("assets/SD_Kick_Battalion.wav"),
     'snare': sa.WaveObject.from_wave_file("assets/SD_Snare_Bewitch.wav"),
-    'hat': sa.WaveObject.from_wave_file("assets/SD_ClHat_Cherry.wav")
+    'hat': sa.WaveObject.from_wave_file("assets/SD_ClHat_Cherry.wav"),
+    'fx':   sa.WaveObject.from_wave_file("assets/SD_Perc_FXSonar.wav")
 }
 
 #list with instruments dicts to choose from 
-names = ['kick','snare','hat']
+names = ['kick','snare','hat','fx']
 
 #Rhythm generation
 #euclidean amount of steps for time signatures
@@ -23,26 +24,28 @@ num_amount_54 = 5
 #densities for different rhythms
 note_densities = {
     'kick': [0.2, 0.3],
-    'snare': [0.8, 0.9],
-    'hat': [0.5, 0.9]
+    'snare': [0.3, 0.5],
+    'hat': [0.5, 0.9],
+    'fx': [0.2,0.3]
+
 }
-#a function for repeating 
-def ask_note_dens(name):
-        note_dens = ui.dens_input()
-        print(name,"density =", note_dens)
-        return(note_dens)
-
-def change_note_dens(name,dens):
-    if dens == "1":
-        note_densities[name] = [0.2,0.3]
-    if dens == "2":
-        note_densities[name] = [0.4,0.6]
-    if dens == "3":
-        note_densities[name] = [0.8,0.9]
-    return(name)
-
-
-
+def inst_input(names):
+    for name in names:
+        print (name)
+        correct_inst = False
+        while not correct_inst:
+            try:
+                keep_inst = input("Would you like to have this instrument in the sequence? y/n")
+                if keep_inst == "y":
+                    correct_inst = True
+                if keep_inst == "n":
+                    names.pop(name)
+                    correct_inst = True
+            except KeyboardInterrupt:
+                sys.exit()
+            except:
+                print("Incorrect input enter y/n") 
+#function for calculating the durations based on steps and notes
 def calculate_durations(steps,notes):
     note_durations = []
     duration16th = int(steps/notes)
@@ -86,9 +89,25 @@ def create_events(sample,timestamps,notedur):
         event_dict = {"Sample":sample, "Ts": timestamps[i], "Nd":notedur[i]}
         events_list.append(event_dict.copy())
     return events_list
+#function for repeating asking the density per sample
+def ask_note_dens(name):
+        note_dens = ui.dens_input()
+        print(name,"density =", note_dens)
+        return(note_dens)
+#function for actually changing the density
+def change_note_dens(name,dens):
+    if dens == "1":
+        note_densities[name] = [0.2,0.3]
+    if dens == "2":
+        note_densities[name] = [0.4,0.5]
+    if dens == "3":
+        note_densities[name] = [0.6,0.7]
+    if dens == "4":
+        note_densities[name] = [0.7,0.8]
+    if dens == "5":
+        note_densities[name] = [0.8,1]
+    return(name)
 #function for repeating the sequence according to amount of loops
-
-
 def loop_dur_list(note_durations,loop_amount):
     note_durations_loop = list(note_durations)
     print(note_durations_loop)
@@ -137,6 +156,8 @@ def play_event(event,i):
         print('=')
     if event[i]["Sample"] == 'hat':
         print('-')
+    if event[i]["Sample"] == 'fx':
+        print('~')
         
     #print(event[i]["Ts"])
 #function for adding events to midi
