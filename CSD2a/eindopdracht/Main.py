@@ -1,5 +1,4 @@
-#Verschillende midi bestanden uit laten schrijven. 
-
+#The main file of IBG, runs the functions, sequence and writes out the midi file. 
 #import modules
 import time
 import simpleaudio as sa
@@ -46,8 +45,12 @@ while True:
 
     #UI for input time signature
     time_sig = ui.sig_input()
-
-    print("Time Signature is: ", time_sig)
+    
+    if time_sig == "crazy":
+        num_amount_user = fnc.custom_sig(time_sig)
+        print("Time Signature is: ", num_amount_user,"/8" )
+    if not time_sig == "crazy":
+        print("Time Signature is: ", time_sig)
     #checking the user input and executing the function
     #To do fix correctinput
     bpm = ui.bpm_input()
@@ -64,11 +67,13 @@ while True:
     #executing the functions all together to make a list of events based on time signature.
     if time_sig == "5/4":
         events =  fnc.execute_functions(fnc.names,fnc.num_amount_54,loop_amount,bpm,time_sig)
-        #print(events)
 
     if time_sig == "7/8":
         events =  fnc.execute_functions(fnc.names,fnc.num_amount_78,loop_amount,bpm,time_sig)
-        #print(events)
+       
+    if time_sig == "crazy":
+        events =  fnc.execute_functions(fnc.names,num_amount_user,loop_amount,bpm,time_sig)
+        
     
     #sort the list based on timestamps
     all_sortedevents_list = sorted(events, key=lambda d: d['Ts']) 
@@ -125,7 +130,7 @@ while True:
         correct_midi = False
         while not correct_midi:
             try:
-                store = input("Would you like to export this experience into a Midifile? y/n ")
+                store = input("Just landed, would you like to export this experience into a Midifile? y/n ")
                 if store == "y":
                     correct_midi = True
                 if store == "n":
@@ -134,13 +139,17 @@ while True:
                 print('Please enter y/n')
     if store == "y":
         export_true = True
+        #ask for a file name if export is true
+        file_name = input("Give the experience a name: " )
         #Function for exporting the midi ->
     else:
         export_true = False
-        
+    #write the midi file
     if export_true == True:
-        with open("events_lists.midi",'wb') as outf:
+        #bestand naam + .midi erachter
+        with open(f'Midisequences/{file_name +str(".midi")}','wb') as outf:
             midi_file.writeFile(outf)
+    #if the user enters no the program will stop. 
     if input("Would you like to travel another time? (any input will continue) n will stop ") == "n":
         break
 

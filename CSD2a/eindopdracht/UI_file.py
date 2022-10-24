@@ -8,20 +8,37 @@ def sig_input():
     correct_sig = False
     while not correct_sig:
         try:
-            time_sig = input("So first: Choose a time signature for your adventure. Choose between 5/4 and 7/8: ")
+            time_sig = input("So first: Choose a time signature for your adventure. Choose between 5/4 and 7/8 or crazy: ")
             if time_sig == "5/4":
                 correct_sig = True
             if time_sig == "7/8":
                 correct_sig = True
+            if time_sig == "crazy":
+                correct_sig = True
             else:
-                print("Please enter 5/4 or 7/8") 
+                print("Please enter 5/4 or 7/8 or crazy") 
         except KeyboardInterrupt:
             sys.exit()
         except:
-            print("Please enter 5/4 or 7/8") 
+            print("Please enter 5/4 or 7/8 or crazy") 
         
 
-    return time_sig    
+    return time_sig  
+#extra input for custom signature.
+def custom_sig_input():
+    correct_custom_sig = False
+    while not correct_custom_sig:
+        try:
+            user_sig = int(input("Enter a custom amount of beats, min 3 max 16: "))
+            if user_sig >= 3 and user_sig <= 16:
+                correct_custom_sig = True
+            else:
+                print("Enter a value between 3 and 16")
+        except KeyboardInterrupt:
+            sys.exit()
+        except:
+            print("Enter a value between 3 and 16")
+    return(user_sig)
 #bpm input keep default or custom user input
 def bpm_input():
     #input for bpm
@@ -67,35 +84,32 @@ def bpm_input():
                 except:
                     print("Incorrect input - please enter a bpm (or enter nothing - default bpm)")
     return(bpm)
-
-    for name in names:
-        print (name)
-        correct_inst = False
-        while not correct_inst:
-            try:
-                keep_inst = input("Would you like to have this instrument in the sequence? y/n")
-                if keep_inst == "y":
-                    correct_inst = True
-                if keep_inst == "n":
-                    correct_inst = True
-                    names.pop(name)
-            except KeyboardInterrupt:
-                sys.exit()
-            except:
-                print("Incorrect input enter y/n") 
 #note density input, lets the user decide per instrument how dense the sequence is
 def dens_input():
     correct_dens = False
     while not correct_dens:
         try:
-            note_dens = input("Fill in the density per instrument from 1 to 5 (0 for default). Start with kick, snare, hat then fx. ")
-            if note_dens == "0" or "1" or "2" or"3" or"4" or"5":
+            #seperated them in seperate conditions.
+            note_dens = input("Fill in the density per instrument from 1 to 5. Start with kick, snare, hat then fx. ")
+            if note_dens == "1":
                 correct_dens = True
+            if note_dens == "2":
+                correct_dens = True
+            if note_dens == "3":
+                correct_dens = True
+            if note_dens == "4":
+                correct_dens = True
+            if note_dens == "5":
+                correct_dens = True
+            if note_dens == "0":
+                correct_dens = True
+            else:
+                print("Incorrect number please enter 1 to 5 for low or high density")
                 
         except KeyboardInterrupt:
             sys.exit()
         except:
-            print("Incorrect number please enter 1, 2, 3, 4 or 5 for low or high density") 
+            print("Incorrect number please enter 1 to 5 for low or high density") 
     return(note_dens)
 #input for the amount of loops
 def loop_input():
@@ -126,7 +140,7 @@ def switch_input():
                 correct_switch = True
             if switch_seq == "n":
                 correct_switch = True
-                print('Too scared to travel? You can still safe the experience to use somewhere else ')
+                print('Too scared to travel? You can still save the experience to use somewhere else ')
             else:
                 print("Please enter y or n") 
         except KeyboardInterrupt:

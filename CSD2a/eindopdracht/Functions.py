@@ -1,4 +1,5 @@
 #In this file the functions for rhythm generation and playing the rhythms are located.
+#Rhythm generation part is Euclidean based on code from Ciska.
 from midiutil import MIDIFile
 #importing modules to use in functions
 import time
@@ -21,6 +22,8 @@ names = ['kick','snare','hat','fx']
 #euclidean amount of steps for time signatures
 num_amount_78 = 7
 num_amount_54 = 5
+
+
 
 #densities for different rhythms
 note_densities = {
@@ -48,7 +51,8 @@ def note_dur_to_td(note_durations,bpm,sig):
         convert_value = 60/bpm
     if(sig == "7/8"):
         convert_value = 30/bpm
-
+    if(sig == "crazy"):
+        convert_value = 30/bpm
     for note_dur in note_durations:
         time_durations.append(note_dur * convert_value)
     return time_durations
@@ -95,15 +99,22 @@ def change_note_dens(name,dens):
     if dens == "0":
         note_densities[name]
     return(name)
+#function for executing the randomizer
 def ask_randomizer():
     rand_input = ui.randomizer_input()
     return(rand_input)
+#function for asking for the amount of notes
+def custom_sig(time_sig):
+    if time_sig == "crazy":
+        user_sig = ui.custom_sig_input()
+    return (user_sig)
 #function for repeating the sequence according to amount of loops
 def loop_dur_list(note_durations,loop_amount,rand_input):
     note_durations_loop = list(note_durations)
     for i in range(loop_amount):
         for e in note_durations_loop:
             note_durations.append(e)
+    #randomizing note durations based on ui.
     if rand_input == "adventure":
         random.shuffle(note_durations)
     return note_durations
@@ -149,7 +160,6 @@ def play_event(event,i):
     if event[i]["Sample"] == 'fx':
         print('~')
         
-    #print(event[i]["Ts"])
 #function for adding events to midi
 def add_events_to_midi(events,quarter_note_dur,midi_file,track,channel,instr_midi_pitch,velocity):
     for event in events:
