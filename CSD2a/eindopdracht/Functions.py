@@ -128,14 +128,15 @@ def execute_functions(names,num_amount,loop_amount,bpm,sig):
             note_dens = ask_note_dens(name)
             #change the note density according to user input
             change_note_dens(name,note_dens)
+            #look at the min and max densities and choose a random value between them
             num_notes_min = round(num_amount * note_densities[name][0])
             num_notes_max = round(num_amount * note_densities[name][1])
             num_notes = ra.randint(num_notes_min, num_notes_max)
 
-            # retrieve the durations
-            durations = calculate_durations(num_amount, num_notes,)
+            # retrieve the durations based on amount of total notes and the actual notes based on density
+            durations = calculate_durations(num_amount, num_notes)
 
-            # repeat the bar - loop_amount times
+            # loop the bar, steady or randomized.
             durations = loop_dur_list(durations, loop_amount,rand_input)
 
             #transform to timestamps

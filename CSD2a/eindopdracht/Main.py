@@ -7,6 +7,7 @@ from midiutil import MIDIFile
 import UI_file as ui
 import Functions as fnc
 import animation
+import sys
 
 
 #setting fixed values for midi
@@ -135,6 +136,10 @@ while True:
                     correct_midi = True
                 if store == "n":
                     correct_midi = True
+                else:
+                    print('Please enter y/n')
+            except KeyboardInterrupt:
+                sys.exit()
             except:
                 print('Please enter y/n')
     if store == "y":
