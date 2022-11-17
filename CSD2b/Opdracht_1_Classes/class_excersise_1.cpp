@@ -5,7 +5,7 @@
 class Woofer
 {
 public:
-  float magnet;
+  std::string magnet;
   float coil;
 
   void printCoilPosition() 
@@ -17,6 +17,12 @@ public:
   {
     coil = position;
   }
+  void printMagnetTypes()
+  {
+     std::cout << "Enter Magnettype: " << std::endl;
+     std::cin >> magnet;
+     std::cout << "Magnettype: " << magnet << std::endl;
+  }
 
 };
 
@@ -25,6 +31,8 @@ int main()
 {
     Woofer myWoofer;
     srand(time(NULL));
+    //UI for input user selecting
+    myWoofer.printMagnetTypes();
     //for loop 10 times speaker position and printing
     for(int i = 0; i < 10; i++)
     {
