@@ -3,6 +3,7 @@
 class Instrument 
     {
     public:
+    Instrument();
         int frequency;
-        void printFrequency(int frequency);
+        void printFrequency();
     };
