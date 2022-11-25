@@ -2,19 +2,22 @@
 #include <iostream>
 #include "bass.h"
 
-Bass::Bass(std::string name) :Instruments(name) 
+Bass::Bass(std::string name, float freq) : Instruments(name,freq)
 {
-std::cout  << "Constructor from the: " << name <<"\n"
+std::cout  << "Constructor from the: " << name <<"\n" << freq << "\n";
 }
+
 
 Bass::~Bass()
 {
-std::cout  << "Constructor from the: " << name <<"\n"
+std::cout  << "Destructor from the: " << name <<"\n";
 }
+
+
 
 void Bass::slide()
 {
-  std::cout << name << "Does voooom!\n " << 
+  std::cout << name << " Does voooom!\n ";
 }
 
 

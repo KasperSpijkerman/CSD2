@@ -2,8 +2,8 @@
 #include <iostream>
 #include "instruments.h"
 
-Instruments::Instruments(float freq, float amp, std::string name) :
-freq(freq), amp(amp), name(name)
+Instruments::Instruments(std::string name,float freq) :
+freq(freq), name(name)
 {
  std::cout << "Inside Instruments constructor \n";
 }
@@ -13,10 +13,10 @@ Instruments::~Instruments()
   std::cout << "Inside Instruments destructor\n";
 }
 
-void Instruments::playSound()
-{
-  std::cout << name << " is playing sound\n";
-}
+// void Instruments::playSound()
+// {
+//   std::cout << name << " is playing sound\n";
+// }
 // void Instruments::setFreq(float freq)
 // {
 //   if(freq > 0 && freq < 22000) 

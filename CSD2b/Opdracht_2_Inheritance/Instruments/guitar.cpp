@@ -3,17 +3,17 @@
 #include "guitar.h"
 
 
-Guitar::Guitar(std::string name) :Instruments(name) 
+Guitar::Guitar(std::string name,float freq) :Instruments(name, freq)
 {
-std::cout  << "Constructor from the: " << name <<"\n"
+std::cout  << "Constructor from the: " << name <<"\n" << freq << "\n";
 }
 
 Guitar::~Guitar()
 {
-std::cout  << "Constructor from the: " << name <<"\n"
+std::cout  << "Destructor from the: " << name <<"\n";
 }
 
 void Guitar::screech()
 {
-  std::cout << name << "Does voooom!\n " << 
+  std::cout << name << "Does SCEECH!\n ";
 }

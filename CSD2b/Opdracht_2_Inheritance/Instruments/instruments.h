@@ -6,9 +6,10 @@ class Instruments
     {
     public:
         //constructor and destructor
-        Instruments();
+        // Instruments();
         //constructur with values
-        Instruments(float freq, float amp, std::string name);
+        Instruments(std::string name,float freq
+        );
         ~Instruments();
         
         //set and get
@@ -17,7 +18,7 @@ class Instruments
         void setAmp(float amp);
         float getAmp();
         //function playing sound
-        void playSound(std:string sound);
+        void playSound(std::string sound);
     protected:  
         float freq;
         float amp;

@@ -1,14 +1,15 @@
 //header file for description of instrument class
-#pragma once
+// #pragma once
 #include <iostream>
 #include "instruments.h"
 
 class Guitar : public Instruments 
-    {
-    Guitar(std::string name);
-    ~Guitar();
+{
+public:
+  Guitar(std::string name,float freq);
+  ~Guitar();
 
-    //methods
-    void screech();
+  //methods
+  void screech();
     
-    };
+};
