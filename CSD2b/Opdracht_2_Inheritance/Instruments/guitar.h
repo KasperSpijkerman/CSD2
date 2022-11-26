@@ -6,7 +6,7 @@
 class Guitar : public Instruments 
 {
 public:
-  Guitar(std::string name,float freq);
+  Guitar(std::string name,float freq, float amp);
   ~Guitar();
 
   //methods

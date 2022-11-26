@@ -2,15 +2,15 @@
 #include <iostream>
 #include "bass.h"
 
-Bass::Bass(std::string name, float freq) : Instruments(name,freq)
+Bass::Bass(std::string name, float freq,float amp) : Instruments(name,freq,amp)
 {
-std::cout  << "Constructor from the: " << name <<"\n" << freq << "\n";
+std::cout << "Constructor from the: " << name <<"\n" << "Main Frequency bass is: " << freq << "\n" << "Default amp bass is: " << amp << "\n";
 }
 
 
 Bass::~Bass()
 {
-std::cout  << "Destructor from the: " << name <<"\n";
+std::cout << "Destructor from the: " << name <<"\n";
 }
 
 

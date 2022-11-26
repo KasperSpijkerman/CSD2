@@ -8,8 +8,7 @@ class Instruments
         //constructor and destructor
         // Instruments();
         //constructur with values
-        Instruments(std::string name,float freq
-        );
+        Instruments(std::string name,float freq, float amp);
         ~Instruments();
         
         //set and get
