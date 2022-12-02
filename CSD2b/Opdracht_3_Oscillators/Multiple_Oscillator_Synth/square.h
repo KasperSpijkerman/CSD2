@@ -3,12 +3,12 @@
 #include <cmath>
 #include "oscillators.h" 
 
-class Sine : public Oscillators
+class Square : public Oscillators
 {
 public:
   //Constructor and destructor
-  Sine(float frequency, float samplerate = 44100);
-  ~Sine();
+  Square(float frequency, float samplerate = 44100);
+  ~Square();
   void tick();
 };
 

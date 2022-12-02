@@ -2,7 +2,7 @@
 #include "math.h"
 
 Oscillators::Oscillators(float frequency, float samplerate) : frequency(frequency),
-  amplitude(0.5), phase(0), sample(0), samplerate(samplerate)
+  amplitude(1.0), phase(0), sample(0), samplerate(samplerate)
 {
   std::cout << "Oscillators - constructor " << frequency << "\n";
 }
@@ -23,15 +23,7 @@ float Oscillators::getSample() {
   return sample;
 }
 
-void Oscillators::tick() {
-  // NOTE 1. - frequency / SAMPLERATE can be implemented in a more efficient way
-  phase += frequency / samplerate;
-  if(phase > 1.0f) {
-    phase -= 1.0f;
-  }
-  sample = sin(pi * 2 * phase) * amplitude;
 
-}
 
 //getters and setters
 void Oscillators::setFrequency(float frequency)
