@@ -1,14 +1,13 @@
-#ifndef _SINE_H_
-#define _SINE_H_
+#pragma once
 #include <iostream>
 #include <cmath>
 
-class Sine
+class Oscillators
 {
 public:
   //Constructor and destructor
-  Sine(float frequency, float samplerate = 44100);
-  ~Sine();
+  Oscillators(float frequency, float samplerate = 44100);
+  ~Oscillators();
   void setSamplerate(float samplerate);
   //return the current sample
   float getSample();
@@ -19,7 +18,7 @@ public:
   void setFrequency(float frequency);
   float getFrequency();
 
-private:
+protected:
   const float pi = acos (-1);  //atan(1) * 4; <-- vak van Pieter.
   float frequency;
   float amplitude;
@@ -29,4 +28,4 @@ private:
   float samplerate;
 };
 
-#endif
+
