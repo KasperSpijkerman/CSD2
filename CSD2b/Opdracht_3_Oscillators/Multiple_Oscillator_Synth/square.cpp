@@ -16,15 +16,15 @@ void Square::tick() {
   // NOTE 1. - frequency / SAMPLERATE can be implemented in a more efficient way
   phase += frequency / samplerate;
   if(phase > 1.0f) {
-    phase -= .0f;
+    phase -= 1.0f;
   }
-  if(phase <= 1.0f/2)
+  if(phase >0.5f)
   {
-  sample = phase;
+  sample = amplitude;
   }
-  else 
+  if(phase < 0.5f)
   {
-  sample = -phase;
+  sample = -amplitude;
   }
 
 

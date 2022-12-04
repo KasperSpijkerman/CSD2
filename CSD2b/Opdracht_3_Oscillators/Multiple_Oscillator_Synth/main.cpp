@@ -15,20 +15,22 @@ class CustomCallback : public AudioCallback {
 public:
   void prepare(int rate) override {
     samplerate = (float) rate;
-    // sine.setSamplerate(samplerate);
-    // saw.setSamplerate(samplerate);
-    square.setSamplerate(samplerate);
+    sine5th.setSamplerate(samplerate);
+    saw7th.setSamplerate(samplerate);
+    squareRootNote.setSamplerate(samplerate);
+    square3rd.tick();
     std::cout << "\nsamplerate: " << samplerate << "\n";
   }
 
   void process(AudioBuffer buffer) override {
     for (int i = 0; i < buffer.numFrames; ++i) {
       // write sample to buffer at channel 0, amp = 0.25
-      buffer.outputChannels[0][i] = square.getSample() + sine.getSample();
-      buffer.outputChannels[1][i] = saw.getSample();
-      saw.tick();
-      sine.tick();
-      square.tick();
+      buffer.outputChannels[0][i] = squareRootNote.getSample() + square3rd.getSample() + saw7th.getSample();
+      buffer.outputChannels[1][i] = squareRootNote.getSample() + square3rd.getSample() +sine5th.getSample();
+      saw7th.tick();
+      sine5th.tick();
+      square3rd.tick();
+      squareRootNote.tick();
   }
   // WriteToFile fileWriter("output.csv", true);
   // for(int i = 0; i < samplerate; i++) {
@@ -38,9 +40,10 @@ public:
   }
   private:
   float samplerate = 44100;
-  Sine sine = Sine(500,samplerate);
-  Saw saw = Saw(200,samplerate);
-  Square square = Square(200,samplerate);
+  Sine sine5th = Sine(220,samplerate);
+  Saw saw7th = Saw(277,samplerate);
+  Square squareRootNote = Square(146.83f,samplerate);
+  Square square3rd = Square(185,samplerate);
 };
 
 int main(int argc,char **argv)

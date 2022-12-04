@@ -2,7 +2,7 @@
 #include "math.h"
 
 Oscillators::Oscillators(float frequency, float samplerate) : frequency(frequency),
-  amplitude(1.0), phase(0), sample(0), samplerate(samplerate)
+  amplitude(0.5), phase(0), sample(0), samplerate(samplerate)
 {
   std::cout << "Oscillators - constructor " << frequency << "\n";
 }
