@@ -5,6 +5,7 @@
 #include "sine.h"
 #include "square.h"
 #include "saw.h"
+#include "synth.h"
 
 class CustomCallback : public AudioCallback {
 public:
@@ -13,9 +14,7 @@ public:
 
 private:
   float samplerate = 44100;
-  Sine sine = Sine(440, samplerate);
-  Square square = Square(440, samplerate);
-  Saw saw = Saw(440,samplerate);
+  Synth::makeSine(400, samplerate);
 };
 
 #endif //CALLBACK_H
