@@ -6,6 +6,7 @@ void CustomCallback::prepare(int rate) {
     samplerate = (float) rate;
     synth.setSamplerate(samplerate);
     std::cout << "\nsamplerate: " << samplerate << "\n";
+    synth.tick();
 };
 
 void CustomCallback::process(AudioBuffer buffer) {

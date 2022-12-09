@@ -14,7 +14,7 @@ public:
 
 private:
   float samplerate = 44100;
-  Synth::makeSine(400, samplerate);
+  Synth synth;
 };
 
 #endif //CALLBACK_H

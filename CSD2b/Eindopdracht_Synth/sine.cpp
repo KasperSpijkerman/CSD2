@@ -7,7 +7,7 @@
 
 Sine::Sine(float frequency, float samplerate) : Oscillator(frequency, samplerate)
 {
-  std::cout << "Sine::Sine constructor\n";
+  std::cout << "Sine::Sine constructor" << frequency << "\n";
 }
 
 void Sine::calculate() {
