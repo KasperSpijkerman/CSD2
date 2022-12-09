@@ -5,7 +5,7 @@
 #include "sine.h"
 #include "square.h"
 #include "saw.h"
-#include "synth.h"
+#include "add_synth.h"
 
 class CustomCallback : public AudioCallback {
 public:
@@ -14,7 +14,7 @@ public:
 
 private:
   float samplerate = 44100;
-  Synth synth;
+  Add_Synth add_synth = Add_Synth(40);
 };
 
 #endif //CALLBACK_H

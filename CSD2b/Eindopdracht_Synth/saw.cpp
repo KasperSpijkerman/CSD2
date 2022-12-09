@@ -5,7 +5,7 @@
 #include "saw.h"
 #include "math.h"
 
-Saw::Saw(float frequency, float samplerate) : Oscillator(frequency, samplerate)
+Saw::Saw(float frequency, float samplerate,float amplitude) : Oscillator(frequency, samplerate,amplitude)
 {
   std::cout << "Saw::Saw constructor\n";
 }
