@@ -10,6 +10,7 @@ Saw::Saw(float frequency, float samplerate,float amplitude) : Oscillator(frequen
   std::cout << "Saw::Saw constructor\n";
 }
 
-void Saw::calculate() {
+void Saw::calculate() 
+{
   sample = (2*amplitude * phase) - amplitude;
 }

@@ -6,17 +6,11 @@
 Synth::Synth()
 {
   std::cout << "Synth::Synth constructor\n";
-  
-  
 };
 
 
-
-void Synth::tick()
-{
-}
-
 float Synth::getSample() 
 {
+  return 0;
 }
 

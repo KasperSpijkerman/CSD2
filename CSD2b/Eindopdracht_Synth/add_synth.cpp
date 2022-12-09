@@ -6,19 +6,19 @@ Add_Synth::Add_Synth(int midinote)
 {
   std::cout << "Add_Synth::Add_Synth constructor\n";
   frequency = mtof(midinote);
-  sine.setFrequency(frequency);
+  saw.setFrequency(frequency);
 };
 
 void Add_Synth::tick()
 {
-  sine.tick();
+  saw.tick();
   // sine2.tick();
   // saw.tick();
 }
 
 float Add_Synth::getSample() {
   
-  float multipleOscillators =  sine.getSample();
+  float multipleOscillators =  saw.getSample();
   return multipleOscillators;
 }
 

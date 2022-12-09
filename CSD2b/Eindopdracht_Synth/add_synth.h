@@ -14,7 +14,7 @@ public:
   void tick();
 
 protected:
-  Sine sine = Sine(100, 44100.0f,0.4);
+  Saw saw = Saw(100, 44100.0f,0.4);
   float frequency;
   int midinote;
   // Sine sine2 = Sine(500, 44100.0f,0.4);

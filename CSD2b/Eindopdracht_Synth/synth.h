@@ -8,7 +8,7 @@ public:
   
   // virtual void setSamplerate() = 0;
   virtual float getSample() = 0;
-  virtual void tick() = 0;
+  // virtual void tick() = 0;
   // void setSamplerate();
 
 protected:
