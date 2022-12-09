@@ -16,10 +16,14 @@ return frequency;
 
 void Synth::tick()
 {
-  return sine.tick();
+  sine.tick();
+  sine2.tick();
+  saw.tick();
 }
 
 float Synth::getSample() {
- return sine.getSample();
+  
+  float multipleOscillators =  sine.getSample()+sine2.getSample()+saw.getSample()/3;
+  return multipleOscillators;
 }
 
