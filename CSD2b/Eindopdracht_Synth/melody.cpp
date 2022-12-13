@@ -1,54 +1,46 @@
-#include <iostream>
 #include "melody.h"
+#include "timer.h"
+#include <chrono>
+#include <thread>
 
-// constructor and destructor
+
 Melody::Melody()
 {
-    readIndex = 0;
-    writeIndex = 0;
-    // initialize the notes array with -1, representing empty spots
-    for(int i = 0; i < NUM_NOTES; i++) {
-      notes[i] = -1;
+
+}
+
+Melody::~Melody()
+{}
+
+float Melody::getPitch()
+{
+  // wrap index
+  if(index >= NUM_NOTES) {
+    index = 0;
+  }
+  // index++ --> first use current value to read from array, after this
+  // increment with 1
+  return melody[index++];
+}
+
+//sleep function inpsired on code openai
+void Melody::updatePitch(*Melody melody, *) {
+  int bpm = 700;
+  //float was not working for the chrono milliseconds input. 
+  int timeMS = 60000/bpm;
+  for (int i = 0; i < NUM_NOTES; i++)
+    {
+        // Print a message indicating the start of the beat
+
+        float pitch = getPitch();
+
+        std::cout << "Note: " <<  pitch  << "  Freq: \n" ;
+
+
+        // Sleep for the specified number of milliseconds per beat
+        std::this_thread::sleep_for(std::chrono::milliseconds(timeMS));
     }
 }
-
-Melody::~Melody() {}
-
-int Melody::getNote()
-{
-
-  // check if melody is empty
-  std::cout << "\n writeIndex: " << writeIndex << " readIndex: " << readIndex << std::endl;
-  if(readIndex == writeIndex) { //empty
-    std::cout << "Melody is empty" << std::endl;
-    return -1;
-  }
-  // return current note and then increase readIndex
-  // readIndex++ --> first use the value, then increment value
-  // ++readIndex --> first increment value, then use the value
-  int note = notes[readIndex++];
-  // wrap readIndex
-  if(readIndex >= NUM_NOTES) readIndex -= NUM_NOTES;
-  return note;
-}
+  
 
 
-void Melody::addNote(int note)
-{
-  // check if circular buffer is full or not
-  if((writeIndex + 1)%NUM_NOTES == readIndex) { // full
-    std::cout << "\nMelody::addNote - "
-      << "Melody is full, not possible to add a note!" << std::endl;
-  } else { // not full
-    // check if note is not a negative value
-    if(note >= 0) {
-      // add note and increase writeIndex
-      notes[writeIndex++] = note;
-    } else { // negative value
-      std::cout << "\nMelody::addNote - "
-        << "does not accept negative notes!" << std::endl;
-    }
-  }
-  // wrap writeIndex
-  if(writeIndex >= NUM_NOTES) writeIndex -= NUM_NOTES;
-}

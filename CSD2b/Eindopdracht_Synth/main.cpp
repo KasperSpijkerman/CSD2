@@ -27,6 +27,7 @@ int main(int argc, char **argv) {
 
   jackModule.init(0, 2);
 
+
   bool running = true;
   while (running) {
     switch (std::cin.get()) {

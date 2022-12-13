@@ -11,10 +11,10 @@ void CustomCallback::prepare(int rate) {
 void CustomCallback::process(AudioBuffer buffer) {
   for (int i = 0; i < buffer.numFrames; ++i) {
     // write sample to buffer at channel 0, amp = 0.25
-    buffer.outputChannels[0][i] = (add_synth.getSample() + vibe_synth.getSample()/2);
-    buffer.outputChannels[1][i] = (add_synth.getSample() + vibe_synth.getSample())/2;
-    add_synth.tick();
-    vibe_synth.tick();
+    buffer.outputChannels[0][i] = (add_synth.getSample());
+    buffer.outputChannels[1][i] = (vibe_synth.getSample());
+    add_synth.synthTick();
+    vibe_synth.synthTick();
     
   }
 };

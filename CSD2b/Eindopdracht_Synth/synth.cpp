@@ -1,6 +1,6 @@
 #include "synth.h"
-#include "sine.h"
-#include "math.h"
+// #include "sine.h"
+// #include "math.h"
 #include <iostream>
 
 Synth::Synth()
@@ -11,10 +11,13 @@ Synth::Synth()
 
 float Synth::getSample() 
 {
-  return 0;
+  float Oscillators = (myOscillators[0] -> getSample() + myOscillators[1] -> getSample() + myOscillators[2] ->getSample())/3;
+  return Oscillators;
 }
 
-void Synth::tick()
+void Synth::synthTick()
 {
-  
+  myOscillators[0] ->tick();
+  myOscillators[1] ->tick();
+  myOscillators[2] ->tick();
 }

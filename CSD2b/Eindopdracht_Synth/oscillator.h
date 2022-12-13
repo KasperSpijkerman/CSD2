@@ -1,10 +1,10 @@
 #pragma once
 #include <iostream>
 
-class Oscillator
+class Oscillator  
 {
 public:
-  Oscillator(float frequency= 0, float samplerate = 44100, float amplitude = 0);
+  Oscillator(float frequency= 0, float amplitude = 0);
   ~Oscillator();
 
   // allow to set samplerate after initialization
@@ -26,7 +26,7 @@ protected:
   float phase;
   // sample contains the current sample
   float sample;
-  float samplerate;
+  float samplerate = 44100;
 };
 
 

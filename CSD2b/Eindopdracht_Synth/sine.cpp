@@ -5,7 +5,7 @@
 #include "sine.h"
 #include "math.h"
 
-Sine::Sine(float frequency, float samplerate,float amplitude) : Oscillator(frequency, samplerate,amplitude)
+Sine::Sine(float frequency,float amplitude) : Oscillator(frequency,amplitude)
 {
   std::cout << "Sine::Sine constructor" << frequency << "\n";
 }

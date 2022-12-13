@@ -17,25 +17,15 @@ Add_Synth::Add_Synth(int midinote)
 
 void Add_Synth::createOscillator()
 {
-  myOscillators[0] = new Saw(440,44100,0.5f);
-  myOscillators[1] = new Square(440,44100,0.5f);
-  myOscillators[2] = new Square(440,44100,0.5f);
+  myOscillators[0] = new Saw(440,0.5f);
+  myOscillators[1] = new Square(440,0.5f);
+  myOscillators[2] = new Square(440,0.5f);
   
 }
 
-void Add_Synth::tick()
-{
-  myOscillators[0] ->tick();
-  myOscillators[1] ->tick();
-  myOscillators[2] ->tick();
-}
 
 //a function for returning samples from specific oscillators for add synth
-float Add_Synth::getSample() 
-{
-  float addOscillators = (myOscillators[0] -> getSample() + myOscillators[1] -> getSample() + myOscillators[2] ->getSample())/3;
-  return addOscillators;
-}
+
 
 float Add_Synth::mtof(int midinote, int detune)
 {
