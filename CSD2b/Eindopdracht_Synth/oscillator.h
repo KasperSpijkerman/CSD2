@@ -1,5 +1,4 @@
-#ifndef _Oscillator_H_
-#define _Oscillator_H_
+#pragma once
 #include <iostream>
 
 class Oscillator
@@ -30,4 +29,4 @@ protected:
   float samplerate;
 };
 
-#endif
+

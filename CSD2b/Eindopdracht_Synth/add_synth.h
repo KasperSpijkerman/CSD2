@@ -3,6 +3,7 @@
 #include "synth.h"
 #include "sine.h"
 #include "saw.h"
+#include "square.h"
 
 class Add_Synth : public Synth
 {
@@ -10,11 +11,12 @@ public:
   Add_Synth(int midinote);
   // void setSamplerate();
   float getSample();
-  float mtof(int midinote);
+  float mtof(int midinote, int detune);
   void tick();
+  void createOscillator();
 
 protected:
-  Saw saw = Saw(100, 44100.0f,0.4);
+  
   float frequency;
   int midinote;
   // Sine sine2 = Sine(500, 44100.0f,0.4);

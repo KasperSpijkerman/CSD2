@@ -14,7 +14,7 @@ public:
 
 private:
   float samplerate = 44100;
-  Add_Synth add_synth = Add_Synth(50);
+  Add_Synth add_synth = Add_Synth(60);
 };
 
 #endif //CALLBACK_H
