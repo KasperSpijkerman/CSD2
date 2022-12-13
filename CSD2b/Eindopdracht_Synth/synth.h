@@ -6,10 +6,12 @@ class Synth
 public: 
   Synth();
   virtual float getSample() = 0;
+  virtual void tick() = 0;
 
 protected:
   float frequency;
   Oscillator* myOscillators[3];
+  
   // float attackTime;
   // float decayTime;
   // float sustainLevel;

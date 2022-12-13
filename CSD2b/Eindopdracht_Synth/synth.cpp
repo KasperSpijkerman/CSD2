@@ -14,3 +14,7 @@ float Synth::getSample()
   return 0;
 }
 
+void Synth::tick()
+{
+  
+}

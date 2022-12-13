@@ -6,6 +6,7 @@
 #include "square.h"
 #include "saw.h"
 #include "add_synth.h"
+#include "vibe_synth.h"
 
 class CustomCallback : public AudioCallback {
 public:
@@ -15,6 +16,7 @@ public:
 private:
   float samplerate = 44100;
   Add_Synth add_synth = Add_Synth(60);
+  Vibe_Synth vibe_synth = Vibe_Synth(72);
 };
 
 #endif //CALLBACK_H
