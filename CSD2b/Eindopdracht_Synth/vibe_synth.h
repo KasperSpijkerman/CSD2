@@ -10,7 +10,6 @@ class Vibe_Synth : public Synth
 public: 
   Vibe_Synth(int midinote);
   // void setSamplerate();
-  float mtof(int midinote, int detune);
   void createOscillator();
 protected:
 };

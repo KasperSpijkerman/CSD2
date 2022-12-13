@@ -4,6 +4,8 @@
 #include "math.h"
 #include "audioToFile.h"
 #include "oscillator.h"
+#include "melody.h"
+
 
 /*
  * NOTE: jack2 needs to be installed
@@ -19,15 +21,12 @@
 int main(int argc, char **argv) {
   auto callback = CustomCallback{};
   auto jackModule = JackModule{callback};
-
 #if WRITE_TO_FILE
   AudioToFile audioToFile;
   audioToFile.write(callback);
 #else
 
   jackModule.init(0, 2);
-
-
   bool running = true;
   while (running) {
     switch (std::cin.get()) {

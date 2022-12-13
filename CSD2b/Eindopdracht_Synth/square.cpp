@@ -1,6 +1,3 @@
-//
-// Created by Ciska Vriezenga on 06/12/2022.
-//
 
 #include "square.h"
 #include "math.h"

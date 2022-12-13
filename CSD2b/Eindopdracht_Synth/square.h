@@ -1,7 +1,3 @@
-//
-// Created by Ciska Vriezenga on 06/12/2022.
-//
-
 #ifndef BLOK2B_SQUARE_H
 #define BLOK2B_SQUARE_H
 

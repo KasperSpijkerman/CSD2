@@ -10,7 +10,6 @@ class Add_Synth : public Synth
 public: 
   Add_Synth(int midinote);
   // void setSamplerate();
-  float mtof(int midinote, int detune);
   void createOscillator();
 protected:
   
