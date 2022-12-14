@@ -1,7 +1,7 @@
 #include "vibe_synth.h"
 #include <iostream>
 
-Vibe_Synth::Vibe_Synth(int midinote) 
+Vibe_Synth::Vibe_Synth() 
 {
   std::cout << "Vibe_Synth::Vibe_Synth constructor\n";
   createOscillator();
@@ -16,9 +16,9 @@ Vibe_Synth::Vibe_Synth(int midinote)
 
 void Vibe_Synth::createOscillator()
 {
-  myOscillators[0] = new Sine(440,1.0f);
-  // myOscillators[1] = new Sine(440,0.5f);
-  // myOscillators[2] = new Square(440,0.3f);
+  myOscillators[0] = new Saw(440,0.5f);
+  myOscillators[1] = new Saw(440,0.5f);
+  myOscillators[2] = new Square(440,0.5f);
   
 }
 

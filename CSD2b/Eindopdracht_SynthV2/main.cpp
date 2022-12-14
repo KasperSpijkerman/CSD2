@@ -10,6 +10,7 @@
 #include "melody.h"
 #include "synth.h"
 #include "add_synth.h"
+#include "vibe_synth.h"
 
 /*
  * NOTE: the development library with headers for jack2 needs to be installed to build this program.
@@ -41,19 +42,27 @@ public:
 
     void updatePitch(Melody& melody, Synth& synth) {
       float pitch = melody.getPitch();
+      float pitch2 = melody2.getPitch();
       double freq = mtof(pitch,0);
       double freq2 = mtof(pitch,7);
       double freq3 = mtof(pitch,12);
+      double freq4 = mtof(pitch2,0);
+      double freq5 = mtof(pitch2,7);
+      double freq6 = mtof(pitch2,12);
       std::cout << "next pitch: " << pitch << ", freq is: " << freq << std::endl;
-      synth.myOscillators[0]->setFrequency(freq);
-      synth.myOscillators[1]->setFrequency(freq2);
-      synth.myOscillators[2]->setFrequency(freq3);
+      addsynth.myOscillators[0]->setFrequency(freq);
+      addsynth.myOscillators[1]->setFrequency(freq2);
+      addsynth.myOscillators[2]->setFrequency(freq3);
+      vibesynth.myOscillators[0]->setFrequency(freq4);
+      vibesynth.myOscillators[1]->setFrequency(freq5);
+      vibesynth.myOscillators[2]->setFrequency(freq6);
     } // updatePitch()
 
 
     void prepare (double sampleRate) override {
       this->sampleRate=sampleRate;
-      updatePitch(melody,synth);
+      updatePitch(melody,addsynth);
+      updatePitch(melody2,vibesynth);
     } // prepare()
 
 
@@ -67,9 +76,11 @@ public:
         auto [inputChannels, outputChannels, numInputChannels, numOutputChannels, numFrames] = buffer;
 
 	for (int channel = 0; channel < numOutputChannels; ++channel) {
+    // std::cout<< channel << "\n";
 	    for (int sample = 0; sample < numFrames; ++sample) {
-		outputChannels[channel][sample] = synth.getSample() * amplitude;
-		synth.synthTick(); // rather mixed up functionality
+		outputChannels[channel][sample] = addsynth.getSample() * amplitude;
+    addsynth.synthTick();
+     // rather mixed up functionality
 
 	    /* After every sample, check if we need to advance to the next note
 	     * This is a bit awkward in this scheme of buffers per channel
@@ -78,7 +89,31 @@ public:
 	    if(frameIndex >= noteDelayFactor * sampleRate) {
 	      // reset frameIndex
 	      frameIndex = 0;
-	      updatePitch(melody,synth);
+	      updatePitch(melody,addsynth);
+        
+	    }
+	    else {
+	      // increment frameindex
+	      frameIndex++;
+	    }
+	  } // for sample
+	} // for channel
+for (int channel = 1; channel < numOutputChannels; ++channel) {
+    // std::cout<< channel << "\n";
+	    for (int sample = 0; sample < numFrames; ++sample) {
+		outputChannels[channel][sample] = vibesynth.getSample() * amplitude;
+    vibesynth.synthTick();
+     // rather mixed up functionality
+
+	    /* After every sample, check if we need to advance to the next note
+	     * This is a bit awkward in this scheme of buffers per channel
+	     *  In a multichannel setting we should update pitches independently per channel!
+	     */
+	    if(frameIndex >= noteDelayFactor2 * sampleRate) {
+	      // reset frameIndex
+	      frameIndex = 0;
+	      updatePitch(melody2,vibesynth);
+        
 	    }
 	    else {
 	      // increment frameindex
@@ -88,12 +123,18 @@ public:
 	} // for channel
     } // process()
 
+
+  
+  
+
 private:
   double sampleRate;
-  Add_Synth synth;
-
-  float amplitude = 0.025;
+  Add_Synth addsynth;
+  Vibe_Synth vibesynth;
+  
+  float amplitude = 0.05;
   Melody melody;
+  Melody melody2;
   int frameIndex = 0;
 
   /* instead of using bpm and specifying note lenghts we'll make every note
@@ -104,6 +145,7 @@ private:
    * played
    */
   double noteDelayFactor=0.25;
+  double noteDelayFactor2=0.25;
 }; // Callback{}
 
 
@@ -113,7 +155,7 @@ int main(int argc,char **argv)
   auto callback = Callback {};
   auto jack_module = JackModule(callback);
 
-  jack_module.init(1,1);
+  jack_module.init(1,2);
 
   std::cout << "\n\nType 'quit' to exit\n";
   bool running = true;

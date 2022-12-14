@@ -8,7 +8,7 @@
 class Vibe_Synth : public Synth
 {
 public: 
-  Vibe_Synth(int midinote);
+  Vibe_Synth();
   // void setSamplerate();
   void createOscillator();
 protected:

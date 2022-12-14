@@ -1,4 +1,5 @@
 #include "synth.h"
+#include "melody.h"
 // #include "sine.h"
 // #include "math.h"
 #include <iostream>
@@ -11,7 +12,8 @@ Synth::Synth()
 
 float Synth::getSample() 
 {
-  float Oscillators = (myOscillators[0]-> getSample()) + (myOscillators[1] -> getSample()) + (myOscillators[2] ->getSample()/3);
+  float Oscillators =(myOscillators[0]-> getSample())+ (myOscillators[1] -> getSample()) + (myOscillators[2] ->getSample()/3);;
+  
   return Oscillators;
   
 }
