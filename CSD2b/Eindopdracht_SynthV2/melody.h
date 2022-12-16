@@ -1,8 +1,7 @@
 #pragma once
 
 #include <iostream>
-#define NUM_NOTES 9
-#define NUM_SCALE 9
+#define NUM_NOTES 8
 
 class Melody
 {
@@ -10,13 +9,13 @@ public:
   Melody();
   ~Melody();
   float getPitch(float melody[]);
+  //function for setting the scale 
   void setScale(float newScale[NUM_NOTES]);
-  void makeMelodyScale(float array[],int rootNote);
 
   // void playMelody();
 
 public:
-  // float scale[NUM_SCALE] = {1,3,5,7,6,8,10,11,12};
+  //setting default rootnote, will be overwritten by UI
   int rootNote = 60;
   float melody_scale[NUM_NOTES] = {0};
   

@@ -14,7 +14,8 @@ public:
   float getSample();
 public:
   float ampMod;
-  Sine ampsine =  Sine(4,1);
+  Sine ampsine =  Sine(2,1);
+  double fmIndex = 2;
 };
 
 #endif 

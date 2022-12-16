@@ -12,6 +12,10 @@
 #include "add_synth.h"
 #include "vibe_synth.h"
 #include "ui_file.h"
+//modules for scale randomization
+#include <algorithm>
+#include <chrono>
+#include <random>
 
 /*
  * NOTE: the development library with headers for jack2 needs to be installed to build this program.
@@ -66,11 +70,18 @@ public:
     double userBpm = ui.retrieveBPMInRange(60,200);
     //using user bpm for playbackspeed
     noteDelayFactor = 30/userBpm;
-    noteDelayFactor2 = 60/userBpm;
+    noteDelayFactor2 = 30/userBpm;
     playing = true;
-    //setting the scales for both melodies
-    melody.setScale(melody_scale);
-    melody2.setScale(melody2_scale);
+    //setting the scales for both synths
+    melody.setScale(dorian);
+    melody2.setScale(dorian);
+    //creating a random number to use to randomize
+    unsigned num = std::chrono::system_clock::now().time_since_epoch().count();
+    //shuffling the array based on length array
+    std::shuffle(&melody.melody_scale[0],&melody.melody_scale[7],std::default_random_engine(num));
+    //doing it a second time to get a different melody
+    unsigned num2 = std::chrono::system_clock::now().time_since_epoch().count();
+    std::shuffle(&melody2.melody_scale[0],&melody2.melody_scale[7],std::default_random_engine(num2));
     //updating the pitch seperately
     updatePitch(melody,addsynth);
     updatePitch(melody2,vibesynth);
@@ -135,8 +146,17 @@ protected:
   UI ui;
   float amplitude = 0.025;
   //scales for different melodies
-  float melody_scale[9] = {0, 7,10, 7, 12, 0, 12, 10, 10};
-  float melody2_scale[9] = {12, 7, 12, 0, 7, 12, 7, 0, 12};
+  float melody_scale[8] = {0, 7,10, 7, 12, 0, 12, 10};
+  float melody2_scale[8] = {12, 7, 12, 0, 7, 12, 7, 0};
+  float randomscale[8] = {0,1,2,3,4,5,6,7};
+  float harmonicminor[8] = {0,2,3,5,7,8,11,12};
+  float minor[8] = {0,2,3,5,7,8,10,12};
+  float major[8] = {0,2,4,5,7,9,11,12};
+  float dorian[8] = {0,2,3,5,7,9,10,12};
+  float phrygian[8] = {0,1,3,5,7,8,10,12};
+  float lydian[8] = {0,2,4,6,7,9,11,12};
+  float mixolydian[8] = {0,2,4,5,7,9,10,12};
+  float locrian[8] = {0,1,3,5,6,8,10,12};
   //melody 1 and 2 
   Melody melody;
   Melody melody2;

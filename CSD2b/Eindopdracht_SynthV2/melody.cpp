@@ -12,12 +12,6 @@ Melody::Melody()
 Melody::~Melody()
 {}
 
-void Melody::makeMelodyScale(float melody[],int rootNote)
-{
-  for (int i = 0; i < NUM_NOTES; i++) {
-    melody[i] += rootNote;
-  }
-}
 
 float Melody::getPitch(float melody[])
 {
