@@ -20,5 +20,13 @@ void Add_Synth::createOscillator()
   myOscillators[2] = new Square(440,0.5f);
 }
 
+float Add_Synth::getSample() 
+{
+  float Oscillators =(myOscillators[0]-> getSample())+ (myOscillators[1] -> getSample()) + (myOscillators[2] ->getSample()/3);;
+  
+  return Oscillators;
+  
+}
+
 
 

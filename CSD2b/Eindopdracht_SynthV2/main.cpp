@@ -50,6 +50,11 @@ public:
     synth.myOscillators[0]->setFrequency(freq);
     synth.myOscillators[1]->setFrequency(freq2);
     synth.myOscillators[2]->setFrequency(freq3);
+    
+
+    
+    
+
   } // updatePitch()
 
 
@@ -69,6 +74,7 @@ public:
     //updating the pitch seperately
     updatePitch(melody,addsynth);
     updatePitch(melody2,vibesynth);
+    
   } // prepare()
 
 
@@ -84,9 +90,14 @@ public:
     if (playing == true) 
     {
       for (int sample = 0; sample < numFrames; ++sample) {
+        //splitting both synths on L/R, vibesynth has amp modulation
         outputChannels[0][sample] = addsynth.getSample() * amplitude;
-        outputChannels[1][sample] = vibesynth.getSample() * amplitude;
+        outputChannels[1][sample] = vibesynth.getSample() * amplitude *vibesynth.ampMod;
+        
         addsynth.synthTick();
+        vibesynth.ampsine.tick();
+        // std::cout << vibesynth.ampMod <<"\n";
+        vibesynth.ampMod = vibesynth.ampsine.getSample();
         vibesynth.synthTick();
         // rather mixed up functionality
 
@@ -100,6 +111,7 @@ public:
           // reset frameIndex
           frameIndex = 0;
           updatePitch(melody, addsynth);
+          
         }
         if (frameIndex2 > noteDelayFactor2 * sampleRate) {
           // reset frameIndex
@@ -119,6 +131,7 @@ protected:
   //creating 2 synth objects
   Add_Synth addsynth;
   Vibe_Synth vibesynth;
+  //creating ui object
   UI ui;
   float amplitude = 0.025;
   //scales for different melodies

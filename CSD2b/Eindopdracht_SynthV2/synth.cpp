@@ -10,13 +10,13 @@ Synth::Synth()
 };
 
 
-float Synth::getSample() 
-{
-  float Oscillators =(myOscillators[0]-> getSample())+ (myOscillators[1] -> getSample()) + (myOscillators[2] ->getSample()/3);;
+// float Synth::getSample() 
+// {
+//   float Oscillators =(myOscillators[0]-> getSample())+ (myOscillators[1] -> getSample()) + (myOscillators[2] ->getSample()/3);;
   
-  return Oscillators;
+//   return Oscillators;
   
-}
+// }
 
 void Synth::synthTick()
 {

@@ -11,6 +11,7 @@ public:
   Add_Synth();
   // void setSamplerate();
   void createOscillator();
+  float getSample();
 protected:
   
   float frequency;

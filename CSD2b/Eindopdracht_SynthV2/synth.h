@@ -6,7 +6,7 @@ class Synth
 {
 public: 
   Synth();
-  float getSample();
+  // float getSample();
   void synthTick();
   float mtof(int midinote, int interval);
   Oscillator* myOscillators[3];

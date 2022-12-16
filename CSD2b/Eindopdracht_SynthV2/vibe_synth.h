@@ -11,7 +11,10 @@ public:
   Vibe_Synth();
   // void setSamplerate();
   void createOscillator();
-protected:
+  float getSample();
+public:
+  float ampMod;
+  Sine ampsine =  Sine(4,1);
 };
 
 #endif 

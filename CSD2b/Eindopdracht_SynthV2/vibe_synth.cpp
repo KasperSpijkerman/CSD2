@@ -7,6 +7,8 @@ Vibe_Synth::Vibe_Synth()
   createOscillator();
   frequency = mtof(midinote,0);
   myOscillators[0] -> setFrequency(frequency);
+  
+  std::cout << ampMod <<"\n";
   // frequency = mtof(midinote,3);
   // myOscillators[1] -> setFrequency(frequency);
   // frequency = mtof(midinote,10);
@@ -16,9 +18,17 @@ Vibe_Synth::Vibe_Synth()
 
 void Vibe_Synth::createOscillator()
 {
-  myOscillators[0] = new Square(440,0.5f);
-  myOscillators[1] = new Sine(440,0.5f);
-  myOscillators[2] = new Square(440,0.5f);
+  myOscillators[0] = new Sine(440,1.0f);
+  myOscillators[1] = new Sine(440,1.0f);
+  myOscillators[2] = new Sine(440,1.0f);
+  
+}
+
+float Vibe_Synth::getSample() 
+{
+  float Oscillators =((myOscillators[0]-> getSample())+ (myOscillators[1] -> getSample()) + (myOscillators[2] ->getSample()))/3;;
+  
+  return Oscillators;
   
 }
 
