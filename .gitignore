@@ -13,8 +13,11 @@ temp/
 # ignore executables 
 Multiple_Instruments 
 Sinewave
+Synth
 
 
 
 
 .DS_Store
+
+__pycache__

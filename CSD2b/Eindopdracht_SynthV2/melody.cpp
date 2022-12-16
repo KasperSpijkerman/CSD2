@@ -5,9 +5,8 @@
 
 Melody::Melody()
 {
-std::cout << "inside constructor melody\n"; 
-makeMelodyScale(melody_scale,rootNote);
-makeMelodyScale(melody2_scale,rootNote);
+  std::cout << "inside constructor melody\n"; 
+  // makeMelodyScale(melody_scale,rootNote);
 }
 
 Melody::~Melody()
@@ -15,7 +14,7 @@ Melody::~Melody()
 
 void Melody::makeMelodyScale(float melody[],int rootNote)
 {
-for (int i = 0; i < NUM_NOTES; i++) {
+  for (int i = 0; i < NUM_NOTES; i++) {
     melody[i] += rootNote;
   }
 }
@@ -31,7 +30,9 @@ float Melody::getPitch(float melody[])
   return melody[index++];
 }
 
-
-  
-
-
+void Melody::setScale(float newScale[NUM_NOTES])
+{
+  for (int i = 0; i < NUM_NOTES; i++) {
+    melody_scale[i] = newScale[i] + rootNote;
+  }
+}
