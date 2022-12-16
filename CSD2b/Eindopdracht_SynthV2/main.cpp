@@ -41,8 +41,8 @@ public:
 
 
     void updatePitch(Melody& melody, Synth& synth) {
-      float pitch = melody.getPitch();
-      float pitch2 = melody2.getPitch();
+      float pitch = melody.getPitch(melody.melody_scale);
+      float pitch2 = melody2.getPitch(melody2.melody2_scale);
       double freq = mtof(pitch,0);
       double freq2 = mtof(pitch,7);
       double freq3 = mtof(pitch,12);
@@ -109,15 +109,15 @@ for (int channel = 1; channel < numOutputChannels; ++channel) {
 	     * This is a bit awkward in this scheme of buffers per channel
 	     *  In a multichannel setting we should update pitches independently per channel!
 	     */
-	    if(frameIndex >= noteDelayFactor2 * sampleRate) {
+	    if(frameIndex2 >= noteDelayFactor2 * sampleRate) {
 	      // reset frameIndex
-	      frameIndex = 0;
+	      frameIndex2 = 0;
 	      updatePitch(melody2,vibesynth);
         
 	    }
 	    else {
 	      // increment frameindex
-	      frameIndex++;
+	      frameIndex2++;
 	    }
 	  } // for sample
 	} // for channel
@@ -132,10 +132,11 @@ private:
   Add_Synth addsynth;
   Vibe_Synth vibesynth;
   
-  float amplitude = 0.05;
+  float amplitude = 0.025;
   Melody melody;
   Melody melody2;
   int frameIndex = 0;
+  int frameIndex2 = 0;
 
   /* instead of using bpm and specifying note lenghts we'll make every note
    * equal length and specify the delay between notes in term of the
@@ -144,8 +145,8 @@ private:
    * A note of say 500 msec or 0.5 sec, takes 0.5*samplerate samples to be
    * played
    */
-  double noteDelayFactor=0.25;
-  double noteDelayFactor2=0.25;
+  double noteDelayFactor=2;
+  double noteDelayFactor2=1;
 }; // Callback{}
 
 
@@ -155,7 +156,7 @@ int main(int argc,char **argv)
   auto callback = Callback {};
   auto jack_module = JackModule(callback);
 
-  jack_module.init(1,2);
+  jack_module.init(0,2);
 
   std::cout << "\n\nType 'quit' to exit\n";
   bool running = true;

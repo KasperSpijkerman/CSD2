@@ -15,9 +15,9 @@ Add_Synth::Add_Synth()
 //creating oscillators with pointers
 void Add_Synth::createOscillator()
 {
-  myOscillators[0] = new Sine(440,0.5f);
-  myOscillators[1] = new Sine(440,0.5f);
-  myOscillators[2] = new Sine(440,0.5f);
+  myOscillators[0] = new Saw(440,0.5f);
+  myOscillators[1] = new Saw(440,0.5f);
+  myOscillators[2] = new Square(440,0.5f);
 }
 
 

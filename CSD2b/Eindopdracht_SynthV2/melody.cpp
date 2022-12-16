@@ -6,7 +6,8 @@
 Melody::Melody()
 {
 std::cout << "inside constructor melody\n"; 
-makeMelodyScale(melody,rootNote);
+makeMelodyScale(melody_scale,rootNote);
+makeMelodyScale(melody2_scale,rootNote);
 }
 
 Melody::~Melody()
@@ -19,7 +20,7 @@ for (int i = 0; i < NUM_NOTES; i++) {
   }
 }
 
-float Melody::getPitch()
+float Melody::getPitch(float melody[])
 {
   // wrap index
   if(index >= NUM_NOTES) {
