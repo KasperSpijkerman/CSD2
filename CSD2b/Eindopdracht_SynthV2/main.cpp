@@ -11,6 +11,7 @@
 #include "synth.h"
 #include "add_synth.h"
 #include "vibe_synth.h"
+#include "ui_file.h"
 
 /*
  * NOTE: the development library with headers for jack2 needs to be installed to build this program.
@@ -54,8 +55,18 @@ public:
 
   void prepare (double sampleRate) override {
     this->sampleRate=sampleRate;
+    //asking the user for a rootnote input per synth and bpm
+    melody.rootNote = ui.retrieveValueInRange(20,80);
+    melody2.rootNote = ui.retrieveValueInRange(20,80);
+    double userBpm = ui.retrieveBPMInRange(60,200);
+    //using user bpm for playbackspeed
+    noteDelayFactor = 30/userBpm;
+    noteDelayFactor2 = 60/userBpm;
+    playing = true;
+    //setting the scales for both melodies
     melody.setScale(melody_scale);
     melody2.setScale(melody2_scale);
+    //updating the pitch seperately
     updatePitch(melody,addsynth);
     updatePitch(melody2,vibesynth);
   } // prepare()
@@ -70,58 +81,58 @@ public:
   void process (AudioBuffer buffer) override {
     auto [inputChannels, outputChannels, numInputChannels, numOutputChannels, numFrames] = buffer;
 
-    for (int sample = 0; sample < numFrames; ++sample) {
-      outputChannels[0][sample] = addsynth.getSample() * amplitude;
-      outputChannels[1][sample] = vibesynth.getSample() * amplitude;
-      addsynth.synthTick();
-      vibesynth.synthTick();
-      // rather mixed up functionality
+    if (playing == true) 
+    {
+      for (int sample = 0; sample < numFrames; ++sample) {
+        outputChannels[0][sample] = addsynth.getSample() * amplitude;
+        outputChannels[1][sample] = vibesynth.getSample() * amplitude;
+        addsynth.synthTick();
+        vibesynth.synthTick();
+        // rather mixed up functionality
 
-      /* After every sample, check if we need to advance to the next note
-      * This is a bit awkward in this scheme of buffers per channel
-      *  In a multichannel setting we should update pitches independently per channel!
-      */
-      frameIndex++;
-      frameIndex2++;
-      if (frameIndex > noteDelayFactor * sampleRate) {
-        // reset frameIndex
-        frameIndex = 0;
-        updatePitch(melody, addsynth);
-      }
-      if (frameIndex2 > noteDelayFactor2 * sampleRate) {
-        // reset frameIndex
-        frameIndex2 = 0;
-        updatePitch(melody2, vibesynth);
-      }
-    } // for sample
+        /* After every sample, check if we need to advance to the next note
+        * This is a bit awkward in this scheme of buffers per channel
+        *  In a multichannel setting we should update pitches independently per channel!
+        */
+        frameIndex++;
+        frameIndex2++;
+        if (frameIndex > noteDelayFactor * sampleRate) {
+          // reset frameIndex
+          frameIndex = 0;
+          updatePitch(melody, addsynth);
+        }
+        if (frameIndex2 > noteDelayFactor2 * sampleRate) {
+          // reset frameIndex
+          frameIndex2 = 0;
+          updatePitch(melody2, vibesynth);
+        }
+      } // for sample
+    }
   } // process()
 
 
   
   
 
-private:
+protected:
   double sampleRate;
+  //creating 2 synth objects
   Add_Synth addsynth;
   Vibe_Synth vibesynth;
-  
+  UI ui;
   float amplitude = 0.025;
-  float melody_scale[9] = {0, 2, 3, 5, 6, 10, 11, 12, 10};
-  float melody2_scale[9] = {12, 10, 11, 12, 10, 12, 10, 11, 12};
+  //scales for different melodies
+  float melody_scale[9] = {0, 7,10, 7, 12, 0, 12, 10, 10};
+  float melody2_scale[9] = {12, 7, 12, 0, 7, 12, 7, 0, 12};
+  //melody 1 and 2 
   Melody melody;
   Melody melody2;
   int frameIndex = 0;
   int frameIndex2 = 0;
-
-  /* instead of using bpm and specifying note lenghts we'll make every note
-   * equal length and specify the delay between notes in term of the
-   * samplerate
-   *
-   * A note of say 500 msec or 0.5 sec, takes 0.5*samplerate samples to be
-   * played
-   */
-  double noteDelayFactor=2;
-  double noteDelayFactor2=1;
+  bool playing = false;
+  double bpm = 120;
+  double noteDelayFactor=60/bpm;
+  double noteDelayFactor2=30/bpm;
 }; // Callback{}
 
 

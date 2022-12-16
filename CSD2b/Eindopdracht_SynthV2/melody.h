@@ -17,7 +17,7 @@ public:
 
 public:
   // float scale[NUM_SCALE] = {1,3,5,7,6,8,10,11,12};
-  int rootNote = 70;
+  int rootNote = 60;
   float melody_scale[NUM_NOTES] = {0};
   
   int index;
