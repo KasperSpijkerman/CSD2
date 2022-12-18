@@ -41,7 +41,7 @@ int UI::retrieveUserSelection(std::string selectionOptions[], int numOptions)
 } // retrieveUserSelection()
 
 
-float UI::retrieveValueInRange(float min, float max)
+float UI::retrieveRootnoteInRange(float min, float max)
 {
   std::string input;
   float value = 0;
@@ -105,7 +105,37 @@ float UI::retrieveValueInRange(float min, float max)
   return value;
 } // retrieveValueInRange()
 
+//function for getting modulation index.
+double UI::retrieveModulationInRange(double min, double max)
+{
+  std::string input;
+  double value = 0;
+  bool notInRange = true;
 
+  while(notInRange) {
+    std::cout << "Please enter a modulation value between " << min << " and " << max
+      << std::endl;
+    // first capture input in input string
+    std::cin >> input;
+    // validate if input string can be transformed into a float
+    try {
+      value = std::stof(input);
+      // validate range
+      if(value >= min && value <= max) {
+        notInRange = false;
+      } else {
+        // value not in range
+        std::cout << "Value out of range, please try again." << std::endl;
+      }
+    }
+    catch (const std::exception& e) {
+      // no float as input
+      std::cout << "Invalid input, expecting a number."
+        << std::endl;
+    }
+  }
+  return value;
+}
 
 // int main()
 // {
