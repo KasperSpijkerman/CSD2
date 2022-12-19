@@ -67,3 +67,37 @@ if (scaleOptions[scale] == "harmonicminor" )
     }
 }
 
+int Melody::calculateRootnote(std::string fundamentInput[],int key, int octave, int octaveMultiplier)
+{
+  int rootNote = 60;
+  if (fundamentInput[key] == "a")
+  {
+  rootNote = key + (octave*octaveMultiplier);
+  }
+  else if (fundamentInput[key] == "b")
+  {
+  rootNote = key + (octave*octaveMultiplier);
+  }
+  else if (fundamentInput[key] == "c")
+  {
+  rootNote = key + (octave*octaveMultiplier);
+  }
+  else if (fundamentInput[key] == "d")
+  {
+  rootNote = key + (octave*octaveMultiplier);
+  }
+  else if (fundamentInput[key] == "e")
+  {
+  rootNote = key + (octave*octaveMultiplier);
+  }
+  else if (fundamentInput[key] == "f")
+  {
+  rootNote = key + (octave*octaveMultiplier);
+  }
+  else if (fundamentInput[key] == "g")
+  {
+  rootNote = key + (octave*octaveMultiplier);
+  }
+
+  return rootNote;
+}

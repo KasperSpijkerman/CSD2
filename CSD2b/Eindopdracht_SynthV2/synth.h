@@ -12,13 +12,14 @@ public:
   float mtof(int midinote, int interval);
   //the synth has 3 oscillators depending on which synth is selected.
   Oscillator* myOscillators[3];
-  //the synth base class has an fm synth and an additive synth
+  //the synth base class has a vibe synth (fm) and an additive synth
   Synth* mySynths[2];
 
 
 protected:
   float frequency;
   int midinote;
+  int synthOptions[3] = {"vibe","add","both"}
 };
 
 #endif 

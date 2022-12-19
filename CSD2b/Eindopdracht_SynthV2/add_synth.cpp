@@ -5,11 +5,8 @@
 Add_Synth::Add_Synth()
 {
   std::cout << "Add_Synth::Add_Synth constructor\n";
+  //creating combination of different oscillators for this synth
   createOscillator();
-  // frequency = mtof(midinote,3);
-  // myOscillators[1] -> setFrequency(frequency);
-  // frequency = mtof(midinote,10);
-  // myOscillators[2] -> setFrequency(frequency);
 };
 
 //creating oscillators with pointers

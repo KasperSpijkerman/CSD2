@@ -19,8 +19,7 @@ std::string UI::retrieveUserInput(std::string selectionOptions[], int numOptions
     std::cin >> selection;
     return selection;
 }
-
-int UI::retrieveUserSelection(std::string selectionOptions[], int numOptions)
+int UI::retrieveSynthSelection(std::string selectionOptions[], int numOptions)
 {
     std::string selection = "";
     while(true) {
@@ -41,14 +40,57 @@ int UI::retrieveUserSelection(std::string selectionOptions[], int numOptions)
 } // retrieveUserSelection()
 
 
-float UI::retrieveRootnoteInRange(float min, float max)
+//function for scale input
+int UI::retrieveScaleSelection(std::string selectionOptions[], int numOptions)
+{
+    std::string selection = "";
+    while(true) {
+        // let user choose from the allowed options
+        selection = retrieveUserInput(selectionOptions, numOptions);
+
+        // check if the selection is among the available option
+	for(int i=0; i<numOptions; ++i) {
+	    if(selection == selectionOptions[i]) {
+		return i;
+	    }
+	}
+        // if we end up here, this means the selection is not correct,
+	// so log a message to user to try again
+        std::cout << "Incorrect selection, please try again";
+    } // while
+    return -1; // should never be reached
+} // retrieveUserSelection()
+
+//function for key input
+int UI::retrieveKeySelection(std::string selectionOptions[], int numOptions)
+{
+    std::string selection = "";
+    while(true) {
+        // let user choose from the allowed options
+        selection = retrieveUserInput(selectionOptions, numOptions);
+
+        // check if the selection is among the available option
+	for(int i=0; i<numOptions; ++i) {
+	    if(selection == selectionOptions[i]) {
+		return i;
+	    }
+	}
+        // if we end up here, this means the selection is not correct,
+	// so log a message to user to try again
+        std::cout << "Incorrect selection, please try again";
+    } // while
+    return -1; // should never be reached
+} // retrieveUserSelection()
+
+
+float UI::retrieveOctaveInRange(float min, float max)
 {
   std::string input;
   float value = 0;
   bool notInRange = true;
 
   while(notInRange) {
-    std::cout << "Please enter a rootnote value between " << min << " and " << max
+    std::cout << "Please enter the octave for the given key between " << min << " and " << max
       << std::endl;
     // first capture input in input string
     std::cin >> input;

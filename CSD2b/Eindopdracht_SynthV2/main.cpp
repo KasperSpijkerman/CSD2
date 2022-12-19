@@ -65,21 +65,25 @@ public:
   void prepare (double sampleRate) override {
     this->sampleRate=sampleRate;
     //asking the user for a rootnote input per synth and bpm
-    melody.rootNote = ui.retrieveRootnoteInRange(20,80);
-    melody2.rootNote = ui.retrieveRootnoteInRange(20,80);
-    double userBpm = ui.retrieveBPMInRange(60,200);
-    vibesynth.fmIndex = ui.retrieveModulationInRange(1,10);
+    melody.key = ui.retrieveKeySelection(melody.keyOptions,melody.keyNumOptions);
+    melody.octaveMultiplier = ui.retrieveOctaveInRange(3,6);
+    melody2.octaveMultiplier = ui.retrieveOctaveInRange(3,6);
+    melody.rootNote = melody.calculateRootnote(melody.keyOptions,melody.key,melody.octave,melody.octaveMultiplier);
+    melody2.rootNote = melody.calculateRootnote(melody.keyOptions,melody.key,melody.octave,melody2.octaveMultiplier);
     //retrieving scale selection from user
-    int scale = ui.retrieveUserSelection(melody.scaleOptions,melody.numOptions);
+    int scale = ui.retrieveUserSelection(melody.scaleOptions,melody.scaleNumOptions);
+    //setting default scale so scale is never empty
     melody.setScale(melody.major);
     melody2.setScale(melody2.major);
-    melody.setScale(melody.major);
-    melody2.setScale(melody2.major);
+    //choosing scale based on user input
     melody.chooseScale(melody.scaleOptions,scale,melody);
     melody2.chooseScale(melody2.scaleOptions,scale,melody2);
+    double userBpm = ui.retrieveBPMInRange(60,200);
+    vibesynth.fmIndex = ui.retrieveModulationInRange(1,10);
+    
     
     //using user bpm for playbackspeed
-    noteDelayFactor = 30/userBpm;
+    noteDelayFactor = 60/userBpm;
     noteDelayFactor2 = 30/userBpm;
     playing = true;
     //setting the scales for both synths
