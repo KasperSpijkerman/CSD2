@@ -45,15 +45,15 @@ public:
   } // mtof()
 
 
-  void updatePitch(Melody& melody, Synth& synth) {
+  void updatePitch(Melody& melody, Synth* synth) {
     float pitch = melody.getPitch(melody.melody_scale);
     double freq = mtof(pitch,0);
     double freq2 = mtof(pitch,7);
     double freq3 = mtof(pitch,12);
     std::cout << "next pitch: " << pitch << ", freq is: " << freq << std::endl;
-    synth.myOscillators[0]->setFrequency(freq);
-    synth.myOscillators[1]->setFrequency(freq2);
-    synth.myOscillators[2]->setFrequency(freq3);
+    synth->myOscillators[0]->setFrequency(freq);
+    synth->myOscillators[1]->setFrequency(freq2);
+    synth->myOscillators[2]->setFrequency(freq3);
     
 
     
@@ -65,21 +65,24 @@ public:
   void prepare (double sampleRate) override {
     this->sampleRate=sampleRate;
     //asking the user for a rootnote input per synth and bpm
+    synth.chosenSynth = ui.retrieveSynthSelection(synth.synthOptions,synth.synthNumOptions);
+    synth.synthSelect(synth.synthOptions,synth.chosenSynth,synth.mySynths);
     melody.key = ui.retrieveKeySelection(melody.keyOptions,melody.keyNumOptions);
     melody.octaveMultiplier = ui.retrieveOctaveInRange(3,6);
     melody2.octaveMultiplier = ui.retrieveOctaveInRange(3,6);
     melody.rootNote = melody.calculateRootnote(melody.keyOptions,melody.key,melody.octave,melody.octaveMultiplier);
     melody2.rootNote = melody.calculateRootnote(melody.keyOptions,melody.key,melody.octave,melody2.octaveMultiplier);
     //retrieving scale selection from user
-    int scale = ui.retrieveUserSelection(melody.scaleOptions,melody.scaleNumOptions);
+    int scale = ui.retrieveScaleSelection(melody.scaleOptions,melody.scaleNumOptions);
     //setting default scale so scale is never empty
     melody.setScale(melody.major);
     melody2.setScale(melody2.major);
     //choosing scale based on user input
     melody.chooseScale(melody.scaleOptions,scale,melody);
     melody2.chooseScale(melody2.scaleOptions,scale,melody2);
+    
     double userBpm = ui.retrieveBPMInRange(60,200);
-    vibesynth.fmIndex = ui.retrieveModulationInRange(1,10);
+    // vibesynth.fmIndex = ui.retrieveModulationInRange(1,10);
     
     
     //using user bpm for playbackspeed
@@ -98,9 +101,10 @@ public:
     //doing it a second time to get a different melody
     unsigned num2 = std::chrono::system_clock::now().time_since_epoch().count();
     std::shuffle(&melody2.melody_scale[0],&melody2.melody_scale[7],std::default_random_engine(num2));
-    //updating the pitch seperately
-    updatePitch(melody,addsynth);
-    updatePitch(melody2,vibesynth);
+    // updating the pitch seperately
+    updatePitch(melody,synth.mySynths[0]);
+    updatePitch(melody2,synth.mySynths[1]);
+    // updatePitch(melody2,vibesynth);
     
   } // prepare()
 
@@ -118,14 +122,16 @@ public:
     {
       for (int sample = 0; sample < numFrames; ++sample) {
         //splitting both synths on L/R, vibesynth has amp modulation
-        outputChannels[0][sample] = addsynth.getSample() * amplitude;
-        outputChannels[1][sample] = vibesynth.getSample() * amplitude *vibesynth.ampMod;
+        outputChannels[0][sample] = synth.mySynths[0]->getSample()* amplitude;
+        outputChannels[1][sample] = synth.mySynths[1]->getSample()* amplitude;
         
-        addsynth.synthTick();
-        vibesynth.ampsine.tick();
-        // std::cout << vibesynth.ampMod <<"\n";
-        vibesynth.ampMod = vibesynth.ampsine.getSample();
-        vibesynth.synthTick();
+        synth.mySynths[0]->synthTick();
+        synth.mySynths[1]->synthTick();
+        // vibesynth.getSample() * amplitude *vibesynth.ampMod;
+        // addsynth.synthTick();
+        // vibesynth.ampsine.tick();
+        // vibesynth.ampMod = vibesynth.ampsine.getSample();
+        // vibesynth.synthTick();
         // rather mixed up functionality
 
         /* After every sample, check if we need to advance to the next note
@@ -137,13 +143,13 @@ public:
         if (frameIndex > noteDelayFactor * sampleRate) {
           // reset frameIndex
           frameIndex = 0;
-          updatePitch(melody, addsynth);
+          updatePitch(melody, synth.mySynths[0]);
           
         }
         if (frameIndex2 > noteDelayFactor2 * sampleRate) {
           // reset frameIndex
           frameIndex2 = 0;
-          updatePitch(melody2, vibesynth);
+          updatePitch(melody2, synth.mySynths[1]);
         }
       } // for sample
     }
@@ -156,8 +162,9 @@ public:
 protected:
   double sampleRate;
   //creating 2 synth objects
-  Add_Synth addsynth;
-  Vibe_Synth vibesynth;
+  // Add_Synth addsynth;
+  // Vibe_Synth vibesynth;
+  Synth synth;
   //creating ui object
   UI ui;
   float amplitude = 0.025;
