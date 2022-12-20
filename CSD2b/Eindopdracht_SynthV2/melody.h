@@ -14,7 +14,7 @@ public:
   //function for setting the scale 
   void setScale(float newScale[NUM_NOTES]);
   //function for calcuting rootnote based on user input
-  int calculateRootnote(std::string keyOptions[],int key, int octave, int octaveMultiplier);
+  int calculateRootnote(int key, int octave, int octaveMultiplier);
 
 public:
   //setting default rootnote, will be overwritten by UI
@@ -34,10 +34,10 @@ public:
   float mixolydian[8] = {0,2,4,5,7,9,10,12};
   float locrian[8] = {0,1,3,5,6,8,10,12};
   //list of options of keys and scales.
-  std::string keyOptions[7] = {"a","b","c","d","e","f","g"};
+  std::string keyOptions[12] = {"a","a#","b","c","c#","d","d#","e","f","f#","g","g#"};
   std::string scaleOptions[8] = {"harmonicminor","minor","major","dorian","phrygian","lydian","mixolydian","locrian"};
   //variables for number of options keys and scales.
-  int keyNumOptions = 7;
+  int keyNumOptions = 12;
   int scaleNumOptions = 8;
   
   int index;

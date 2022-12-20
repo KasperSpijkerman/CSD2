@@ -5,10 +5,10 @@ UI::UI()
 {
   std::cout << "Inside UI contructor";
 }
-std::string UI::retrieveUserInput(std::string selectionOptions[], int numOptions)
+std::string UI::retrieveUserInput(std::string question, std::string selectionOptions[], int numOptions)
 {
     // show user the allowed options
-    std::cout << "Please enter your selection. You can choose from: ";
+    std::cout << question;
     for(int i = 0; i < numOptions - 1; i++) {
         std::cout << selectionOptions[i] << ", ";
     }
@@ -19,12 +19,12 @@ std::string UI::retrieveUserInput(std::string selectionOptions[], int numOptions
     std::cin >> selection;
     return selection;
 }
-int UI::retrieveSynthSelection(std::string selectionOptions[], int numOptions)
+int UI::retrieveSelection(std::string question, std::string selectionOptions[], int numOptions)
 {
     std::string selection = "";
     while(true) {
         // let user choose from the allowed options
-        selection = retrieveUserInput(selectionOptions, numOptions);
+        selection = retrieveUserInput(question,selectionOptions, numOptions);
 
         // check if the selection is among the available option
 	for(int i=0; i<numOptions; ++i) {
@@ -38,52 +38,7 @@ int UI::retrieveSynthSelection(std::string selectionOptions[], int numOptions)
     } // while
     return -1; // should never be reached
 } // retrieveUserSelection()
-
-
-//function for scale input
-int UI::retrieveScaleSelection(std::string selectionOptions[], int numOptions)
-{
-    std::string selection = "";
-    while(true) {
-        // let user choose from the allowed options
-        selection = retrieveUserInput(selectionOptions, numOptions);
-
-        // check if the selection is among the available option
-	for(int i=0; i<numOptions; ++i) {
-	    if(selection == selectionOptions[i]) {
-		return i;
-	    }
-	}
-        // if we end up here, this means the selection is not correct,
-	// so log a message to user to try again
-        std::cout << "Incorrect selection, please try again";
-    } // while
-    return -1; // should never be reached
-} // retrieveUserSelection()
-
-//function for key input
-int UI::retrieveKeySelection(std::string selectionOptions[], int numOptions)
-{
-    std::string selection = "";
-    while(true) {
-        // let user choose from the allowed options
-        selection = retrieveUserInput(selectionOptions, numOptions);
-
-        // check if the selection is among the available option
-	for(int i=0; i<numOptions; ++i) {
-	    if(selection == selectionOptions[i]) {
-		return i;
-	    }
-	}
-        // if we end up here, this means the selection is not correct,
-	// so log a message to user to try again
-        std::cout << "Incorrect selection, please try again";
-    } // while
-    return -1; // should never be reached
-} // retrieveUserSelection()
-
-
-float UI::retrieveOctaveInRange(float min, float max)
+float UI::retrieveFloatInRange(std::string question,float min, float max)
 {
   std::string input;
   float value = 0;
@@ -114,15 +69,14 @@ float UI::retrieveOctaveInRange(float min, float max)
 
   return value;
 } // while not in range
-
-  double UI::retrieveBPMInRange(double min, double max)
+double UI::retrieveDoubleInRange(std::string question,double min, double max)
 {
   std::string input;
   double value = 0;
   bool notInRange = true;
 
   while(notInRange) {
-    std::cout << "Please enter a BPM value between " << min << " and " << max
+    std::cout << question << min << " and " << max
       << std::endl;
     // first capture input in input string
     std::cin >> input;
@@ -146,50 +100,4 @@ float UI::retrieveOctaveInRange(float min, float max)
 
   return value;
 } // retrieveValueInRange()
-
-//function for getting modulation index.
-double UI::retrieveModulationInRange(double min, double max)
-{
-  std::string input;
-  double value = 0;
-  bool notInRange = true;
-
-  while(notInRange) {
-    std::cout << "Please enter a modulation value between " << min << " and " << max
-      << std::endl;
-    // first capture input in input string
-    std::cin >> input;
-    // validate if input string can be transformed into a float
-    try {
-      value = std::stof(input);
-      // validate range
-      if(value >= min && value <= max) {
-        notInRange = false;
-      } else {
-        // value not in range
-        std::cout << "Value out of range, please try again." << std::endl;
-      }
-    }
-    catch (const std::exception& e) {
-      // no float as input
-      std::cout << "Invalid input, expecting a number."
-        << std::endl;
-    }
-  }
-  return value;
-}
-
-// int main()
-// {
-//   std::string waveFormOptions[4] = {"sine", "saw", "square", "triangle"};
-//   int numWaveFormOptions = 4;
-
-//   int waveTypeSelection = retrieveUserSelection(waveFormOptions,numWaveFormOptions);
-
-//   // use the selected option to show the corresponding text
-//   std::cout << "You selected: " << waveFormOptions[waveTypeSelection] << std::endl;
-
-//   float value =  retrieveValueInRange(20, 20499);
-//   std::cout << "You chose the following value: " << value << std::endl;
-// }
 

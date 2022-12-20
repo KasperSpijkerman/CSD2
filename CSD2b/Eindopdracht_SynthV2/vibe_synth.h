@@ -2,8 +2,6 @@
 #define BLOK2B_Vibe_Synth_H
 #include "synth.h"
 #include "sine.h"
-#include "saw.h"
-#include "square.h"
 
 class Vibe_Synth : public Synth
 {
@@ -15,7 +13,7 @@ public:
 public:
   float ampMod;
   Sine ampsine =  Sine(2,1);
-  double fmIndex = 2;
+  double fmIndex = 5;
 };
 
 #endif 
