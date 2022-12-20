@@ -27,3 +27,7 @@ return frequency;
  {
   return 0;
  }
+ void Synth:: setampFrequency(float frequency)
+ {
+
+ }

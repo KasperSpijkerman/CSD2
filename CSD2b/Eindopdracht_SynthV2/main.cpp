@@ -58,6 +58,8 @@ public:
     {
       mySynths[0] = new Vibe_Synth;
       mySynths[1] = new Vibe_Synth;
+      
+      freq4 = ui.retrieveDoubleInRange("Enter Wobble Frequency between: ",2,200);
       std::cout << mySynths[0] << "\n" << mySynths[1] << "\n";
 
     }
@@ -65,6 +67,7 @@ public:
     {
       mySynths[0] = new Add_Synth;
       mySynths[1] = new Vibe_Synth;
+      freq4 = ui.retrieveDoubleInRange("Enter Wobble Frequency between: ",2,200);
       std::cout << mySynths[0] << "\n" << mySynths[1] << "\n";
 
     }
@@ -73,6 +76,7 @@ public:
   void updatePitch(Melody& melody, Synth* synth) 
   {
     float pitch = melody.getPitch(melody.melody_scale);
+    //setting the frequencies for different oscillators
     double freq = mtof(pitch,0);
     double freq2 = mtof(pitch,7);
     double freq3 = mtof(pitch,12);
@@ -80,6 +84,15 @@ public:
     synth->myOscillators[0]->setFrequency(freq);
     synth->myOscillators[1]->setFrequency(freq2);
     synth->myOscillators[2]->setFrequency(freq3);
+    if(synthOptions[chosenSynth]== "vibe") 
+    {
+      mySynths[0]->setampFrequency(freq4);
+      mySynths[1]->setampFrequency(freq4);
+    }
+    else if(synthOptions[chosenSynth]== "both")
+    {
+      mySynths[1]->setampFrequency(freq4);
+    }
 
   } // updatePitch()
 
@@ -87,15 +100,15 @@ public:
   void prepare (double sampleRate) override {
     this->sampleRate=sampleRate;
     //asking the user for a rootnote input per synth and bpm
-    chosenSynth = ui.retrieveSelection("Hello this is a synthesizer! Choose a Synth ",synthOptions,synthNumOptions);
+    chosenSynth = ui.retrieveSelection("Hello. This is a synthesizer! Choose a Synthtype: ",synthOptions,synthNumOptions);
     synthSelect(synthOptions,chosenSynth,mySynths);
     melody.key = ui.retrieveSelection("Choose a key for the melody choose from: ",melody.keyOptions,melody.keyNumOptions);
-    melody.octaveMultiplier = ui.retrieveFloatInRange("Enter the Octave for First melody",0,6);
-    melody2.octaveMultiplier = ui.retrieveFloatInRange("Enter the Octave for second melody",0,6);
+    melody.octaveMultiplier = ui.retrieveFloatInRange("Enter the Octave for the First melody: ",0,6);
+    melody2.octaveMultiplier = ui.retrieveFloatInRange("Enter the Octave for the second melody: ",0,6);
     melody.rootNote = melody.calculateRootnote(melody.key,melody.octave,melody.octaveMultiplier);
     melody2.rootNote = melody.calculateRootnote(melody.key,melody.octave,melody2.octaveMultiplier);
     //retrieving scale selection from user
-    int scale = ui.retrieveSelection("Choose a scale ",melody.scaleOptions,melody.scaleNumOptions);
+    int scale = ui.retrieveSelection("Choose a scale: ",melody.scaleOptions,melody.scaleNumOptions);
     //setting default scale so scale is never empty
     melody.setScale(melody.major);
     melody2.setScale(melody2.major);
@@ -103,12 +116,13 @@ public:
     melody.chooseScale(melody.scaleOptions,scale,melody);
     melody2.chooseScale(melody2.scaleOptions,scale,melody2);
     //using user bpm for playbackspeed
-    double userBpm = ui.retrieveDoubleInRange("Enter a bpm between:",60,400);
+    double userBpm = ui.retrieveDoubleInRange("Enter a bpm between: ",60,400);
     //seperate time divisions for different melodies
     double timeDivision = 30;
     double timeDivision2 = 60;
+    //set timedivision to userinput value
     timeDivision = ui.retrieveDoubleInRange("Enter a time division for Melody 1 between: ",30,120);
-    timeDivision2 = ui.retrieveDoubleInRange("Enter a time division for Melody 1 between: ",30,120);
+    timeDivision2 = ui.retrieveDoubleInRange("Enter a time division for Melody 2 between: ",30,120);
     //timedivision devided by bpm determines speed. Higher value for timede
     noteDelayFactor = timeDivision/userBpm;
     noteDelayFactor2 = timeDivision2/userBpm;
@@ -173,6 +187,7 @@ protected:
   //creating ui object
   UI ui;
   float amplitude = 0.25;
+  double freq4;
   
   
   //melody 1 and 2 

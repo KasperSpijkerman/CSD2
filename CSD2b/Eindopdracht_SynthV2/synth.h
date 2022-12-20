@@ -12,6 +12,7 @@ public:
   float mtof(int midinote, int interval);
   //get sample function, will be overwritten by sub classes
   virtual float getSample();
+  virtual void setampFrequency(float frequency);
   //the synth has 3 oscillators depending on which synth is selected.
   Oscillator* myOscillators[3];
 protected:

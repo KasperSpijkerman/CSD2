@@ -10,10 +10,12 @@ public:
   // void setSamplerate();
   void createOscillator();
   float getSample();
+  //function for setting amplitude speed
+  void setampFrequency(float frequency);
 public:
   float ampMod;
   Sine ampsine =  Sine(2,1);
-  double fmIndex = 5;
+  double amIndex = 3;
 };
 
 #endif 
