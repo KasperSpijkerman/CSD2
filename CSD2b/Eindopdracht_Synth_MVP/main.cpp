@@ -1,7 +1,3 @@
-/*
-  Example program that plays a simple hard coded melody using a square wave oscillator
-*/
-
 #include <iostream>
 #include <thread>
 #include "jack_module.h"
@@ -49,6 +45,9 @@ public:
     {
       mySynths[0] = new Add_Synth;
       mySynths[1] = new Add_Synth;
+      detuneOsc4 = ui.retrieveFloatInRange("The add synth has 3 extra oscillators which can be detuned for width\nEnter a the frequency of detuning for the 1st Oscillator between: ", 0,100);
+      detuneOsc5 = ui.retrieveFloatInRange("Enter a frequency of detuning for the 2nd Oscillator: ", 0,100);
+      detuneOsc5 = ui.retrieveFloatInRange("Enter a frequency of detuning for the 3rd Oscillator: ", 0,100);
       #if DEBUG
       std::cout << mySynths[0] << "\n" << mySynths[1] << "\n";
       #endif
@@ -59,7 +58,7 @@ public:
       mySynths[0] = new Vibe_Synth;
       mySynths[1] = new Vibe_Synth;
       
-      freq4 = ui.retrieveDoubleInRange("Enter Wobble Frequency between: ",2,200);
+      freq4 = ui.retrieveDoubleInRange("The vibe synth has a wobble\nEnter a Frequency for the wobble between: ",2,200);
       #if DEBUG
       std::cout << mySynths[0] << "\n" << mySynths[1] << "\n";
       #endif
@@ -69,7 +68,10 @@ public:
     {
       mySynths[0] = new Add_Synth;
       mySynths[1] = new Vibe_Synth;
-      freq4 = ui.retrieveDoubleInRange("Enter Wobble Frequency between: ",2,200);
+      freq4 = ui.retrieveDoubleInRange("The vibe synth has a wobble\nEnter a Frequency for the wobble between: ",2,200);
+      detuneOsc4 = ui.retrieveFloatInRange("The add synth has 3 extra oscillators which can be detuned for width\nEnter the frequency of detuning between: ", 0,100);
+      detuneOsc5 = ui.retrieveFloatInRange("Enter the frequency of detuning for the 2nd Oscillator between: ", 0,100);
+      detuneOsc5 = ui.retrieveFloatInRange("Enter the frequency of detuning for the 3rd Oscillator between: ", 0,100);
       #if DEBUG
       std::cout << mySynths[0] << "\n" << mySynths[1] << "\n";
       #endif
@@ -85,9 +87,9 @@ public:
     double freq2 = mtof(pitch,7,0);
     double freq3 = mtof(pitch,12,0);
     //freq4 is a modulator frequency and will be created in another function.
-    double freq5 = mtof(pitch,0,5);
-    double freq6 = mtof(pitch,7,5);
-    double freq7 = mtof(pitch,12,5);
+    double freq5 = mtof(pitch,0,detuneOsc4);
+    double freq6 = mtof(pitch,7,detuneOsc5);
+    double freq7 = mtof(pitch,12,detuneOsc6);
     std::cout << "next pitch: " << pitch << std::endl;
     synth->myOscillators[0]->setFrequency(freq);
     synth->myOscillators[1]->setFrequency(freq2);
@@ -97,11 +99,13 @@ public:
     synth->myOscillators[5]->setFrequency(freq7);
     if(synthOptions[chosenSynth]== "vibe") 
     {
+      //setting the wobble frequency
       mySynths[0]->setampFrequency(freq4);
       mySynths[1]->setampFrequency(freq4);
     }
     else if(synthOptions[chosenSynth]== "both")
     {
+      //setting the wobble frequency only for 2nd synth.
       mySynths[1]->setampFrequency(freq4);
     }
 
@@ -135,10 +139,8 @@ public:
     //shuffling the array based on length array and a random seed
     std::shuffle(&melody.melody_scale[0],&melody.melody_scale[7],std::default_random_engine(num));
     //retrieving user bpm
+    
     userBpm = ui.retrieveDoubleInRange("Enter a bpm between: ",60,400);
-    //updating the pitches for the melody
-    updatePitch(melody,mySynths[0]);
-    updatePitch(melody,mySynths[1]);
     }
     //if the user selected 2 melodies, more functions will be executed and more questions will be asked
     else if (melodyAmount == 1) 
@@ -161,11 +163,11 @@ public:
     unsigned num2 = std::chrono::system_clock::now().time_since_epoch().count();
     std::shuffle(&melody2.melody_scale[0],&melody2.melody_scale[7],std::default_random_engine(num2));
     userBpm = ui.retrieveDoubleInRange("Enter a bpm between: ",60,400);
-    updatePitch(melody,mySynths[0]);
-    updatePitch(melody2,mySynths[1]);
     }    
     //set timedivision to userinput value
-    //timedivision devided by bpm determines speed. Higher value for timede
+    //timedivision devided by bpm determines speed. Higher value for more space between notes
+    amplitudeL = ui.retrieveFloatInRange("Enter amplitude for Left channel between: ",0.1,1);
+    amplitudeR = ui.retrieveFloatInRange("Enter amplitude for Right channel between: ",0.1,1);
     noteDelayFactor = timeDivision/userBpm;
     noteDelayFactor2 = timeDivision2/userBpm;
     //starting playback
@@ -179,9 +181,9 @@ public:
     if (playing == true) 
     {
       for (int sample = 0; sample < numFrames; ++sample) {
-        //splitting both synths on L/R, vibesynth has amp modulation
-        outputChannels[0][sample] = mySynths[0]->getSample()* amplitude;
-        outputChannels[1][sample] = mySynths[1]->getSample()* amplitude;
+        //splitting both synths on L/R 0.5 so if user enter max amplitude it's still not clipping.
+        outputChannels[0][sample] = mySynths[0]->getSample()* amplitudeL*0.5;
+        outputChannels[1][sample] = mySynths[1]->getSample()* amplitudeR*0.5;
         mySynths[0]->synthTick();
         mySynths[1]->synthTick();
 
@@ -223,7 +225,6 @@ protected:
   int melodyNumOptions = 2;
   int synthNumOptions = 3;
   int chosenSynth = 0;
-  float amplitude = 0.125;
   //frequency for modulation
   double freq4;
   //amount of melodies
@@ -242,11 +243,17 @@ protected:
   //default bpm 
   double bpm = 120;
   double userBpm;
+  //amplitudes for L&R
+  float amplitudeL = 0.125;
+  float amplitudeR = 0.125;
+  //different time divisions for L/R
   double timeDivision = 60;
   double timeDivision2 = 60;
-  //different time divisions for L/R
   double noteDelayFactor=60/bpm;
   double noteDelayFactor2=30/bpm;
+  float detuneOsc4; 
+  float detuneOsc5; 
+  float detuneOsc6; 
 }; // Callback{}
 
 //enabling/disabling write to file

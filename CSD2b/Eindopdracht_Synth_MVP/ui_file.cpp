@@ -1,4 +1,5 @@
 #include "ui_file.h"
+//based on code from Marc's Example (session 5)
 
 
 UI::UI()
@@ -47,7 +48,7 @@ float UI::retrieveFloatInRange(std::string question,float min, float max)
   bool notInRange = true;
 
   while(notInRange) {
-    std::cout << "Please enter the octave for the given key between " << min << " and " << max
+    std::cout << question << min << " and " << max
       << std::endl;
     // first capture input in input string
     std::cin >> input;

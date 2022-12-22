@@ -32,7 +32,7 @@ myOscillators[2] -> setFrequency(frequency);
 float Vibe_Synth::getSample() 
 {
   //2 oscillators multiplied by the modulator oscillator based with an am index.
-  float Oscillators =((myOscillators[0]-> getSample()+ myOscillators[1] -> getSample())*(amIndex *myOscillators[2]->getSample()))/3 ;
+  float Oscillators =((myOscillators[0]-> getSample()+ myOscillators[1] -> getSample())*(1+amIndex *myOscillators[2]->getSample()))/3 ;
   return Oscillators;
   
 }
