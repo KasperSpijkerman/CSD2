@@ -30,8 +30,6 @@ public:
       fileWriter.write(std::to_string(mySynths[0]->getSample()) + "\n");
       mySynths[0]->synthTick();
     }
-
-    std::cout << "\nWROTE TO FILE = DONE." << std::endl;
   } // write
   // function for selecting the synths based on UI.
   void synthSelect(std::string synthOptions[], int chosenSynth, Synth *mySynths[])
@@ -86,7 +84,7 @@ public:
     float detunedFrequencyOsc4 = freq * pow(2, detuneOsc4 / 1200);
     float detunedFrequencyOsc5 = freq2 * pow(2, detuneOsc5 / 1200);
     float detunedFrequencyOsc6 = freq3 * pow(2, detuneOsc6 / 1200);
-    std::cout << "next pitch: " << pitch << std::endl;
+    // std::cout << "next pitch: " << pitch << std::endl;
     synth->myOscillators[0]->setFrequency(freq);
     synth->myOscillators[1]->setFrequency(freq2);
     synth->myOscillators[2]->setFrequency(freq3);
@@ -124,7 +122,7 @@ public:
     melodyAmount = ui.retrieveSelection("Would you like one or two melodies? type: ", melodyOptions, melodyNumOptions);
     if (melodyAmount == 0)
     {
-      melody.octaveMultiplier = ui.retrieveFloatInRange("Enter the octave for the melody between: ", 0, 6);
+      melody.octaveMultiplier = ui.retrieveFloatInRange("Enter the octave for the melody between: ", 0, 5);
       melody.rootNote = melody.calculateRootnote(melody.key, melody.octave, melody.octaveMultiplier);
       melody.setScale(melody.major);
       melody.chooseScale(melody.scaleOptions, scale, melody);
@@ -142,8 +140,8 @@ public:
     // if the user selected 2 melodies, more functions will be executed and more questions will be asked
     else if (melodyAmount == 1)
     {
-      melody.octaveMultiplier = ui.retrieveFloatInRange("Enter the octave for the first melody between: ", 0, 6);
-      melody2.octaveMultiplier = ui.retrieveFloatInRange("Enter the octave for the second melody between: ", 0, 6);
+      melody.octaveMultiplier = ui.retrieveFloatInRange("Enter the octave for the first melody between: ", 0, 5);
+      melody2.octaveMultiplier = ui.retrieveFloatInRange("Enter the octave for the second melody between: ", 0, 5);
       melody.rootNote = melody.calculateRootnote(melody.key, melody.octave, melody.octaveMultiplier);
       melody2.rootNote = melody.calculateRootnote(melody.key, melody.octave, melody2.octaveMultiplier);
       // setting default scale so scale is never empty
@@ -218,7 +216,7 @@ protected:
   double sampleRate;
   //  empty list with synthpointers
   Synth *mySynths[2];
-  // let the user choose between 3 different synths
+  // let the user choose between 3 different options for synths, only additive, vibe or both at the same time.
   std::string synthOptions[3] = {"add", "vibe", "both"};
   std::string melodyOptions[2] = {"1", "2"};
   int melodyNumOptions = 2;
@@ -248,7 +246,7 @@ protected:
   // default value for noteDelayFactor
   double noteDelayFactor = 60 / bpm;
   double noteDelayFactor2 = 30 / bpm;
-  // creating detune frequencies different oscillators
+  // creating detune frequencies for different oscillators
   float detuneOsc4;
   float detuneOsc5;
   float detuneOsc6;
