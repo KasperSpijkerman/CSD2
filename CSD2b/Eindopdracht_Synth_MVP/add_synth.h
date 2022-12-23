@@ -1,5 +1,4 @@
-#ifndef BLOK2B_Add_Synth_H
-#define BLOK2B_Add_Synth_H
+#pragma once
 #include "synth.h"
 #include "sine.h"
 #include "saw.h"
@@ -7,14 +6,12 @@
 
 class Add_Synth : public Synth
 {
-public: 
+public:
   Add_Synth();
   // void setSamplerate();
   void createOscillator();
   float getSample();
+
 protected:
-  
   float frequency;
 };
-
-#endif 

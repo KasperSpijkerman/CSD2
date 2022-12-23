@@ -1,18 +1,18 @@
 #pragma once
 #include <iostream>
 
-class Oscillator  
+class Oscillator
 {
 public:
-  Oscillator(float frequency= 0, float amplitude = 0);
+  Oscillator(float frequency = 0, float amplitude = 0);
   ~Oscillator();
 
   // allow to set samplerate after initialization
   void setSamplerate(float samplerate);
-  //return the current sample
+  // return the current sample
   float getSample();
 
-  //getters and setters
+  // getters and setters
   void setFrequency(float frequency);
   float getFrequency();
   // go to next sample
@@ -28,5 +28,3 @@ protected:
   float sample;
   float samplerate = 44100;
 };
-
-
