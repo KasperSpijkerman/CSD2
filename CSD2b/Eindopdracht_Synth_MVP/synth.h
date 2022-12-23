@@ -12,6 +12,7 @@ public:
   virtual float getSample();
   virtual void setampFrequency(float frequency);
   //the synth has 6 oscillators depending on which synth is selected.
+  double mtof(float mPitch, float interval,float detune);
   Oscillator* myOscillators[6];
 protected:
   float frequency;

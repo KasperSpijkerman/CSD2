@@ -33,11 +33,6 @@ public:
        
 
   }
-  // function for converting midi to frequency
-  double mtof(float mPitch, float interval,float detune)
-  {
-    return (440.0 * pow(2.0, ((mPitch+ interval) - 69.0f)/12.0f))+detune;
-  } // mtof()
   //function for selecting the synths based on UI.
   void synthSelect(std::string synthOptions[], int chosenSynth, Synth* mySynths[])
   {
@@ -82,14 +77,14 @@ public:
   void updatePitch(Melody& melody, Synth* synth) 
   {
     float pitch = melody.getPitch(melody.melody_scale);
-    //setting the frequencies for different oscillators
-    double freq = mtof(pitch,0,0);
-    double freq2 = mtof(pitch,7,0);
-    double freq3 = mtof(pitch,12,0);
+    //setting the frequencies for different oscillators using the synth base class mtof
+    double freq =  synth->mtof(pitch,0,0);
+    double freq2 = synth->mtof(pitch,7,0);
+    double freq3 = synth->mtof(pitch,12,0);
     //freq4 is a modulator frequency and will be created in another function.
-    double freq5 = mtof(pitch,0,detuneOsc4);
-    double freq6 = mtof(pitch,7,detuneOsc5);
-    double freq7 = mtof(pitch,12,detuneOsc6);
+    double freq5 = synth->mtof(pitch,0,detuneOsc4);
+    double freq6 = synth->mtof(pitch,7,detuneOsc5);
+    double freq7 = synth->mtof(pitch,12,detuneOsc6);
     std::cout << "next pitch: " << pitch << std::endl;
     synth->myOscillators[0]->setFrequency(freq);
     synth->myOscillators[1]->setFrequency(freq2);
@@ -219,6 +214,8 @@ protected:
   double sampleRate;
   //list with synthpointers
   Synth* mySynths[2];
+  //creating a synth object 
+  // Synth synth;
   //let the user choose between 3 different synths
   std::string synthOptions[3] = {"add","vibe","both"};
   std::string melodyOptions[2] = {"1","2"};
