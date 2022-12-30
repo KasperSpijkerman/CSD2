@@ -269,7 +269,7 @@ class localOSC : public OSC
   string msgpath=path;
     if(!msgpath.compare("/note-on")){
       pitch_osc = argv[1]->i;
-      cout << "pitch osc: " << channel << " " << pitch_osc << " " << velocity << endl;
+      cout << "pitch osc:" " " << pitch_osc << " " << endl;
     } // if
     return pitch_osc;
   } // realcallback()
