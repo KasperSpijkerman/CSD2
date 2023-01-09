@@ -11,9 +11,4 @@ public:
   float getSample();
   // function for setting amplitude speed
   void setampFrequency(float frequency);
-
-public:
-  float ampMod;
-  // wobble/amplitude index
-  // double amIndex = 20;
 };
