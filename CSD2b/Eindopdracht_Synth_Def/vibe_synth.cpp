@@ -16,7 +16,7 @@ void Vibe_Synth::createOscillator()
   myOscillators[1] = new Sine(440, 1.0f);
   // am modulator
   myOscillators[2] = new Sine(440, 1.0f);
-  // extra oscillators
+  // extra oscillators (not being used-> avoiding Segmentation 11)
   myOscillators[3] = new Sine(440, 0.5f);
   myOscillators[4] = new Sine(440, 0.5f);
   myOscillators[5] = new Sine(440, 0.5f);
@@ -29,7 +29,7 @@ void Vibe_Synth::setampFrequency(float frequency)
 
 float Vibe_Synth::getSample()
 {
-  // 2 oscillators multiplied by the modulator oscillator based with an am index.
-  float Oscillators = ((myOscillators[0]->getSample() + myOscillators[1]->getSample()) * (1 + amIndex * myOscillators[2]->getSample())) / 3;
+  // 2 oscillators multiplied by the modulator oscillator ->frequency will be set by user for wobble experience.
+  float Oscillators = ((myOscillators[0]->getSample() + myOscillators[1]->getSample()) * myOscillators[2]->getSample()) / 2;
   return Oscillators;
 }

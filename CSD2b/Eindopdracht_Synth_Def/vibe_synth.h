@@ -15,5 +15,5 @@ public:
 public:
   float ampMod;
   // wobble/amplitude index
-  double amIndex = 3;
+  // double amIndex = 20;
 };
