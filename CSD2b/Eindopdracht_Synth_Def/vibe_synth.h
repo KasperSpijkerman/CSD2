@@ -1,6 +1,8 @@
 #pragma once
 #include "synth.h"
 #include "sine.h"
+#include "square.h"
+#include "saw.h"
 
 class Vibe_Synth : public Synth
 {
