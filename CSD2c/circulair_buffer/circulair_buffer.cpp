@@ -6,10 +6,10 @@
 // short 
 using namespace std;
 
-CircBuffer::CircBuffer(uint size) : currentSize(size), buffer(new float[currentSize])
+CircBuffer::CircBuffer(uint size) : buffer(new float[size]), currentSize(size)
 {
     cout << "Inside Circbuffer constructor\n";
-    wrapValue = 4;
+
 }
 
 CircBuffer::~CircBuffer()
@@ -30,44 +30,32 @@ void CircBuffer::input(float value)
 float CircBuffer::output() 
 { 
     cout << buffer[readHead] << " Is being read\n"; 
-    if (readHead > 0)
-    {
-        return buffer[readHead];
-    }
-    else 
-    {
-        return 0.0f;
-    }
+    return buffer[readHead];
 }
 
 // setting a distance between readheader and writeheader
 void CircBuffer::setDistance (uint distance) 
 {
-    currentDistance = distance;
-    int readHeadDelayed = readHead - distance;
-    if(readHeadDelayed < 0){
-        readHead = readHeadDelayed + currentSize;
-    } else {
-        readHead = readHeadDelayed;
-    }
+    this->distance = distance;
+    readHead = (writeHead - distance + currentSize) % currentSize;
+    
 }
 // incrementing the writehead 
 inline void CircBuffer::incrementWrite()
 {
     writeHead++;
+    wrapHeader(writeHead);
 }
 // incrementing the readhead
 inline void CircBuffer::incrementRead()
 {
     readHead++;
+    wrapHeader(readHead);
 }
 void CircBuffer::incrementHeads() 
 {
     incrementRead();
     incrementWrite();
-    // wrapping read and writeheads
-    wrapHeader(readHead);
-    wrapHeader(writeHead);
 }
 // deleting buffer 
 void CircBuffer::deleteBuffer()
@@ -76,13 +64,9 @@ void CircBuffer::deleteBuffer()
 }
 inline void CircBuffer::wrapHeader(uint& head) 
 {
-     if (head >= wrapValue)
+     if (head >= currentSize)
         {
             head = 0 ;
         }
-}
-void CircBuffer::setwrapValue(uint value)
-{
-    wrapValue = value;
 }
 

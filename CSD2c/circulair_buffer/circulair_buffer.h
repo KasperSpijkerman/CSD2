@@ -18,7 +18,6 @@ public:
 
     // setters
     void setDistance (uint distance);
-    void setwrapValue(uint value);
 private:
     inline void wrapHeader (uint& head);
     inline void incrementWrite();
@@ -27,7 +26,6 @@ private:
 
     float* buffer;
     uint currentSize { 0 };
-    uint currentDistance { 0 };
-    uint wrapValue { 0 };
+    uint distance { 0 };
     uint writeHead { 0 }, readHead { 0 };
 };
