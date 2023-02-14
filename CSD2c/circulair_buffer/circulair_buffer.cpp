@@ -9,11 +9,7 @@ using namespace std;
 CircBuffer::CircBuffer(uint size) : currentSize(size), buffer(new float[currentSize])
 {
     cout << "Inside Circbuffer constructor\n";
-    //currentSize = size;
-    wrapValue = 8;
-    // for (uint i = 0; i < sizeof(buffer); i++){
-    //     buffer[i] = 0;
-    // }
+    wrapValue = 4;
 }
 
 CircBuffer::~CircBuffer()
@@ -23,35 +19,57 @@ CircBuffer::~CircBuffer()
     cout << "Buffer is now deleted\n";
 }
 
+// writing values according to list with values
 void CircBuffer::input(float value)
 {  
     buffer[writeHead] = value; 
     cout << buffer[writeHead] << " Is written\n";   
 }
+
+// reading values and printing them acooring to readhead
 float CircBuffer::output() 
 { 
-   
     cout << buffer[readHead] << " Is being read\n"; 
-    return buffer[readHead];
+    if (readHead > 0)
+    {
+        return buffer[readHead];
+    }
+    else 
+    {
+        return 0.0f;
+    }
 }
+
+// setting a distance between readheader and writeheader
 void CircBuffer::setDistance (uint distance) 
 {
     currentDistance = distance;
+    int readHeadDelayed = readHead - distance;
+    if(readHeadDelayed < 0){
+        readHead = readHeadDelayed + currentSize;
+    } else {
+        readHead = readHeadDelayed;
+    }
 }
+// incrementing the writehead 
 inline void CircBuffer::incrementWrite()
 {
-    wrapHeader(writeHead);
+    writeHead++;
 }
+// incrementing the readhead
 inline void CircBuffer::incrementRead()
 {
-    wrapHeader(readHead);
+    readHead++;
 }
 void CircBuffer::incrementHeads() 
 {
-    // incrementing write and readheads
     incrementRead();
     incrementWrite();
+    // wrapping read and writeheads
+    wrapHeader(readHead);
+    wrapHeader(writeHead);
 }
+// deleting buffer 
 void CircBuffer::deleteBuffer()
 {
     delete[] buffer;
@@ -60,7 +78,7 @@ inline void CircBuffer::wrapHeader(uint& head)
 {
      if (head >= wrapValue)
         {
-            head = head - wrapValue;
+            head = 0 ;
         }
 }
 void CircBuffer::setwrapValue(uint value)

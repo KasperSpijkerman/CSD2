@@ -4,17 +4,21 @@ int main()
 {
 int circBufferSize = 8;
 CircBuffer myBuffer(circBufferSize);
-float bufferValues[8] = {0.1,0.4,0.2,0.5,0.3,0.6,0.4,0.8};
+// setting distance/delay between write and read
+myBuffer.setDistance(3);
+// an array with buffervalues for write
+float bufferValues[8] = {0.1,0.2,0.4,0.5,0.6,0.7,0.8,0.9};
 
-myBuffer.setwrapValue(8);
 
 // giving bufferValues to input and ouput
-for(int i=0; i<circBufferSize; i++)
+for(int i=0; i<8; i++)
 { 
+    myBuffer.incrementHeads(); 
     myBuffer.input(bufferValues[i]); 
     myBuffer.output(); 
-    myBuffer.incrementHeads(); 
+    
 }
+
 return 0; 
 
 }
