@@ -4,7 +4,7 @@
 class Oscillator
 {
 public:
-  Oscillator(float frequency = 0, float amplitude = 0);
+  Oscillator(float frequency = 4, float amplitude = 1);
   ~Oscillator();
 
   // allow to set samplerate after initialization

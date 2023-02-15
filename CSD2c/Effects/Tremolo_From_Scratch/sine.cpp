@@ -5,11 +5,13 @@ Sine::Sine(float frequency, float amplitude) : Oscillator(frequency, amplitude)
 {
 #if DEBUG
   std::cout << "Sine::Sine constructor" << frequency << "\n";
+  
 #endif
+amplitude = 1;
 }
 
 float Sine::calculate()
 {
-  return sin(M_PI * 2 * phase) * amplitude;
+return sin(M_PI * 2 * phase) * amplitude;
 }
 
