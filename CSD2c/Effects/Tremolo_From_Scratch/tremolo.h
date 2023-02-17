@@ -18,5 +18,5 @@ public:
 
 private:
     Sine tremSine;
-    float amp {0};
+    float amp {0.25f};
 };

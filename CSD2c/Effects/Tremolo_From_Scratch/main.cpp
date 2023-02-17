@@ -35,10 +35,6 @@ private:
 
 int main()
 {
-    // Tremolo trem;
-    // trem.prepareToPlay(44100);
-    // trem.setAmplitude(0.5);
-    // trem.setSpeed(4);
     auto callback = Callback {};
     auto jack = JackModule (callback);
 

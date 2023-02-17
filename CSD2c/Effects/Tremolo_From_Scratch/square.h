@@ -8,6 +8,6 @@ public:
   Square(float frequency = 0, float amplitude = 0);
 
 protected:
-  float calculate();
+  void calculate();
 };
 

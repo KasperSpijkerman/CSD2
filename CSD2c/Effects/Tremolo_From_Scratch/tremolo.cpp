@@ -11,7 +11,9 @@ void Tremolo::prepareToPlay (double sampleRate)
 
 float Tremolo::output (float input) 
 {
-   float tremSignal = tremSine.tick();
+   auto tremSignal = tremSine.getSample();
+   tremSine.tick();
+   //std::cout << tremSignal << "\n";
    tremSignal *= amp;
    tremSignal += 1.0f - amp;
    return input * tremSignal;

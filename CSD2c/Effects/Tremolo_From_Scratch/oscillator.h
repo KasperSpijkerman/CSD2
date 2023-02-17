@@ -16,8 +16,8 @@ public:
   void setFrequency(float frequency);
   float getFrequency();
   // go to next sample
-  float tick();
-  virtual float calculate() = 0;
+  void tick();
+  virtual void calculate() = 0;
 
 protected:
   // abstract method calculate - needs to be overriden by subclasses

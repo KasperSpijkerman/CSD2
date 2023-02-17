@@ -37,13 +37,13 @@ float Oscillator::getFrequency()
   return frequency;
 }
 
-float Oscillator::tick()
+void Oscillator::tick()
 {
   // increment the phase to allow calculation of next sample
-  phase += frequency / samplerate;
+  sample = phase += frequency / samplerate;
   // wrap the phase to interval [0, 1]
   if (phase > 1)
     phase -= 1.0;
   // calculate sample for the incremented phase
- return calculate();
+ calculate();
 }

@@ -7,13 +7,11 @@ Square::Square(float frequency, float amplitude) : Oscillator(frequency, amplitu
   std::cout << "Square::Square constructor\n";
 #endif
 }
-
-float Square::calculate()
+void Square::calculate()
 {
-  sample = amplitude;
+  sample = amplitude +1.0f;
   if (phase > 0.5)
   {
     sample *= -1.0f;
   }
-  return sample;
 }
