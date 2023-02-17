@@ -1,8 +1,8 @@
 CXX= g++
 CXXFLAGS = -I/usr/local/include -Wall -std=c++1z
 LDFLAGS= -ljack
-SOURCE= main.o effect.o 
-TARGET= delay
+SOURCE= main.o effect.o waveshaper.o
+TARGET= waveshaper
 $(TARGET) : $(SOURCE)
 	$(CXX) -o $@ $(SOURCE) $(LDFLAGS)
 

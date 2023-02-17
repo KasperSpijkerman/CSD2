@@ -1,4 +1,5 @@
 #include "jack_module.h"
+#include "waveshaper.h"
 #include <array>
 
 // callback class with prepare and process for sending audio to buffer
@@ -9,10 +10,8 @@ public:
 
     void prepare (int sampleRate) override 
     {
-        for (Delay& delay : delays)
-        {
-			delay.setDistance(44100 * 0.5);
-        }
+        for (WaveShaper& waveshaper : waveshapers)
+            waveshaper.prepareToPlay(sampleRate);
     }
 
     void process (AudioBuffer buffer) override {
@@ -20,13 +19,13 @@ public:
 
         for (int channel = 0u; channel < numOutputChannels; ++channel) {
             for (int sample = 0u; sample < numFrames; ++sample) {
-                outputChannels[channel][sample] = (delays[channel].output (inputChannels[0][sample]) + inputChannels[0][sample])/2;
+                outputChannels[channel][sample] = (waveshapers[channel].output (inputChannels[0][sample]))/2;
             }
         }
     }
 
 private:
-    std::array<Delay, 2> delays;
+    std::array<WaveShaper, 2> waveshapers;
 };
 
 

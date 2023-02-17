@@ -1,14 +1,20 @@
-#include <cmath>
-#include <iostream>
+#pragma once
 
 namespace Util
 {
-    float mapInRange (float factor, float inLow, float inHigh, float outLow, float outHigh)
+    inline double mapInRange(double factor, double inputMin, double inputMax, double outputMin, double outputMax)
     {
-        float deltaInOut = (outHigh - outLow) / (inHigh - inLow);
-        return outLow + deltaInOut * (factor - inLow);
+        double inputRange = inputMax - inputMin;
+        double outputRange = outputMax - outputMin;
+        double valueScaled = (factor-inputMin)/inputRange;
+        double output = valueScaled * outputRange + outputMin;
+        return output;
     }
-    float linearMap (float factor, float low, float high) {
-        return mapInRange (factor, 0.0, 1.0, low, high);
+
+    inline double linearMap(double factor, double min, double max)
+    {
+        double output = mapInRange(factor, 0.0, 1.0, min, max);
+        return output;
     }
+
 }
