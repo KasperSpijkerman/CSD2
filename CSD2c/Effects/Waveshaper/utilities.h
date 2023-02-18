@@ -2,18 +2,18 @@
 
 namespace Util
 {
-    inline double mapInRange(double factor, double inputMin, double inputMax, double outputMin, double outputMax)
+    inline float mapInRange(float factor, float inputMin, float inputMax, float outputMin, float outputMax)
     {
-        double inputRange = inputMax - inputMin;
-        double outputRange = outputMax - outputMin;
-        double valueScaled = (factor-inputMin)/inputRange;
-        double output = valueScaled * outputRange + outputMin;
+        float inputDelta = inputMax - inputMin;
+        float outputDelta = outputMax - outputMin;
+        float valueScaled = (factor-inputMin)/inputDelta;
+        float output = valueScaled * outputDelta + outputMin;
         return output;
     }
 
-    inline double linearMap(double factor, double min, double max)
+    inline float linearMap(float factor, float min, float max)
     {
-        double output = mapInRange(factor, 0.0, 1.0, min, max);
+        float output = mapInRange(factor, 0.0, 1.0, min, max);
         return output;
     }
 
