@@ -10,10 +10,12 @@ public:
     // functions that tremolo uses from effects
     void prepareToPlay (double sampleRate);
     float output (float input);
+    void bypass (bool bypass);
     
     // setters
     void setAmplitude(float amplitude);
     void setSpeed(float speed);
+    void setDryWet(float dryWet);
 
 
 private:

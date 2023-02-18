@@ -28,3 +28,13 @@ float Delay::output(float input)
 void Delay::setDistance(uint distance) {
 	delayBuffer->setDistance(distance);
 }
+
+void Delay::setDryWet(float dryWet) 
+{
+
+}
+
+void Delay::bypass (bool bypass) 
+{
+
+}

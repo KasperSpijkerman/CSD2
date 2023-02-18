@@ -31,3 +31,11 @@ void Tremolo::setSpeed(float speed)
    std::cout << "Speed is set to: " << speed << " Hz\n";
 }
 
+void Tremolo::setDryWet(float dryWet) 
+{
+
+}
+void Tremolo::bypass (bool bypass) 
+{
+
+}

@@ -12,9 +12,12 @@ public:
     ~WaveShaper();
 
     float output (float input);
-    void setDrive (float k);
     void prepareToPlay(double samplerate);
-
+    void bypass (bool bypass);
+    
+    // setters 
+    void setDrive (float k);
+    void setDryWet(float dryWet);
 private:
     uint bufferSize { 512 };
     float* buffer;

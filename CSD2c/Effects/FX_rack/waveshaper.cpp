@@ -10,7 +10,8 @@ WaveShaper::~WaveShaper()
 void WaveShaper::prepareToPlay(double samplerate) 
 {
 	buffer = new float[bufferSize];
-    setDrive(200.0f);
+    // standard drive
+    setDrive(10.0f);
 }
 float WaveShaper::output(float input)
 {
@@ -28,5 +29,16 @@ void WaveShaper::setDrive(float k)
 	{
         float x = Util::mapInRange (i, 0.0f, bufferSize, -1.0f, 1.0f);
         buffer[i] = atan (k * x) / atan (k);
+        // tanh (k * x) / tanh (k); formula for different distortion.
 	}	
+}
+
+void WaveShaper::setDryWet(float dryWet) 
+{
+
+}
+
+void WaveShaper::bypass (bool bypass)
+{
+
 }

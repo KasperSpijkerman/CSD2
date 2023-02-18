@@ -52,7 +52,7 @@ int main()
 
     // start jack client with 1 input and 2 outputs
     jack.init (1, 2);
-
+    std::cout << " Press d to enter Dry/wet for the different Effects:\n ";
     bool running = true;
     while (running) {
         switch (std::cin.get()) {

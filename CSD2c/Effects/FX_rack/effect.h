@@ -5,6 +5,7 @@ class Effect {
 public:    
     virtual void prepareToPlay (double sampleRate) = 0;
     virtual float output (float input) = 0;
+    virtual void bypass (bool bypass) = 0;
     void setDryWet(float dryWet);
 private: 
     float dryWet { 1.0f };
