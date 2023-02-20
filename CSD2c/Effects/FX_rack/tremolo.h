@@ -15,7 +15,6 @@ public:
     // setters
     void setAmplitude(float amplitude);
     void setSpeed(float speed);
-    void setDryWet(float dryWet);
 
 
 private:

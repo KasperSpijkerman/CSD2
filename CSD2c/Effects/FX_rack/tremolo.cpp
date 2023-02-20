@@ -5,7 +5,10 @@ void Tremolo::prepareToPlay (double sampleRate)
    std::cout << "Samplerate is set to: " << sampleRate << "\n";
    // initializing samplerate
    tremSine.setSamplerate(sampleRate);
-   tremSine.setFrequency(8);
+   // setting the modulation frequency
+   setSpeed(8);
+   // setting dry wet;
+   setDryWet(0.5);
 }
 
 
@@ -16,25 +19,21 @@ float Tremolo::output (float input)
    //std::cout << tremSignal << "\n";
    tremSignal *= amp;
    tremSignal += 1.0f - amp;
-   return input * tremSignal;
+   // returning modulated or dry signal based on dry wet
+   return (input * tremSignal* wet) + (input * dry);
 }
 
 void Tremolo::setAmplitude(float amplitude)
 {
    amp = amplitude;
-   std::cout << "Amp is set to: " << amp << "\n";
 }
     
 void Tremolo::setSpeed(float speed)
 {
    tremSine.setFrequency(speed);
-   std::cout << "Speed is set to: " << speed << " Hz\n";
 }
 
-void Tremolo::setDryWet(float dryWet) 
-{
 
-}
 void Tremolo::bypass (bool bypass) 
 {
 
