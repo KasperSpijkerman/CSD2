@@ -12,4 +12,5 @@ protected:
     // dry and wet for every effect
     float dry { 0 };
     float wet { 0 };
+    double samplerateFX {0};
 };

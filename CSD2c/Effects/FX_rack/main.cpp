@@ -16,10 +16,10 @@ public:
         {
             delay.prepareToPlay(sampleRate);
             // set delay time
-            delay.setDistance(44100 * 5);
+            delay.setDelayTime(500);
             //std::cout << delay.distance;
             // set dry wet (input wet amount)
-            delay.setDryWet(1.0);
+            delay.setDryWet(0.5);
         }
         for (Tremolo& tremolo : tremolos)
             tremolo.prepareToPlay(sampleRate);

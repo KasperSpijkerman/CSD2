@@ -8,15 +8,12 @@ using namespace std;
 
 CircBuffer::CircBuffer(uint size) : buffer(new float[size]), currentSize(size)
 {
-    cout << "Inside Circbuffer constructor\n";
 
 }
 
 CircBuffer::~CircBuffer()
 {
-    cout << "Inside Circbuffer deconstructor\n";
     deleteBuffer();
-    cout << "Buffer is now deleted\n";
 }
 
 // writing values according to list with values
@@ -36,6 +33,7 @@ float CircBuffer::output()
 // setting a distance between readheader and writeheader
 void CircBuffer::setDistance (uint distance) 
 {
+    
     this->distance = distance;
     readHead = (writeHead - distance + currentSize) % currentSize;
     
