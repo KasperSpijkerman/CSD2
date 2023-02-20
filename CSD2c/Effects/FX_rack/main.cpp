@@ -15,7 +15,11 @@ public:
         for (Delay& delay : delays)
         {
             delay.prepareToPlay(sampleRate);
-            delay.setDistance(44100 * 2);
+            // set delay time
+            delay.setDistance(44100 * 5);
+            //std::cout << delay.distance;
+            // set dry wet (input wet amount)
+            delay.setDryWet(1.0);
         }
         for (Tremolo& tremolo : tremolos)
             tremolo.prepareToPlay(sampleRate);
@@ -28,7 +32,7 @@ public:
 
         for (int channel = 0u; channel < numOutputChannels; ++channel) {
             for (int sample = 0u; sample < numFrames; ++sample) {
-                outputChannels[channel][sample] = tremolos[channel].output(waveshapers[channel].output (inputChannels[0][sample]))/3 + (delays[channel].output(waveshapers[channel].output (inputChannels[0][sample]))/3);
+                outputChannels[channel][sample] = delays[channel].output (inputChannels[0][sample])/2;
             }
         }
     }

@@ -5,7 +5,7 @@ void Tremolo::prepareToPlay (double sampleRate)
    std::cout << "Samplerate is set to: " << sampleRate << "\n";
    // initializing samplerate
    tremSine.setSamplerate(sampleRate);
-   tremSine.setFrequency(4);
+   tremSine.setFrequency(8);
 }
 
 

@@ -12,8 +12,8 @@ public:
 
 	// setters
 	void setDistance(uint distance);
-	void setDryWet(float dryWet);
 private:
 	CircBuffer* delayBuffer;
+	//int size {0};
 
 };

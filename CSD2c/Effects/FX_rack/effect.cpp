@@ -1,9 +1,17 @@
 #include "effect.h"
 
 
-void Effect::setDryWet(float dryWet) 
+void Effect::setDryWet(float wetInput) 
 {
-	if(dryWet > 1) dryWet = 1;
-	else if(dryWet < 0) dryWet = 0;
-	this->dryWet = dryWet;
+	
+	if(wetInput > 1) 
+	{
+		wetInput = 1;
+	} 
+	else if(wetInput < 0) 
+	{
+		wetInput = 0;
+	}
+	wet = wetInput;
+	dry = 1 - wetInput;
 }
