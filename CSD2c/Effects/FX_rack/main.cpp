@@ -9,7 +9,7 @@
 class Callback : public AudioCallback {
 
 public:
-
+    // giving the samplerate to every effect and executing init functions
     void prepare (int sampleRate) override 
     {
         for (Delay& delay : delays)
@@ -26,7 +26,8 @@ public:
         for (int channel = 0u; channel < numOutputChannels; ++channel) {
             for (int sample = 0u; sample < numFrames; ++sample) 
             {
-                outputChannels[channel][sample] = delays[channel].output(tremolos[channel].output(waveshapers[channel].output (inputChannels[0][sample])))*0.7;
+                // stacking FX first receiving input going into the waveshaper, tremolo -> delay * 0.6 so it won't get too loud
+                outputChannels[channel][sample] = delays[channel].output(tremolos[channel].output(waveshapers[channel].output (inputChannels[0][sample])))*0.6;
             }
         }
     }
@@ -50,7 +51,6 @@ int main()
 
     // start jack client with 1 input and 2 outputs
     jack.init (1, 2);
-    //std::cout << " Press d to enter Dry/wet for the different Effects:\n ";
     bool running = true;
     while (running) {
         switch (std::cin.get()) {

@@ -16,11 +16,11 @@ void Delay::prepareToPlay(double samplerate)
 	// create delaybuffer with a size 
 	delayBuffer = new CircBuffer(44100*20);
 	// set delay time
-	setDelayTime(60);
+	setDelayTime(200);
 	// set dry wet (input wet amount)
 	setDryWet(0.4);
 	// set feedback (between 0.1 and 0.99)
-	setFeedback(0.6);
+	setFeedback(0.5);
 }
 
 float Delay::output(float input)
@@ -44,10 +44,6 @@ void Delay::setDelayTime(float delayMs) {
 	delayBuffer->setDistance(delaySamples);
 }
 
-void Delay::bypass (bool bypass) 
-{
-
-}
 
 int Delay::msToSamp(float ms, double samplerate) 
 {
@@ -70,5 +66,10 @@ void Delay::setFeedback(float feedback)
 	{
 		delayFeedback = feedback;
 	}
-	std::cout << delayFeedback;
+}
+
+// TODO create bypass
+void Delay::bypass (bool bypass) 
+{
+
 }

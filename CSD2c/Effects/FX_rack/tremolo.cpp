@@ -2,13 +2,12 @@
 
 void Tremolo::prepareToPlay (double sampleRate)
 {
-   std::cout << "Samplerate is set to: " << sampleRate << "\n";
    // initializing samplerate
    tremSine.setSamplerate(sampleRate);
    // setting the modulation frequency
-   setSpeed(8);
+   setSpeed(50);
    // setting dry wet;
-   setDryWet(0.5);
+   setDryWet(0.8);
 }
 
 
@@ -33,7 +32,7 @@ void Tremolo::setSpeed(float speed)
    tremSine.setFrequency(speed);
 }
 
-
+// TODO create bypass
 void Tremolo::bypass (bool bypass) 
 {
 

@@ -1,3 +1,4 @@
+// based on code from example
 #include "waveshaper.h"
 
 WaveShaper::WaveShaper() {}
@@ -10,10 +11,12 @@ WaveShaper::~WaveShaper()
 void WaveShaper::prepareToPlay(double samplerate) 
 {
 	buffer = new float[bufferSize];
-    // standard drive
-    setDrive(20.0f);
+    // setting drive
+    setDrive(200.0f);
+    // setting dry wet
     setDryWet(1);
 }
+
 float WaveShaper::output(float input)
 {
 	float index = (input + 1.0f) * (bufferSize * 0.5f);
@@ -35,7 +38,7 @@ void WaveShaper::setDrive(float k)
 	}	
 }
 
-
+// TODO create bypass
 void WaveShaper::bypass (bool bypass)
 {
 
