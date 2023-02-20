@@ -11,15 +11,16 @@ void WaveShaper::prepareToPlay(double samplerate)
 {
 	buffer = new float[bufferSize];
     // standard drive
-    setDrive(200.0f);
+    setDrive(20.0f);
+    setDryWet(1);
 }
 float WaveShaper::output(float input)
 {
 	float index = (input + 1.0f) * (bufferSize * 0.5f);
     int i = (int) trunc (index);
     float indexDecimal = index - (float) i;
-    
-	return Util::linearMap (indexDecimal, buffer[i], buffer[i + 1]);
+    // returning shaped signal and dry signal 
+	return (Util::linearMap (indexDecimal, buffer[i], buffer[i + 1])*wet) + input*dry;
 }
 
 void WaveShaper::setDrive(float k)
@@ -34,10 +35,6 @@ void WaveShaper::setDrive(float k)
 	}	
 }
 
-void WaveShaper::setDryWet(float dryWet) 
-{
-
-}
 
 void WaveShaper::bypass (bool bypass)
 {

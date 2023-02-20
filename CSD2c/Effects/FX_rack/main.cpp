@@ -13,9 +13,7 @@ public:
     void prepare (int sampleRate) override 
     {
         for (Delay& delay : delays)
-        {
             delay.prepareToPlay(sampleRate);
-        }
         for (Tremolo& tremolo : tremolos)
             tremolo.prepareToPlay(sampleRate);
         for (WaveShaper& waveshaper : waveshapers)
@@ -26,8 +24,9 @@ public:
         auto [inputChannels, outputChannels, numInputChannels, numOutputChannels, numFrames] = buffer;
 
         for (int channel = 0u; channel < numOutputChannels; ++channel) {
-            for (int sample = 0u; sample < numFrames; ++sample) {
-                outputChannels[channel][sample] = tremolos[channel].output (inputChannels[0][sample]);
+            for (int sample = 0u; sample < numFrames; ++sample) 
+            {
+                outputChannels[channel][sample] = delays[channel].output(tremolos[channel].output(waveshapers[channel].output (inputChannels[0][sample])))*0.7;
             }
         }
     }

@@ -16,17 +16,17 @@ void Delay::prepareToPlay(double samplerate)
 	// create delaybuffer with a size 
 	delayBuffer = new CircBuffer(44100*20);
 	// set delay time
-	setDelayTime(200);
+	setDelayTime(60);
 	// set dry wet (input wet amount)
-	setDryWet(0.5);
+	setDryWet(0.4);
 	// set feedback (between 0.1 and 0.99)
 	setFeedback(0.6);
 }
 
 float Delay::output(float input)
 {
-	// giving the input to writehead with feedback * 0.9 to make every feedback lower in volume 
-    delayBuffer->input(input +(outputDelay*delayFeedback*0.9));
+	// giving the input to writehead with feedback 
+    delayBuffer->input(input +(outputDelay*delayFeedback));
 	// reading output and store in variable
 	outputDelay = delayBuffer->output();
 	// incrementing heads
