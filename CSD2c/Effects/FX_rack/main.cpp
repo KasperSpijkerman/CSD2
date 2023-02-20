@@ -16,8 +16,7 @@ public:
         {
             delay.prepareToPlay(sampleRate);
             // set delay time
-            delay.setDelayTime(500);
-            //std::cout << delay.distance;
+            delay.setDelayTime(200);
             // set dry wet (input wet amount)
             delay.setDryWet(0.5);
         }
@@ -56,7 +55,7 @@ int main()
 
     // start jack client with 1 input and 2 outputs
     jack.init (1, 2);
-    std::cout << " Press d to enter Dry/wet for the different Effects:\n ";
+    //std::cout << " Press d to enter Dry/wet for the different Effects:\n ";
     bool running = true;
     while (running) {
         switch (std::cin.get()) {

@@ -13,8 +13,8 @@ void Delay::prepareToPlay(double samplerate)
 {
 	// setting the effect samplerate equal to given samplerate
 	samplerateFX = samplerate;
-	// create delaybuffer
-	delayBuffer = new CircBuffer(44100*5);
+	// create delaybuffer with no delaytime
+	delayBuffer = new CircBuffer(44100*20);
 	
 }
 
