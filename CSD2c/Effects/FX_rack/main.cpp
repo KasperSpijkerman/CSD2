@@ -15,10 +15,6 @@ public:
         for (Delay& delay : delays)
         {
             delay.prepareToPlay(sampleRate);
-            // set delay time
-            delay.setDelayTime(200);
-            // set dry wet (input wet amount)
-            delay.setDryWet(0.5);
         }
         for (Tremolo& tremolo : tremolos)
             tremolo.prepareToPlay(sampleRate);

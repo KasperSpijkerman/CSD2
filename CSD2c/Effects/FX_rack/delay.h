@@ -14,10 +14,12 @@ public:
 
 	// setters
 	void setDelayTime(float delayTime);
+	void setFeedback(float feedback);
+
 private:
 	CircBuffer* delayBuffer;
 	float delayTimeMs { 0 };
 	int delaySamples { 0 };
-	
-
+	float outputDelay { 0 };
+	float delayFeedback { 0 };
 };

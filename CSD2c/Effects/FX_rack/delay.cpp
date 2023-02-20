@@ -13,22 +13,26 @@ void Delay::prepareToPlay(double samplerate)
 {
 	// setting the effect samplerate equal to given samplerate
 	samplerateFX = samplerate;
-	// create delaybuffer with no delaytime
+	// create delaybuffer with a size 
 	delayBuffer = new CircBuffer(44100*20);
-	
+	// set delay time
+	setDelayTime(200);
+	// set dry wet (input wet amount)
+	setDryWet(0.5);
+	// set feedback (between 0.1 and 0.99)
+	setFeedback(0.6);
 }
 
 float Delay::output(float input)
 {
-	// use functions from circBuffer. 
-	// giving the input to writehead
-    delayBuffer->input(input);
+	// giving the input to writehead with feedback * 0.9 to make every feedback lower in volume 
+    delayBuffer->input(input +(outputDelay*delayFeedback*0.9));
 	// reading output and store in variable
-	float output = delayBuffer->output();
+	outputDelay = delayBuffer->output();
 	// incrementing heads
 	delayBuffer->incrementHeads();
 	// return the input and output based on dry wet 
-	return (output*wet) + (input*dry);
+	return (outputDelay*wet) + (input*dry);
 }
 
 void Delay::setDelayTime(float delayMs) {
@@ -50,4 +54,21 @@ int Delay::msToSamp(float ms, double samplerate)
 	// amount of samples calculated based on miliseconds and samplerate
 	int samples = ms * samplerateFX/1000;
 	return samples;
+}
+
+void Delay::setFeedback(float feedback) 
+{
+	if(feedback > 0.99) 
+	{
+		delayFeedback = 0.99;
+	} 
+	else if(feedback < 0) 
+	{
+		delayFeedback = 0;
+	}
+	else 
+	{
+		delayFeedback = feedback;
+	}
+	std::cout << delayFeedback;
 }

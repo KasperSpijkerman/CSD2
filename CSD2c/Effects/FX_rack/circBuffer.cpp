@@ -19,14 +19,12 @@ CircBuffer::~CircBuffer()
 // writing values according to list with values
 void CircBuffer::input(float value)
 {  
-    buffer[writeHead] = value; 
-    // cout << buffer[writeHead] << " Is written\n";   
+    buffer[writeHead] = value;   
 }
 
 // reading values and printing them acooring to readhead
 float CircBuffer::output() 
 { 
-    // cout << buffer[readHead] << " Is being read\n"; 
     return buffer[readHead];
 }
 
