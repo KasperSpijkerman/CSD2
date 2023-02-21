@@ -28,6 +28,12 @@ public:
             {
                 // stacking FX first receiving input going into the waveshaper, tremolo -> delay * 0.6 so it won't get too loud
                 outputChannels[channel][sample] = delays[channel].output(tremolos[channel].output(waveshapers[channel].output (inputChannels[0][sample])))*0.6;
+                
+                // having the effects separate 
+                
+                // outputChannels[channel][sample] = tremolos[channel].output(inputChannels[0][sample]);
+                // outputChannels[channel][sample] = delays[channel].output(inputChannels[0][sample]);
+                // outputChannels[channel][sample] = waveshapers[channel].output(inputChannels[0][sample]);
             }
         }
     }

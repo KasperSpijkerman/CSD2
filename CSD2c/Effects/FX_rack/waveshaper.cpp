@@ -12,7 +12,7 @@ void WaveShaper::prepareToPlay(double samplerate)
 {
 	buffer = new float[bufferSize];
     // setting drive
-    setDrive(200.0f);
+    setDrive(10.0f);
     // setting dry wet
     setDryWet(1);
 }

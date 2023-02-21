@@ -54,6 +54,7 @@ int Delay::msToSamp(float ms, double samplerate)
 
 void Delay::setFeedback(float feedback) 
 {
+	// make sure feedback goes not out of range
 	if(feedback > 0.99) 
 	{
 		delayFeedback = 0.99;
