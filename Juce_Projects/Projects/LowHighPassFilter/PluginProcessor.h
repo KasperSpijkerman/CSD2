@@ -1,19 +1,14 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
-#include <utilities.h>
-#include <circBuffer.h>
-
-
-
+#include "LowPassHighPassFilter.h"
 //==============================================================================
-class AudioPluginAudioProcessor  : public juce::AudioProcessor
+class LowpassHighpassFilterAudioProcessor  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    float noteOnVel;
-    AudioPluginAudioProcessor();
-    ~AudioPluginAudioProcessor() override;
+    LowpassHighpassFilterAudioProcessor();
+    ~LowpassHighpassFilterAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -47,10 +42,11 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    // a variable that will be changed by the slider
-
-
 private:
+    juce::AudioProcessorValueTreeState parameters;
+    std::atomic <float>* cutoffFrequencyParameter = nullptr;
+    std::atomic<float>* highpassParameter = nullptr;
+    LowpassHighpassFilter filter;
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LowpassHighpassFilterAudioProcessor)
 };
