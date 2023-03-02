@@ -5,11 +5,11 @@ void Tremolo::prepareToPlay (double sampleRate)
    // initializing samplerate
    tremSine.setSamplerate(sampleRate);
    // setting the modulation frequency
-   setSpeed(50);
+   setSpeed(12);
    //set amplitude of modulation depth
-   setAmplitude(0.25)
-   // setting dry wet;
-   setDryWet(0.8);
+   setAmplitude(1);
+   // setting dry wet
+   setDryWet(1);
 }
 
 

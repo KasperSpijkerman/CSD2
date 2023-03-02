@@ -14,7 +14,7 @@ void Delay::prepareToPlay(double samplerate)
 	// setting the effect samplerate equal to given samplerate
 	samplerateFX = samplerate;
 	// create delaybuffer with a size 
-	delayBuffer = new CircBuffer(44100*20);
+	delayBuffer = new Interpolated_CircBuffer_(44100*20);
 	// set delay time
 	setDelayTime(500);
 	// set dry wet (input wet amount)
@@ -68,6 +68,12 @@ void Delay::setFeedback(float feedback)
 		delayFeedback = feedback;
 	}
 }
+
+void Delay::setMaxDelay(int maxDelay)
+{
+    delayBuffer.setSize(msToSamps(maxDelay));
+}
+
 
 // TODO create bypass
 void Delay::bypass (bool bypass) 

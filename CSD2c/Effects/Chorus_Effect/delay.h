@@ -1,5 +1,6 @@
 #pragma once
 #include "circBuffer.h"
+#include "interpolated_circBuffer.h"
 
 class Delay : public Effect 
 {
@@ -15,10 +16,11 @@ public:
 
 	// setters
 	void setDelayTime(float delayTime);
+    void setMaxDelay(float maxDelay)
 	void setFeedback(float feedback);
 
 private:
-	CircBuffer* delayBuffer;
+	Interpolated_CircBuffer* delayBuffer;
 	float delayTimeMs { 0 };
 	int delaySamples { 0 };
 	float outputDelay { 0 };

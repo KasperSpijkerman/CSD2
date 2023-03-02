@@ -16,6 +16,9 @@ public:
 
     // setters
     void setDistance (uint distance);
+    void setSize(uint size);
+
+    
 private:
     inline void wrapHeader (uint& head);
     inline void incrementWrite();

@@ -17,6 +17,7 @@ class Chorus : public Effect
         // setters
         void setDepth(float depth);
         void setSpeed(float speed);
+        void setMaxDelayTime(float maxDelay);
     private:
         // creating 2 delays for stereo chorus
         Delay delays[2] = {Delay(),Delay()};
@@ -26,6 +27,8 @@ class Chorus : public Effect
         float depth { 0 };
         // delay time
         float delayTime { 0 };
+        // set maxDelay time for interval of the chorus
+        float maxDelayTime{0};
         // speed for modulation
         float speed {0.5};
         // samplerate will be overwritten

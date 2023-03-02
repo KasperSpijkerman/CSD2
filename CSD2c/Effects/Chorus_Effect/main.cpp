@@ -11,8 +11,8 @@ public:
     // giving the samplerate to every effect and executing init functions
     void prepare (int sampleRate) override 
     {
-//        for (Delay& delay : delays)
-//            delay.prepareToPlay(sampleRate);
+        for (Chorus& chorus : choruses)
+            delay.prepareToPlay(sampleRate);
     }
 
     void process (AudioBuffer buffer) override {
@@ -21,13 +21,13 @@ public:
         for (int channel = 0u; channel < numOutputChannels; ++channel) {
             for (int sample = 0u; sample < numFrames; ++sample) 
             {
-                outputChannels[channel][sample] = delays[channel].output(inputChannels[0][sample]);
+                outputChannels[channel][sample] = choruses[channel].output(inputChannels[0][sample]);
             }
         }
     }
 
 private:
-    std::array<Delay, 2> delays;
+    std::array<Chorus, 2> choruses;
 };
 
 

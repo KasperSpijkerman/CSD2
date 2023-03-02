@@ -16,7 +16,7 @@ void Delay::prepareToPlay(double samplerate)
 	// create delaybuffer with a size 
 	delayBuffer = new CircBuffer(44100*20);
 	// set delay time
-	setDelayTime(200);
+	setDelayTime(500);
 	// set dry wet (input wet amount)
 	setDryWet(0.4);
 	// set feedback (between 0.1 and 0.99)
