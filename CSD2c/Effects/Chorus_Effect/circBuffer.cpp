@@ -24,8 +24,15 @@ void CircBuffer::input(float value)
 
 // reading values and printing them acooring to readhead
 float CircBuffer::output() 
-{ 
-    return buffer[readHead];
+{
+    float low_value = buffer[(int)readHead];
+    float high_value = buffer[((int)readHead + 1)];
+    float factor = readHead - (int)readHead;
+    float interpolated_output = Util::linearMap(factor, low_value, high_value);
+    return interpolated_output;
+
+
+    //return buffer[readHead];
 }
 
 // setting a distance between readheader and writeheader

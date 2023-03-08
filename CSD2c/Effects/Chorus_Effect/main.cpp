@@ -12,7 +12,7 @@ public:
     void prepare (int sampleRate) override 
     {
         for (Chorus& chorus : choruses)
-            delay.prepareToPlay(sampleRate);
+            chorus.prepareToPlay(sampleRate);
     }
 
     void process (AudioBuffer buffer) override {

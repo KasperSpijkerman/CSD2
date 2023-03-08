@@ -1,8 +1,10 @@
 #include "effect.h"
+#include "utilities.h"
 
 #pragma once
 
 class CircBuffer {
+
     using uint = unsigned int;
 
 public:
@@ -18,8 +20,8 @@ public:
     void setDistance (uint distance);
     void setSize(uint size);
 
-    
-private:
+
+protected:
     inline void wrapHeader (uint& head);
     inline void incrementWrite();
     inline void incrementRead(); 

@@ -16,11 +16,10 @@ public:
 
 	// setters
 	void setDelayTime(float delayTime);
-    void setMaxDelay(float maxDelay)
 	void setFeedback(float feedback);
 
 private:
-	Interpolated_CircBuffer* delayBuffer;
+	CircBuffer* delayBuffer;
 	float delayTimeMs { 0 };
 	int delaySamples { 0 };
 	float outputDelay { 0 };

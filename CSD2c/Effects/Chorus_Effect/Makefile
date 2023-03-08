@@ -1,7 +1,7 @@
 CXX= g++
 CXXFLAGS = -I/usr/local/include -Wall -std=c++1z
 LDFLAGS= -ljack
-SOURCE= main.o effect.o sine.o  circBuffer.o oscillator.o delay.o
+SOURCE= main.o effect.o sine.o circBuffer.o oscillator.o delay.o interpolated_circBuffer.o chorus.o
 TARGET= chorus
 $(TARGET) : $(SOURCE)
 	$(CXX) -o $@ $(SOURCE) $(LDFLAGS)
