@@ -1,6 +1,5 @@
 #pragma once
 #include "circBuffer.h"
-#include "interpolated_circBuffer.h"
 
 class Delay : public Effect 
 {

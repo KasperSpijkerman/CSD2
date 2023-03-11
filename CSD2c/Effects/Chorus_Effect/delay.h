@@ -1,6 +1,5 @@
 #pragma once
 #include "circBuffer.h"
-#include "interpolated_circBuffer.h"
 
 class Delay : public Effect 
 {
@@ -12,16 +11,17 @@ public:
 	void prepareToPlay(double samplerate);
 	void bypass (bool bypass);
 	// function for converting miliseconds to samples 
-	int msToSamp(float ms, double samplerate);
+	float msToSamp(float ms);
 
 	// setters
 	void setDelayTime(float delayTime);
 	void setFeedback(float feedback);
 
 private:
-	CircBuffer* delayBuffer;
+    CircBuffer delayBuffer{44100*2};
 	float delayTimeMs { 0 };
-	int delaySamples { 0 };
+	float delaySamples { 0 };
 	float outputDelay { 0 };
 	float delayFeedback { 0 };
+    int sampleRate;
 };

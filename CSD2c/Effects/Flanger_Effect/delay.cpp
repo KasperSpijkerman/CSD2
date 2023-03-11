@@ -20,7 +20,7 @@ void Delay::prepareToPlay(double samplerate)
 	// set dry wet (input wet amount)
 	setDryWet(1);
 	// set feedback (between 0.1 and 0.99)
-	setFeedback(0.9);
+	setFeedback(0.7);
 }
 
 float Delay::output(float input)

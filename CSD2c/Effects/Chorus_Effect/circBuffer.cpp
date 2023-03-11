@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include <iterator>
+#include <cmath>
 
 // short 
 using namespace std;
@@ -25,11 +26,12 @@ void CircBuffer::input(float value)
 // reading values and printing them acooring to readhead
 float CircBuffer::output() 
 {
-    float low_value = buffer[(int)readHead];
-    float high_value = buffer[((int)readHead + 1)];
-    float factor = readHead - (int)readHead;
-    float interpolated_output = Util::linearMap(factor, low_value, high_value);
-    return interpolated_output;
+    // truncate index (remove everything after the decimal point)
+    int i = (int) trunc (readHead);
+    // subtract from the original value to find the remainder
+    float indexDecimal = readHead - (float) i;
+    // std::cout << linearMap(indexDecimal, buffer[i], buffer[i + 1]) << " IS THE OUTPUT" << std::endl;
+    return Util::linearMap(indexDecimal, buffer[i], buffer[i + 1]);
 
 
     //return buffer[readHead];

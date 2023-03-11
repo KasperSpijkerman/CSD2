@@ -16,7 +16,7 @@ Oscillator::~Oscillator()
   #endif
 }
 
-void Oscillator::setSamplerate(float samplerate)
+void Oscillator::setSamplerate(double samplerate)
 {
   this->samplerate = samplerate;
 }
@@ -46,4 +46,9 @@ void Oscillator::tick()
     phase -= 1.0;
   // calculate sample for the incremented phase
  calculate();
+}
+
+void Oscillator::setPhase(float phase)
+{
+    this->phase = phase;
 }

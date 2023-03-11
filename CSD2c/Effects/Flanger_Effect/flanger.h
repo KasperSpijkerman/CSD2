@@ -12,24 +12,26 @@ class Flanger : public Effect
         ~Flanger();
 
         void prepareToPlay(double sampleRate) override;
-        float output(float input) override;
+        float output(float input,uint channel = 0);
         // setters
         void setDepth(float depth);
         void setSpeed(float speed);
+        // calculating modulation and ticking oscillators
+        void calcMod(uint channel);
     private:
         // creating delay for Flanger
-        Delay delay;
+        Delay delays[2] = {Delay(),Delay()};
         // creating triangle oscillator to modulate the delay
-        Triangle oscillator;
+        Triangle oscillators[2] = {Triangle(0.3,0.7),Triangle(0.7,0.7)};
         // depth for modulation determines the minDelay and maxDelay
-        float depth { 0.3 };
+        float depth { 2.0f };
         // delaycenter
-        float delayCenter{ 2 };
+        float delayCenter{ 10 };
         // speed for modulation
-        float speed { 2 };
+        float speed { 0.5 };
         // samplerate will be overwritten
         float sampleRateFX;
-        float freq = 1.0f;
+        float freq {1.0f};
 };
 
 

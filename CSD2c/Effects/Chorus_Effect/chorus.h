@@ -12,24 +12,26 @@ class Chorus : public Effect
         ~Chorus();
 
         void prepareToPlay(double sampleRate) override;
-        float output(float input) override;
+        float output(float input,uint channel = 0) ;
         // setters
         void setDepth(float depth);
         void setSpeed(float speed);
+        // function for ticking sine and calculating the modulation
+        void calcMod(uint channel);
     private:
-        // creating delay for chorus
-        Delay delay;
-        // creating sine oscillator to modulate the delay
-        Sine oscillator;
         // depth for modulation determines the minDelay and maxDelay
-        float depth { 4 };
+        float depth { 1.0f  };
         // delaycenter in ms, will be converted
-        float delayCenter{ 4 };
-        // speed for modulation
-        float speed { 20 };
-        // samplerate will be overwritten
-        float sampleRateFX;
-        float freq = 1.0f;
+        float delayCenter{ 30 };
+        float delayCenter2 { 50 };
+        // speeds for modulation
+        float speed { 2 };
+        float speed2 { 5 };
+        // creating delays for stereo chorus
+        Delay delays[2] = {Delay(),Delay()};
+        // creating sine oscillators to modulate the delay with different speed
+        Sine oscillators[2] = {Sine(speed,0.5f),Sine(speed2,0.5f)};
+
 };
 
 
