@@ -23,7 +23,7 @@ void CircBuffer::input(float value)
     buffer[writeHead] = value;   
 }
 
-// reading values and printing them acooring to readhead
+// reading values and printing them according to readhead
 float CircBuffer::output() 
 {
     int i = (int) trunc (readHead);

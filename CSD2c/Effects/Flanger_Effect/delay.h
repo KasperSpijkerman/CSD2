@@ -8,7 +8,7 @@ public:
 	~Delay();
 
 	float output(float input);
-	void prepareToPlay(double samplerate);
+	void prepareToPlay(double samplerate) override;
 	void bypass (bool bypass);
 	// function for converting miliseconds to samples 
 	int msToSamp(float ms, double samplerate);

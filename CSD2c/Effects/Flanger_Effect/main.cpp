@@ -28,7 +28,7 @@ public:
 
             for (int sample = 0u; sample < numFrames; ++sample) 
             {
-//                sines[channel].tick();
+                sines[channel].tick();
                 outputChannels[channel][sample] = flangers[channel].output(inputChannels[0][sample],channel)*0.8;
             }
         }

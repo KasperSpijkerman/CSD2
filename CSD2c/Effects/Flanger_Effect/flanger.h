@@ -19,14 +19,12 @@ class Flanger : public Effect
         // calculating modulation and ticking oscillators
         void calcMod(uint channel);
     private:
-        // creating delay for Flanger
+        // creating delays for stereo Flanger
         Delay delays[2] = {Delay(),Delay()};
-        // creating triangle oscillator to modulate the delay
+        // creating triangle oscillator to modulate the delay, different frequency for stereo effect
         Triangle oscillators[2] = {Triangle(0.3,0.7),Triangle(0.7,0.7)};
-        // depth for modulation determines the minDelay and maxDelay
+        // depth for modulation
         float depth { 2.0f };
-        // delaycenter
-        float delayCenter{ 10 };
         // speed for modulation
         float speed { 0.5 };
         // samplerate will be overwritten
