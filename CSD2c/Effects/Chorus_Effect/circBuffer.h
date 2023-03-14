@@ -12,23 +12,26 @@ public:
     ~CircBuffer(); 
     
     // input/output and incrementing the heads
-    void input (float value); 
+    void input (float value);
     float output(); 
     void incrementHeads(); 
 
     // setters
-    void setDistance (uint distance);
+    void setDistance (float distance);
     void setSize(uint size);
 
 
 protected:
-    inline void wrapHeader (uint& head);
+    inline void wrapreadHeader (float& head);
+    inline void wrapwriteHeader (uint& head);
     inline void incrementWrite();
     inline void incrementRead(); 
     void deleteBuffer();
 
     float* buffer;
     uint currentSize { 0 };
-    uint distance { 0 };
-    uint writeHead { 0 }, readHead { 0 };
+    float distance { 0 };
+    uint writeHead { 0 };
+    // float of readhead so it can interpolate
+    float readHead { 0 };
 };

@@ -4,7 +4,7 @@
 class Sine : public Oscillator
 {
 public:
-  Sine(float frequency = 200, float amplitude = 0.3);
+  Sine(float frequency = 200, float amplitude = 0.2);
 
 protected:
   void calculate();

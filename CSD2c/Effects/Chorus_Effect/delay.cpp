@@ -6,17 +6,17 @@ Delay::Delay()
 }
 Delay::~Delay() 
 {
-//    deletedelayBuffer;
+    delete delayBuffer;
 }
 
 void Delay::prepareToPlay(double samplerate)
 {
 	// setting the effect samplerate equal to given samplerate
-    this->sampleRate = samplerate;
+	samplerateFX = samplerate;
 	// create delaybuffer with a size 
-//    delayBuffer = new CircBuffer(44100*20);
+	delayBuffer = new CircBuffer(44100*20);
 	// set delay time
-//	setDelayTime(500);
+	setDelayTime(500);
 	// set dry wet (input wet amount)
 	setDryWet(1);
 	// set feedback (between 0.1 and 0.99)
@@ -26,11 +26,11 @@ void Delay::prepareToPlay(double samplerate)
 float Delay::output(float input)
 {
 	// giving the input to writehead with feedback 
-    delayBuffer.input(input +(outputDelay*delayFeedback));
+    delayBuffer->input(input +(outputDelay*delayFeedback));
 	// reading output and store in variable
-	outputDelay = delayBuffer.output();
+	outputDelay = delayBuffer->output();
 	// incrementing heads
-	delayBuffer.incrementHeads();
+	delayBuffer->incrementHeads();
 	// return the input and output based on dry wet 
 	return (outputDelay*wet) + (input*dry);
 }
@@ -39,16 +39,16 @@ void Delay::setDelayTime(float delayMs) {
 	// setting the variable to input 
 	delayTimeMs = delayMs;
 	// converting to samples
-	delaySamples = msToSamp(delayTimeMs);
+	delaySamples = msToSamp(delayTimeMs,samplerateFX);
 	// using the samples to the distance for the readhead
-	delayBuffer.setDistance(delaySamples);
+	delayBuffer->setDistance(delaySamples);
 }
 
 
-float Delay::msToSamp(float ms)
+float Delay::msToSamp(float ms, double samplerateFX)
 {
 	// amount of samples calculated based on miliseconds and samplerate
-	float samples = ms /1000.0f * sampleRate;
+	float samples = ms * samplerateFX/1000;
 	return samples;
 }
 

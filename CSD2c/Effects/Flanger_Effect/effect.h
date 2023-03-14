@@ -5,10 +5,11 @@ class Effect
 {
 public:    
     virtual void prepareToPlay (double sampleRate) = 0;
-    //virtual float output (float input);
-    //virtual void bypass (bool bypass) = 0;
+    //virtual float output (float input) = 0;
+    //virtual float stereoOutput (float input,uint channel) ;
     // set dry wet
     void setDryWet(float dryWet);
+    //virtual void bypass (bool bypass) = 0;
 protected: 
     // dry and wet for every effect
     float dry { 0 };

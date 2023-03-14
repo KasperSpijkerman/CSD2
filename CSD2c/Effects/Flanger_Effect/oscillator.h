@@ -26,5 +26,5 @@ protected:
   float phase;
   // sample contains the current sample
   float sample;
-  float samplerate = 48000;
+  float samplerate = 44100;
 };

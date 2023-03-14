@@ -45,10 +45,10 @@ void Delay::setDelayTime(float delayMs) {
 }
 
 
-int Delay::msToSamp(float ms, double samplerateFX)
+float Delay::msToSamp(float ms, double samplerateFX)
 {
 	// amount of samples calculated based on miliseconds and samplerate
-	int samples = ms * samplerateFX/1000;
+	float samples = ms * samplerateFX/1000;
 	return samples;
 }
 

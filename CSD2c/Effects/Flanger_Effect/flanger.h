@@ -12,7 +12,7 @@ class Flanger : public Effect
         ~Flanger();
 
         void prepareToPlay(double sampleRate) override;
-        float output(float input,uint channel = 0);
+        float output(float input,uint channel);
         // setters
         void setDepth(float depth);
         void setSpeed(float speed);
@@ -22,11 +22,11 @@ class Flanger : public Effect
         // creating delays for stereo Flanger
         Delay delays[2] = {Delay(),Delay()};
         // creating triangle oscillator to modulate the delay, different frequency for stereo effect
-        Triangle oscillators[2] = {Triangle(0.3,0.7),Triangle(0.7,0.7)};
+        Triangle oscillators[2] = {Triangle(0.3f,0.3f),Triangle(0.7f,0.3f)};
         // depth for modulation
         float depth { 2.0f };
         // speed for modulation
-        float speed { 0.5 };
+        float speed { 0.5f };
         // samplerate will be overwritten
         float sampleRateFX;
         float freq {1.0f};

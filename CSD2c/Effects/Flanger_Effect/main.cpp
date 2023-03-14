@@ -15,7 +15,7 @@ public:
             flanger.prepareToPlay(sampleRate);
 
         for (Sine& sine : sines) {
-            sine.setFrequency(300);
+            sine.setFrequency(400);
             sine.setSamplerate(sampleRate);
 
         }
@@ -28,8 +28,8 @@ public:
 
             for (int sample = 0u; sample < numFrames; ++sample) 
             {
-                sines[channel].tick();
-                outputChannels[channel][sample] = flangers[channel].output(inputChannels[0][sample],channel)*0.8;
+//                sines[channel].tick();
+                outputChannels[channel][sample] = flangers[channel].output(inputChannels[0][sample],channel);
             }
         }
     }

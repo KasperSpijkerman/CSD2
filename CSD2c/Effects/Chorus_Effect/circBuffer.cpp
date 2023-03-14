@@ -23,39 +23,39 @@ void CircBuffer::input(float value)
     buffer[writeHead] = value;   
 }
 
-// reading values and printing them acooring to readhead
+// reading values and outputting them according to readhead
 float CircBuffer::output() 
 {
-    // truncate index (remove everything after the decimal point)
+    // Interpolating output
     int i = (int) trunc (readHead);
-    // subtract from the original value to find the remainder
-    float indexDecimal = readHead - (float) i;
-    // std::cout << linearMap(indexDecimal, buffer[i], buffer[i + 1]) << " IS THE OUTPUT" << std::endl;
-    return Util::linearMap(indexDecimal, buffer[i], buffer[i + 1]);
-
-
-    //return buffer[readHead];
+    float factor = readHead - (float) i;
+    return Util::linearMap(factor, buffer[i], buffer[i + 1]);
 }
 
 // setting a distance between readheader and writeheader
-void CircBuffer::setDistance (uint distance) 
+void CircBuffer::setDistance (float distance)
 {
     
     this->distance = distance;
-    readHead = (writeHead - distance + currentSize) % currentSize;
+    float readHeadBuffer = writeHead - distance;
+    if(readHeadBuffer < 0){
+        readHead = readHeadBuffer + currentSize;
+    } else {
+        readHead = readHeadBuffer;
+    }
     
 }
 // incrementing the writehead 
 inline void CircBuffer::incrementWrite()
 {
     writeHead++;
-    wrapHeader(writeHead);
+    wrapwriteHeader(writeHead);
 }
 // incrementing the readhead
 inline void CircBuffer::incrementRead()
 {
     readHead++;
-    wrapHeader(readHead);
+    wrapreadHeader(readHead);
 }
 void CircBuffer::incrementHeads() 
 {
@@ -67,11 +67,19 @@ void CircBuffer::deleteBuffer()
 {
     delete[] buffer;
 }
-inline void CircBuffer::wrapHeader(uint& head) 
+inline void CircBuffer::wrapreadHeader(float& head)
 {
      if (head >= currentSize)
         {
             head = 0 ;
         }
+}
+
+inline void CircBuffer::wrapwriteHeader(uint& head)
+{
+    if (head >= currentSize)
+    {
+        head = 0 ;
+    }
 }
 

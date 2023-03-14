@@ -20,13 +20,13 @@ class Chorus : public Effect
         void calcMod(uint channel);
     private:
         // depth for modulation determines the minDelay and maxDelay
-        float depth { 1.0f  };
+        float depth { 4.0f  };
         // delaycenter in ms, will be converted
-        float delayCenter{ 30 };
-        float delayCenter2 { 50 };
+        float delayCenter{ 15 };
+        float delayCenter2 { 25 };
         // speeds for modulation
-        float speed { 2 };
-        float speed2 { 5 };
+        float speed { 4 };
+        float speed2 { 0.5 };
         // creating delays for stereo chorus
         Delay delays[2] = {Delay(),Delay()};
         // creating sine oscillators to modulate the delay with different speed
