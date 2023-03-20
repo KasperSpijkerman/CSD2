@@ -6,10 +6,18 @@ FlangerAudioProcessor::FlangerAudioProcessor()
 :
 // giving the Audio value tree state to the constructor and calling the createParameters function for all parameters, nullptr for undo manager so it won't be used.
     AudioProcessor (BusesProperties()
-                   .withInput  ("Input",  juce::AudioChannelSet::mono(), true)
+                   .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                    .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                    ), apvts(*this, nullptr,"Parameters", createParameters())
 {
+    // getting the parametervalues and storing them.
+     dryWet = apvts.getRawParameterValue("drywet");
+     feedback = apvts.getRawParameterValue("feedback");
+     rateL = apvts.getRawParameterValue("ratel");
+     rateR = apvts.getRawParameterValue("rater");
+     depthL = apvts.getRawParameterValue("depthl");
+     depthR = apvts.getRawParameterValue("depthr");
+     intensity = apvts.getRawParameterValue("intensity");
 }
 
 FlangerAudioProcessor::~FlangerAudioProcessor()
@@ -85,6 +93,14 @@ void FlangerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     {
        flanger.prepareToPlay(sampleRate);
     }
+    previousdryWet = *dryWet;
+    previousfeedback = *feedback;
+    previousrateL = *rateL;
+    previousrateR = *rateR;
+    previousdepthL = *depthL;
+    previousdepthR = *depthR;
+    previousintensity = *intensity;
+
 }
 
 void FlangerAudioProcessor::releaseResources()
@@ -125,43 +141,37 @@ void FlangerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // getting all parameters in an atomic float
-    auto dw = apvts.getRawParameterValue("drywet");
-    auto fb = apvts.getRawParameterValue("feedback");
-    auto rl = apvts.getRawParameterValue("rateL");
-    auto rr = apvts.getRawParameterValue("rateR");
-    auto dl = apvts.getRawParameterValue("depthL");
-    auto dr = apvts.getRawParameterValue("depthR");
-    auto i = apvts.getRawParameterValue("intensity");
 
-    dryWet = dw->load();
-    feedback = fb->load();
-    rateL = rl->load();
-    rateR = rr->load();
-    depthL = dl->load();
-    depthR = dr->load();
-    intensity = i->load();
+    auto currentDryWet = *dryWet * 1.0f;
+    auto currentFeedback = *feedback * 1.0f;
+    auto currentrateL = *rateL * 1.0f;
+    auto currentrateR = *rateR * 1.0f;
+    auto currentdepthL = *depthL * 1.0f;
+    auto currentdepthR= *depthR * 1.0f;
+    auto currentIntensity = *intensity * 1.0f;
+
+
+
+
 
     for (Flanger& flanger : flangers)
     {
-        flanger.setDryWet(dryWet);
-        flanger.setFeedback(feedback);
-        flanger.setRate(rateL,rateR);
-        flanger.setampDepth(depthL,depthR);
-        flanger.setIntensity(intensity);
+        flanger.setDryWet(currentDryWet);
+        flanger.setFeedback(currentFeedback);
+        flanger.setRate(currentrateL,currentrateR);
+        flanger.setampDepth(currentdepthL,currentdepthR);
+        flanger.setIntensity(currentIntensity);
     }
-
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);
-
         // process the audio
         for(int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
-            channelData[sample] = flangers[channel].output(buffer.getSample(channel,sample),channel);
+            channelData[sample] = flangers[channel].output(buffer.getSample(channel,sample),channel)*mainVolume;
         }
     }
 }
@@ -174,21 +184,24 @@ bool FlangerAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* FlangerAudioProcessor::createEditor()
 {
-    return new FlangerAudioProcessorEditor (*this);
+    return new FlangerAudioProcessorEditor (*this,apvts);
 }
 
 //==============================================================================
 void FlangerAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    auto state = apvts.copyState();
+    std::unique_ptr<juce::XmlElement> xml (state.createXml());
+    copyXmlToBinary (*xml, destData);
 }
 
 void FlangerAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName (apvts.state.getType()))
+            apvts.replaceState (juce::ValueTree::fromXml (*xmlState));
 }
 
 //==============================================================================
@@ -203,13 +216,13 @@ juce::AudioProcessorValueTreeState::ParameterLayout FlangerAudioProcessor::creat
     // creating a vector for all parameters
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
     // creating every parameter that is going to be controlled, id to identify, actual name, range and default value
-    params.push_back (std::make_unique<juce::AudioParameterFloat>("drywet", "Dry-Wet", 0.0f, 1.0f,1.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>("feedback", "Feedback", 0.0f, 0.90f,0.5f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>("rateL", "Rate-L", 0.0f, 5.0f,1.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>("rateR", "Rate-R", 0.0f, 5.0f,1.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>("depthL", "Depth-L", 0.0f, 4.0f,0.3f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>("depthR", "Depth-R", 0.0f, 4.0f,0.3f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>("intensity", "Intensity", 0.0f, 20.0f,1));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "drywet", 1 }, "Dry-Wet", 0.0f, 1.0f,1.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"feedback",2}, "Feedback", 0.0f, 0.90f,0.5f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"ratel",3}, "Rate-L", 0.0f, 5.0f,1.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"rater",4}, "Rate-R", 0.0f, 5.0f,1.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"depthl",5}, "Depth-L", 0.0f, 4.0f,0.3f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"depthr",6}, "Depth-R", 0.0f, 4.0f,0.3f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"intensity",7}, "Intensity", 0.0f, 20.0f,1));
     // returning the whole vector with parameters
     return {params.begin(), params.end()};
 }
