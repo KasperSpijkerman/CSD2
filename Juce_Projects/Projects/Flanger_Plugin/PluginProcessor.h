@@ -64,13 +64,13 @@ public:
 
 
 private:
-    float previousdryWet {0.0f};
-    float previousfeedback {0.0f};
-    float previousrateL {0.0f};
-    float previousrateR {0.0f};
-    float previousdepthL {0.0f};
-    float previousdepthR {0.0f};
-    float previousintensity{0.0f};
+    juce::SmoothedValue<float> previousdryWet {0.0f};
+    juce::SmoothedValue<float>  previousfeedback {0.0f};
+    juce::SmoothedValue<float>  previousrateL {0.0f};
+    juce::SmoothedValue<float>  previousrateR {0.0f};
+    juce::SmoothedValue<float>  previousdepthL {0.0f};
+    juce::SmoothedValue<float>  previousdepthR {0.0f};
+    juce::SmoothedValue<float>  previousintensity{0.0f};
 
     float mainVolume = 0.8f;
     // nullptrs for protection
@@ -81,6 +81,7 @@ private:
     std::atomic<float>*  depthL = nullptr;
     std::atomic<float>* depthR  = nullptr;
     std::atomic<float>* intensity  = nullptr;
+
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FlangerAudioProcessor)
 };

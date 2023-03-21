@@ -101,12 +101,14 @@ FlangerAudioProcessorEditor::FlangerAudioProcessorEditor (FlangerAudioProcessor&
     addAndMakeVisible(intensitySlider);
 
     // specify here on which UDP port number to receive incoming OSC messages
-    if (! connect (9001))    {
-        showConnectionErrorMessage ("Error: could not connect to UDP port 9001.");
-    }                   // [3]
-
-    juce::OSCReceiver::addListener(this, "/juce/drywet");
-    juce::OSCReceiver::addListener(this, "/juce/feedback");
+    if (! connect (7778))
+    {
+        showConnectionErrorMessage ("Error: could not connect to UDP port 7778.");
+    }
+    // adding listeners for the parameters.
+    juce::OSCReceiver::addListener(this, "/ZIGSIM/1234/compass");
+//    juce::OSCReceiver::addListener(this, "/juce/feedback");
+    // setting size of canvas.
     setSize (800, 800);
 
 }
@@ -149,21 +151,37 @@ void FlangerAudioProcessorEditor::resized()
 // Function for receiving OSC and getting the messages.
 void FlangerAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& message)
 {
-    if (message.size() == 1 && message[0].isFloat32())   {}
-    OSCAddressPattern drywetPattern("/juce/drywet");
-    OSCAddressPattern feedbackPattern("/juce/feedback");
+    if (message.size() == 2 && message[0].isFloat32())   {}
+    OSCAddressPattern drywetPattern("/ZIGSIM/1234/compass");
+    //OSCAddressPattern feedbackPattern("/juce/feedback");
 
     OSCAddress messageAddress(message.getAddressPattern().toString());
 
     if (drywetPattern.matches(messageAddress))
     {
-        drywetSlider.setValue (juce::jlimit (0.5f, 1.0f, message[0].getFloat32()));
+        float compassScaled = util.mapInRange(message[0].getFloat32(),0,360,0,100.0f);
+        float compassSlider = util.mapInRange(message[0].getFloat32(),0,360,0,1.0f);
+        drywetSlider.setValue (juce::jlimit (0.5f, 1.0f, compassSlider));
+
+        if(compassScaled>95.0){
+            tippingpoint = true;
+        }
+
+        if(tippingpoint&&compassScaled < 3.0){
+            compassRotations++;
+            std::cout << "ROTATION: " << compassRotations << "\n";
+            tippingpoint = false;
+        }
+
+        if(compassRotations >= 10){
+            compassRotations = 0;
+        }
     }
 
-    else if (feedbackPattern.matches(messageAddress))
-    {
-        feedbackSlider.setValue (juce::jlimit (0.0f, 0.90f, message[0].getFloat32()));
-    }
+//    else if (feedbackPattern.matches(messageAddress))
+//    {
+//        feedbackSlider.setValue (juce::jlimit (0.0f, 0.90f, message[0].getFloat32()));
+//    }
 }
 
 // debug OSC connection

@@ -93,13 +93,13 @@ void FlangerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     {
        flanger.prepareToPlay(sampleRate);
     }
-    previousdryWet = *dryWet;
-    previousfeedback = *feedback;
-    previousrateL = *rateL;
-    previousrateR = *rateR;
-    previousdepthL = *depthL;
-    previousdepthR = *depthR;
-    previousintensity = *intensity;
+    previousdryWet.reset(sampleRate,0.005);
+    previousfeedback.reset(sampleRate,0.005);
+    previousrateL.reset(sampleRate,0.005);
+    previousrateR.reset(sampleRate,0.005);
+    previousdepthL.reset(sampleRate,0.005);
+    previousdepthR.reset(sampleRate,0.005);
+    previousintensity.reset(sampleRate,0.005);
 
 }
 
@@ -142,6 +142,7 @@ void FlangerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
 
+    // retrieving the current values in realtime
     auto currentDryWet = *dryWet * 1.0f;
     auto currentFeedback = *feedback * 1.0f;
     auto currentrateL = *rateL * 1.0f;
@@ -150,17 +151,25 @@ void FlangerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     auto currentdepthR= *depthR * 1.0f;
     auto currentIntensity = *intensity * 1.0f;
 
+    // setting the current values targets to climb to smoothly
+    previousdryWet.setTargetValue(currentDryWet);
+    previousfeedback.setTargetValue(currentFeedback);
+    previousrateL.setTargetValue(currentrateL);
+    previousrateR.setTargetValue(currentrateR);
+    previousdepthL.setTargetValue(currentdepthL);
+    previousdepthR.setTargetValue(currentdepthR);
+    previousintensity.setTargetValue(currentIntensity);
 
 
 
 
     for (Flanger& flanger : flangers)
     {
-        flanger.setDryWet(currentDryWet);
-        flanger.setFeedback(currentFeedback);
-        flanger.setRate(currentrateL,currentrateR);
-        flanger.setampDepth(currentdepthL,currentdepthR);
-        flanger.setIntensity(currentIntensity);
+        flanger.setDryWet(previousdryWet.getNextValue());
+        flanger.setFeedback(previousfeedback.getNextValue());
+        flanger.setRate(previousrateL.getNextValue(),previousrateR.getNextValue());
+        flanger.setampDepth(previousrateL.getNextValue(),previousrateR.getNextValue());
+        flanger.setIntensity(previousintensity.getNextValue());
     }
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());

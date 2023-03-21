@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "utilities.h"
 //==============================================================================
 /**
 */
@@ -67,6 +68,14 @@ private:
 
     // osc receiver
     juce::OSCReceiver oscReceiver;
+
+    // utilities
+    Util util;
+
+    // compass counter, rotations
+    bool tippingpoint{false};
+    int compassRotations {0};
+
     // Functions OSC
     void oscMessageReceived (const juce::OSCMessage& message) override;
     void showConnectionErrorMessage (const juce::String& messageText);
