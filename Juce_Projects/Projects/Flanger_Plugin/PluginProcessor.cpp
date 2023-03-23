@@ -93,6 +93,7 @@ void FlangerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     {
        flanger.prepareToPlay(sampleRate);
     }
+    // setting the time for the ramp of adjusting the values
     previousdryWet.reset(sampleRate,0.005);
     previousfeedback.reset(sampleRate,0.005);
     previousrateL.reset(sampleRate,0.005);
@@ -100,7 +101,6 @@ void FlangerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     previousdepthL.reset(sampleRate,0.005);
     previousdepthR.reset(sampleRate,0.005);
     previousintensity.reset(sampleRate,0.005);
-
 }
 
 void FlangerAudioProcessor::releaseResources()
@@ -160,9 +160,7 @@ void FlangerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     previousdepthR.setTargetValue(currentdepthR);
     previousintensity.setTargetValue(currentIntensity);
 
-
-
-
+    // setting parameters for the flanger
     for (Flanger& flanger : flangers)
     {
         flanger.setDryWet(previousdryWet.getNextValue());
@@ -204,6 +202,7 @@ void FlangerAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     copyXmlToBinary (*xml, destData);
 }
 
+// keeping the state of the parameters
 void FlangerAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
@@ -228,7 +227,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout FlangerAudioProcessor::creat
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "drywet", 1 }, "Dry-Wet", 0.0f, 1.0f,1.0f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"feedback",2}, "Feedback", 0.0f, 0.90f,0.5f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"ratel",3}, "Rate-L", 0.0f, 5.0f,1.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"rater",4}, "Rate-R", 0.0f, 5.0f,1.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"rater",4}, "Rate-R", 0.0f, 5.0f,1.1f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"depthl",5}, "Depth-L", 0.0f, 4.0f,0.3f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"depthr",6}, "Depth-R", 0.0f, 4.0f,0.3f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"intensity",7}, "Intensity", 0.0f, 20.0f,1));

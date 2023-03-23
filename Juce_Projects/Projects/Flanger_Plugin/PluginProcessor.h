@@ -64,6 +64,7 @@ public:
 
 
 private:
+    // creating smoothed values for every parameter
     juce::SmoothedValue<float> previousdryWet {0.0f};
     juce::SmoothedValue<float>  previousfeedback {0.0f};
     juce::SmoothedValue<float>  previousrateL {0.0f};
@@ -72,8 +73,7 @@ private:
     juce::SmoothedValue<float>  previousdepthR {0.0f};
     juce::SmoothedValue<float>  previousintensity{0.0f};
 
-    float mainVolume = 0.8f;
-    // nullptrs for protection
+    // the actual realtime atomic float values of parameters, init with nullpointer for protection
     std::atomic<float>* dryWet = nullptr;
     std::atomic<float>* feedback  = nullptr;
     std::atomic<float>* rateL = nullptr;
@@ -81,6 +81,9 @@ private:
     std::atomic<float>*  depthL = nullptr;
     std::atomic<float>* depthR  = nullptr;
     std::atomic<float>* intensity  = nullptr;
+
+    // mainvolume variabele
+    float mainVolume = 0.8f;
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FlangerAudioProcessor)

@@ -14,7 +14,7 @@ cmake_minimum_required(VERSION 3.15)
 # `project()` command. `project()` sets up some helpful variables that describe source/binary
 # directories, and the current project version. This is a standard CMake command.
 
-project(SpinFlange VERSION 3.0.1)
+project(SpinFlange VERSION 3.0.2)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
@@ -38,7 +38,7 @@ project(SpinFlange VERSION 3.0.1)
 # Check the readme at `docs/CMake API.md` in the JUCE repo for the full list.
 
 juce_add_plugin(SpinFlange
-    VERSION 3.0.1                               # Set this if the plugin version is different to the project version
+    VERSION 3.0.2                               # Set this if the plugin version is different to the project version
     # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
     # ICON_SMALL ...
     COMPANY_NAME Uso                            # Specify the name of the plugin's author

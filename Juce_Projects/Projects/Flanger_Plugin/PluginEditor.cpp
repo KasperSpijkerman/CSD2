@@ -100,14 +100,15 @@ FlangerAudioProcessorEditor::FlangerAudioProcessorEditor (FlangerAudioProcessor&
     // adding the actual slider
     addAndMakeVisible(intensitySlider);
 
-    // specify here on which UDP port number to receive incoming OSC messages
+    // OSC Port
     if (! connect (7778))
     {
+        // showing error if it is not connected
         showConnectionErrorMessage ("Error: could not connect to UDP port 7778.");
     }
     // adding listeners for the parameters.
     juce::OSCReceiver::addListener(this, "/ZIGSIM/1234/compass");
-//    juce::OSCReceiver::addListener(this, "/juce/feedback");
+    //juce::OSCReceiver::addListener(this, "/juce/feedback");
     // setting size of canvas.
     setSize (800, 800);
 
@@ -160,8 +161,8 @@ void FlangerAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& me
     if (drywetPattern.matches(messageAddress))
     {
         float compassScaled = util.mapInRange(message[0].getFloat32(),0,360,0,100.0f);
-        float compassSlider = util.mapInRange(message[0].getFloat32(),0,360,0,1.0f);
-        drywetSlider.setValue (juce::jlimit (0.5f, 1.0f, compassSlider));
+        float compassSlider = util.mapInRange(message[0].getFloat32(),0,360,0,0.9f);
+        feedbackSlider.setValue (juce::jlimit (0.0f, 0.9f, compassSlider));
 
         if(compassScaled>95.0){
             tippingpoint = true;
@@ -173,7 +174,23 @@ void FlangerAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& me
             tippingpoint = false;
         }
 
-        if(compassRotations >= 10){
+        if(compassRotations == 2){
+            rateLSlider.setValue (juce::jlimit (0.0f, 5.0f,2.0f ));
+        }
+        else if(compassRotations == 3){
+            rateRSlider.setValue (juce::jlimit (0.0f, 5.0f,2.5f ));
+        }
+        else if(compassRotations == 4){
+            rateLSlider.setValue (juce::jlimit (0.0f, 5.0f,3.0f ));
+        }
+        else if(compassRotations == 5){
+            rateLSlider.setValue (juce::jlimit (0.0f, 5.0f,4.0f ));
+            rateRSlider.setValue (juce::jlimit (0.0f, 5.0f,4.5f ));
+        }
+        else if(compassRotations >= 10)
+        {
+            rateLSlider.setValue (juce::jlimit (0.0f, 5.0f,1.0f ));
+            rateRSlider.setValue (juce::jlimit (0.0f, 5.0f,1.1f ));
             compassRotations = 0;
         }
     }
