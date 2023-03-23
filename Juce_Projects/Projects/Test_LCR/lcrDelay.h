@@ -32,6 +32,7 @@ protected:
     int delayTimesLCR[3]= {2000, 3000, 700};
     float feedbackLCR[3]= {0.1, 0.1, 0.3};
     float drywetLCR[3]= {0,0,0.5};
+    bool distChange{false};
 };
 
 #endif

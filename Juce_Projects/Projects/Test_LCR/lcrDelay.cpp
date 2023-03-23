@@ -38,11 +38,18 @@ float LcrDelay::lcrDelayOutput(float input, uint ch){
 
 void LcrDelay::changeDelayLine(int ch, int delaytime, float feedback, float drywet)
 {
+    distChange = true;
     delayTimesLCR[ch] = delaytime;
     DelayArrP[ch].setDelayTime(delaytime);
+    feedbackLCR[ch] = 0;
+    distChange = false;
 
-    feedbackLCR[ch] = feedback;
-    DelayArrP[ch].setFeedback(feedback);
+    if (distChange == false)
+    {
+        feedbackLCR[ch] = feedback;
+        DelayArrP[ch].setFeedback(feedback);
+    }
+
 
     drywetLCR[ch] = drywet;
     DelayArrP[ch].setDryWet(drywet);
