@@ -101,14 +101,16 @@ FlangerAudioProcessorEditor::FlangerAudioProcessorEditor (FlangerAudioProcessor&
     addAndMakeVisible(intensitySlider);
 
     // OSC Port
-    if (! connect (7778))
+    if (! connect (7779))
     {
         // showing error if it is not connected
         showConnectionErrorMessage ("Error: could not connect to UDP port 7778.");
     }
     // adding listeners for the parameters.
     juce::OSCReceiver::addListener(this, "/ZIGSIM/1234/compass");
-    //juce::OSCReceiver::addListener(this, "/juce/feedback");
+    juce::OSCReceiver::addListener(this, "/ZIGSIM/1234/touch02");
+    juce::OSCReceiver::addListener(this, "/ZIGSIM/1234/facemouthsmileleft");
+
     // setting size of canvas.
     setSize (800, 800);
 
@@ -152,53 +154,87 @@ void FlangerAudioProcessorEditor::resized()
 // Function for receiving OSC and getting the messages.
 void FlangerAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& message)
 {
-    if (message.size() == 2 && message[0].isFloat32())   {}
-    OSCAddressPattern drywetPattern("/ZIGSIM/1234/compass");
-    //OSCAddressPattern feedbackPattern("/juce/feedback");
+    if (message.size() == 1 && message[0].isFloat32())   {}
+    OSCAddressPattern compassPattern("/ZIGSIM/1234/compass");
+    OSCAddressPattern touch02Pattern("/ZIGSIM/1234/touch02");
+    OSCAddressPattern smilePattern("/ZIGSIM/1234/facemouthsmileleft");
 
     OSCAddress messageAddress(message.getAddressPattern().toString());
 
-    if (drywetPattern.matches(messageAddress))
+    if (compassPattern.matches(messageAddress))
     {
         float compassScaled = util.mapInRange(message[0].getFloat32(),0,360,0,100.0f);
         float compassSlider = util.mapInRange(message[0].getFloat32(),0,360,0,0.9f);
+        // setting feedbackslider according to position of compass
         feedbackSlider.setValue (juce::jlimit (0.0f, 0.9f, compassSlider));
+        rateLSlider.setValue(juce::jlimit (1.0f, 4.5f, compassRotations));
+        rateLSlider.setValue(juce::jlimit (0.0f, 5.0f, compassRotations));
 
-        if(compassScaled>95.0){
+        if(compassScaled>95.0)
+        {
             tippingpoint = true;
         }
 
-        if(tippingpoint&&compassScaled < 3.0){
+        if(tippingpoint&&compassScaled < 3.0)
+        {
             compassRotations++;
             std::cout << "ROTATION: " << compassRotations << "\n";
             tippingpoint = false;
         }
-
-        if(compassRotations == 2){
-            rateLSlider.setValue (juce::jlimit (0.0f, 5.0f,2.0f ));
-        }
-        else if(compassRotations == 3){
-            rateRSlider.setValue (juce::jlimit (0.0f, 5.0f,2.5f ));
-        }
-        else if(compassRotations == 4){
-            rateLSlider.setValue (juce::jlimit (0.0f, 5.0f,3.0f ));
-        }
-        else if(compassRotations == 5){
-            rateLSlider.setValue (juce::jlimit (0.0f, 5.0f,4.0f ));
-            rateRSlider.setValue (juce::jlimit (0.0f, 5.0f,4.5f ));
-        }
-        else if(compassRotations >= 10)
+        if (compassRotations >5)
         {
-            rateLSlider.setValue (juce::jlimit (0.0f, 5.0f,1.0f ));
-            rateRSlider.setValue (juce::jlimit (0.0f, 5.0f,1.1f ));
             compassRotations = 0;
         }
+
+
+
+    }
+    // comparing messages to touch02 (y coordinate) address and changing intensity slider
+    if (touch02Pattern.matches(messageAddress))
+    {
+        // intensity changing based on y coordinate
+        float yCoordinate = message[0].getFloat32();
+        float intensityOSC = util.mapInRange(yCoordinate,-1,1,0,20);
+
+        intensitySlider.setValue (juce::jlimit (0.0f, 20.0f, intensityOSC));
     }
 
-//    else if (feedbackPattern.matches(messageAddress))
-//    {
-//        feedbackSlider.setValue (juce::jlimit (0.0f, 0.90f, message[0].getFloat32()));
-//    }
+    if (smilePattern.matches(messageAddress))
+    {
+        bool drywet = false;
+        bool currentState = false;
+        bool previousState = true;
+        bool smile = false;
+        float drywetOSC {0};
+
+            if(message[0].getFloat32() > 0.3)
+            {
+                smile = true;
+            }
+            else
+            {
+                smile = false;
+            }
+            currentState = smile;
+
+            if (previousState ==! currentState)
+            {
+                if (smile)
+                {
+                  drywet = !drywet;
+                }
+                previousState = currentState;
+            }
+            if (drywet)
+            {
+                drywetOSC = 1;
+            }
+            else
+            {
+                drywetOSC = 0;
+            }
+        drywetSlider.setValue (juce::jlimit (0.0f, 20.0f,drywetOSC));
+    }
 }
 
 // debug OSC connection

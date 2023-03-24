@@ -74,7 +74,7 @@ private:
 
     // compass counter, rotations
     bool tippingpoint{false};
-    int compassRotations {0};
+    float compassRotations {0};
 
     // Functions OSC
     void oscMessageReceived (const juce::OSCMessage& message) override;
