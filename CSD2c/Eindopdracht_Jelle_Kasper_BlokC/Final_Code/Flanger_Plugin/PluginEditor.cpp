@@ -104,7 +104,7 @@ FlangerAudioProcessorEditor::FlangerAudioProcessorEditor (FlangerAudioProcessor&
     if (! connect (7779))
     {
         // showing error if it is not connected
-        showConnectionErrorMessage ("Error: could not connect to UDP port 7778.");
+        showConnectionErrorMessage ("Error: could not connect to UDP port 7779.");
     }
     // adding listeners for the parameters.
     juce::OSCReceiver::addListener(this, "/ZIGSIM/1234/compass");
@@ -163,27 +163,38 @@ void FlangerAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& me
 
     if (compassPattern.matches(messageAddress))
     {
-        float compassScaled = util.mapInRange(message[0].getFloat32(),0,360,0,100.0f);
-        float compassSlider = util.mapInRange(message[0].getFloat32(),0,360,0,0.9f);
-        // setting feedbackslider according to position of compass
-        feedbackSlider.setValue (juce::jlimit (0.0f, 0.9f, compassSlider));
-        rateLSlider.setValue(juce::jlimit (1.0f, 4.5f, compassRotations));
-        rateLSlider.setValue(juce::jlimit (0.0f, 5.0f, compassRotations));
+        // receiving compass with 360 and creating variabele for one full rotation
+        float compassOneRotation = util.mapInRange(message[0].getFloat32(),0,360,0,100.0f);
+        // degrees for feedback scaling it according to rotationfactor
+        float degreesFB = (message[0].getFloat32()+(rotationFactor * 360));
+        float degreesRate = (message[0].getFloat32()+(compassRotations * 360));
+        // scaling feedback according to 4 max rotations, making it more dynamic
+        float feedbackCOSC = util.mapInRange(degreesFB,1,1080,0,0.90);
+        // scaling feedback according to 6 max rotations, making it more dynamic
+        float rateOSC = util.mapInRange(degreesRate,1,1440,0,0.99);
+        feedbackSlider.setValue (juce::jlimit (0.0f, 0.90f,feedbackCOSC ));
+        rateLSlider.setValue(juce::jlimit (0.1f, 4.9f, rateOSC));
+        rateRSlider.setValue(juce::jlimit (0.0f, 5.0f, rateOSC));
 
-        if(compassScaled>95.0)
+        if(compassOneRotation>95.0)
         {
             tippingpoint = true;
         }
 
-        if(tippingpoint&&compassScaled < 3.0)
+        if(tippingpoint&&compassOneRotation < 3.0)
         {
             compassRotations++;
-            std::cout << "ROTATION: " << compassRotations << "\n";
+            rotationFactor++;
             tippingpoint = false;
         }
-        if (compassRotations >5)
+        if (compassRotations >4)
         {
             compassRotations = 0;
+        }
+
+        if (rotationFactor > 3)
+        {
+            rotationFactor = 0;
         }
 
 
@@ -194,7 +205,7 @@ void FlangerAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& me
     {
         // intensity changing based on y coordinate
         float yCoordinate = message[0].getFloat32();
-        float intensityOSC = util.mapInRange(yCoordinate,-1,1,0,20);
+        float intensityOSC = util.mapInRange(yCoordinate,-1,1,20,1);
 
         intensitySlider.setValue (juce::jlimit (0.0f, 20.0f, intensityOSC));
     }
@@ -203,36 +214,37 @@ void FlangerAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& me
     {
         bool drywet = false;
         bool currentState = false;
-        bool previousState = true;
+        bool previousState = false;
         bool smile = false;
         float drywetOSC {0};
 
-            if(message[0].getFloat32() > 0.3)
-            {
-                smile = true;
-            }
-            else
-            {
-                smile = false;
-            }
-            currentState = smile;
+        if(message[0].getFloat32() > 0.3)
+        {
+            smile = true;
+        }
+        else
+        {
+            smile = false;
+        }
+        currentState = smile;
 
-            if (previousState ==! currentState)
+        if (previousState != currentState)
+        {
+            if (smile)
             {
-                if (smile)
-                {
-                  drywet = !drywet;
-                }
-                previousState = currentState;
+                drywet = !drywet;
             }
-            if (drywet)
-            {
-                drywetOSC = 1;
-            }
-            else
-            {
-                drywetOSC = 0;
-            }
+            previousState = currentState;
+        }
+        if (drywet)
+        {
+            drywetOSC = 0.2;
+        }
+        else
+        {
+
+            drywetOSC = 0.8;
+        }
         drywetSlider.setValue (juce::jlimit (0.0f, 20.0f,drywetOSC));
     }
 }

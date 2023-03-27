@@ -199,9 +199,11 @@ void LCRdelayAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& m
         float x = message[0].getFloat32();
         float dL = util.mapInRange(x,-1,1,0,3000);
         float dR = util.mapInRange(x,-1,1,200,3000);
+        float dC = util.mapInRange(x,-1,1,3000,200);
 
         delayTimeLSlider.setValue (juce::jlimit (0.0f, 3000.0f, dL));
         delayTimeRSlider.setValue (juce::jlimit (0.0f, 3000.0f, dR));
+        delayTimeCSlider.setValue (juce::jlimit (0.0f, 3000.0f, dC));
     }
 
     if (compassPattern.matches(messageAddress))
@@ -210,12 +212,10 @@ void LCRdelayAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& m
         float compassOneRotation = util.mapInRange(message[0].getFloat32(),1,360,0,100);
         // We also capture the message and multiply it by a rotation, for a wider range for the center Delay
         float degrees = (message[0].getFloat32()+(rotationFactor * 360));
-        float feedbackCOSC = util.mapInRange(degrees,1,1800,0,0.99);
+        float feedbackCOSC = util.mapInRange(degrees,1,1800,0,0.85);
         // using the compass rotations in a different way for L and R
-        float feedbackLOSC = util.mapInRange(compassRotations, 0, 10, 0.2, 0.99);
-        float feedbackROSC = util.mapInRange(compassRotations, 0, 6, 0, 0.99);
-
-
+        float feedbackLOSC = util.mapInRange(compassRotations, 0, 10, 0.2, 0.85);
+        float feedbackROSC = util.mapInRange(compassRotations, 0, 6, 0, 0.85);
         if(compassOneRotation>95.0){
             tippingpoint = true;
         }
@@ -226,8 +226,6 @@ void LCRdelayAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& m
             compassRotations++;
             // Feedback C scaling
             rotationFactor++;
-           // std::cout << "ROTATION C: " << rotationFactor << "\n";
-            std::cout << "ROTATION LR: " << compassRotations << "\n";
             tippingpoint = false;
         }
         // setting rotations back to 0 so it goes in circles
@@ -242,9 +240,9 @@ void LCRdelayAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& m
         }
 
         // change the feedback slidervalue for center Delay and LR
-        feedbackCSlider.setValue (juce::jlimit (0.0f, 0.99f, feedbackCOSC));
-        feedbackLSlider.setValue (juce::jlimit (0.0f, 0.99f, feedbackLOSC));
-        feedbackRSlider.setValue (juce::jlimit (0.0f, 0.99f, feedbackROSC));
+        feedbackCSlider.setValue (juce::jlimit (0.0f, 0.85f, feedbackCOSC));
+        feedbackLSlider.setValue (juce::jlimit (0.0f, 0.85f, feedbackLOSC));
+        feedbackRSlider.setValue (juce::jlimit (0.0f, 0.85f, feedbackROSC));
 
     }
 
@@ -264,7 +262,6 @@ void LCRdelayAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& m
         {
             smile = false;
         }
-        std::cout << smile << "\n";
         currentState = smile;
 
         if (previousState != currentState)
@@ -277,11 +274,12 @@ void LCRdelayAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& m
         }
         if (drywet)
         {
-            drywetOSC = 1;
+            drywetOSC = 0.1;
         }
         else
         {
-            drywetOSC = 0;
+
+            drywetOSC = 0.7;
         }
         drywetLSlider.setValue (juce::jlimit (0.0f, 0.99f,drywetOSC ));
         drywetRSlider.setValue (juce::jlimit (0.0f, 0.99f,drywetOSC ));
