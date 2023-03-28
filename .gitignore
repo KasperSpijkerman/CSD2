@@ -10,11 +10,16 @@ temp/
 # ignore ALL .s files 
 *.s 
 
+#ignore ALL ._ files
+*._
+
 # ignore executables 
 Multiple_Instruments 
 Sinewave
 Synth
-
+tremolo
+fxrack
+Chorus
 
 
 
