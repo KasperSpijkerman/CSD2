@@ -24,7 +24,7 @@ void CircBuffer::input(float value)
     buffer[writeHead] = value;   
 }
 
-// reading values and outputting them according to readhead
+// reading values and outputting them according to readhead, interpolating the output for no clicks
 float CircBuffer::output() 
 {
     // Interpolating output
@@ -63,6 +63,7 @@ inline void CircBuffer::incrementRead()
     readHead++;
     wrapreadHeader(readHead);
 }
+// incrementing both heads
 void CircBuffer::incrementHeads() 
 {
     incrementRead();
@@ -73,6 +74,7 @@ void CircBuffer::deleteBuffer()
 {
     delete[] buffer;
 }
+// starting at zero again, float
 inline void CircBuffer::wrapreadHeader(float& head)
 {
      if (head >= currentSize)
@@ -80,7 +82,7 @@ inline void CircBuffer::wrapreadHeader(float& head)
             head = 0 ;
         }
 }
-
+// starting at zero again for writheader, int instead of float
 inline void CircBuffer::wrapwriteHeader(uint& head)
 {
     if (head >= currentSize)

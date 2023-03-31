@@ -28,7 +28,7 @@ class Flanger : public Effect
         Triangle oscillators[2] = {Triangle(rateL,ampDepthL),Triangle(rateR,ampDepthR)};
     private:
 
-        // delay range modulation depth
+        // delay range modulation depth, intensity of modulation
         float range { 0.0f };
         // depth for amplitude of the triangle oscillators
         float ampDepthL {0.0f};

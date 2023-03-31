@@ -122,7 +122,7 @@ FlangerAudioProcessorEditor::~FlangerAudioProcessorEditor()
 //==============================================================================
 void FlangerAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
+    // colors and text in the plugin window
     g.fillAll (juce::Colours::darkviolet);
     g.setFont (juce::Font ("New Times Roman", 83.0f, juce::Font::bold));
     g.setColour(juce::Colours::orange);
@@ -212,6 +212,7 @@ void FlangerAudioProcessorEditor::oscMessageReceived (const juce::OSCMessage& me
 
     if (smilePattern.matches(messageAddress))
     {
+        // toggle for smiling changing the dry wet
         bool drywet = false;
         bool currentState = false;
         bool previousState = false;
