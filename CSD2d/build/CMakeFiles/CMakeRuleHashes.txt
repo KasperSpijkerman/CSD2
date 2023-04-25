@@ -1,0 +1,5 @@
+# Hashes of file build rules.
+3498bdbc1c1d1cdf56b7d33e9fc70d34 Projects/Midi_Plugins/Midi_Synth/MidiSynth_artefacts/JuceLibraryCode/JuceHeader.h
+8f49329072b93dbb047f54cbc040d725 Projects/Midi_Plugins/Midi_Synth/MidiSynth_artefacts/JuceLibraryCode/MidiSynth_AU/PkgInfo
+21666d09b2d7866676dd640214b42d2e Projects/Midi_Plugins/Midi_Synth/MidiSynth_artefacts/JuceLibraryCode/MidiSynth_Standalone/PkgInfo
+f03719d15e2fd4ea2c852a301a62c490 Projects/Midi_Plugins/Midi_Synth/MidiSynth_artefacts/JuceLibraryCode/MidiSynth_VST3/PkgInfo

@@ -1,0 +1,107 @@
+{
+	"backtrace" : 3,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"_juce_configure_plugin_targets",
+			"juce_add_plugin",
+			"add_dependencies",
+			"_juce_link_plugin_wrapper"
+		],
+		"files" : 
+		[
+			"JUCE/extras/Build/CMake/JUCEUtils.cmake",
+			"Projects/Midi_Plugins/Midi_Synth/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 40,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1770,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1225,
+				"parent" : 2
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 1229,
+				"parent" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 1085,
+				"parent" : 4
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 1229,
+				"parent" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 1085,
+				"parent" : 6
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 1229,
+				"parent" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 1085,
+				"parent" : 8
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 5,
+			"id" : "MidiSynth_Standalone::@75712356f4623fe77d0f"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "MidiSynth_AU::@75712356f4623fe77d0f"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "MidiSynth_VST3::@75712356f4623fe77d0f"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "MidiSynth"
+	},
+	"id" : "MidiSynth_All::@75712356f4623fe77d0f",
+	"name" : "MidiSynth_All",
+	"paths" : 
+	{
+		"build" : "Projects/Midi_Plugins/Midi_Synth",
+		"source" : "Projects/Midi_Plugins/Midi_Synth"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

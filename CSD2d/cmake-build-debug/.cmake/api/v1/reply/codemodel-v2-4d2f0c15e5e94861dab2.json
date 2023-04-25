@@ -1,0 +1,226 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						5
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "JUCE",
+					"childIndexes" : 
+					[
+						2,
+						3
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-JUCE-Debug-1ea34fccb5a6921f2158.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "JUCE"
+				},
+				{
+					"build" : "JUCE/modules",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-JUCE.modules-Debug-0b8c285ba2dd819cfc67.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "JUCE/modules"
+				},
+				{
+					"build" : "JUCE/extras/Build",
+					"childIndexes" : 
+					[
+						4
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-JUCE.extras.Build-Debug-da8f8edfa979b2c5464a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "JUCE/extras/Build"
+				},
+				{
+					"build" : "JUCE/extras/Build/juceaide",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-JUCE.extras.Build.juceaide-Debug-63cd8ea7b53c47ca052d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 1,
+					"source" : "JUCE/extras/Build/juceaide"
+				},
+				{
+					"build" : "Projects",
+					"childIndexes" : 
+					[
+						6
+					],
+					"jsonFile" : "directory-Projects-Debug-4e5c604529c67e69a2d7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "Projects"
+				},
+				{
+					"build" : "Projects/Midi_Plugins",
+					"childIndexes" : 
+					[
+						7
+					],
+					"jsonFile" : "directory-Projects.Midi_Plugins-Debug-aacf6e0178425f6052af.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 0,
+					"source" : "Projects/Midi_Plugins"
+				},
+				{
+					"build" : "Projects/Midi_Plugins/Midi_Synth",
+					"jsonFile" : "directory-Projects.Midi_Plugins.Midi_Synth-Debug-731f2187674710e0b82c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 6,
+					"projectIndex" : 2,
+					"source" : "Projects/Midi_Plugins/Midi_Synth",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						5,
+						6
+					],
+					"name" : "Projects"
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					],
+					"name" : "JUCE",
+					"parentIndex" : 0
+				},
+				{
+					"directoryIndexes" : 
+					[
+						7
+					],
+					"name" : "MidiSynth",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 7,
+					"id" : "MidiSynth::@75712356f4623fe77d0f",
+					"jsonFile" : "target-MidiSynth-Debug-eeec2365c6db6cd7b3ce.json",
+					"name" : "MidiSynth",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "MidiSynth_AU::@75712356f4623fe77d0f",
+					"jsonFile" : "target-MidiSynth_AU-Debug-6b98261b2ff230e35e4f.json",
+					"name" : "MidiSynth_AU",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "MidiSynth_All::@75712356f4623fe77d0f",
+					"jsonFile" : "target-MidiSynth_All-Debug-c56f08d896c49f523c23.json",
+					"name" : "MidiSynth_All",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "MidiSynth_Standalone::@75712356f4623fe77d0f",
+					"jsonFile" : "target-MidiSynth_Standalone-Debug-2830a7050bd6e91bb9cc.json",
+					"name" : "MidiSynth_Standalone",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "MidiSynth_VST3::@75712356f4623fe77d0f",
+					"jsonFile" : "target-MidiSynth_VST3-Debug-c1406017dcab8577da85.json",
+					"name" : "MidiSynth_VST3",
+					"projectIndex" : 2
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Volumes/SSD_Kasper/HKU/Jaar_2/CSD2/CSD2d/cmake-build-debug",
+		"source" : "/Volumes/SSD_Kasper/HKU/Jaar_2/CSD2/CSD2d"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

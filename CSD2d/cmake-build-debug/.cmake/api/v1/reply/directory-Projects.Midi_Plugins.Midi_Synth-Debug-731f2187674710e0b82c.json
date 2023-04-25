@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "Projects/Midi_Plugins/Midi_Synth",
+		"source" : "Projects/Midi_Plugins/Midi_Synth"
+	}
+}
