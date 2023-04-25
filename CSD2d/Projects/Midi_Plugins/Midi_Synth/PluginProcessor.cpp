@@ -145,11 +145,16 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     // making sure the parameters get updated if the user changes them
     for (int i = 0; i < synth.getNumVoices(); i++)
     {
-        if (auto voice = dynamic_cast <juce::SynthesiserVoice*>(synth.getVoice(i)))
+        if (auto voice = dynamic_cast <Synth_Voice*>(synth.getVoice(i)))
         {
             // OSC controls
             // ADSR
             // LFO
+            auto& attack = *apvts.getRawParameterValue("attack");
+            auto& decay = *apvts.getRawParameterValue("decay");
+            auto& sustain = *apvts.getRawParameterValue("sustain");
+            auto& release = *apvts.getRawParameterValue("release");
+            voice->updateADSR(attack.load(),decay.load(),sustain.load(),release.load());
         }
     }
     // outputting the sound by rendering next block

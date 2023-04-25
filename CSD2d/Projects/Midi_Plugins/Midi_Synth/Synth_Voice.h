@@ -13,11 +13,15 @@ public:
     void pitchWheelMoved (int newPitchWheelValue) override;
     void prepareToPlay (double sampleRate, int samplesPerBlock, int outputChannels);
     void renderNextBlock (AudioBuffer< float > &outputBuffer, int startSample, int numSamples) override;
+    // function updatind ADSR
+    void updateADSR(const float attack, const float decay, const float sustain, const float release);
 
 
 private:
     juce::ADSR adsr;
     juce::ADSR::Parameters adsrParams;
+    // buffer for synth to avoid clicks
+    juce::AudioBuffer<float> synthBuffer;
     juce::dsp::Oscillator<float> osc {  [](float x) {return sin(x);} };
     juce::dsp::Gain<float> gain;
     bool isPrepared {false};
