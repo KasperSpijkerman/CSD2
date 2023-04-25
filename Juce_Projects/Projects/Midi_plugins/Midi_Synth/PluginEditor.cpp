@@ -3,11 +3,17 @@
 
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), processorRef (p)
+    : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    juce::ignoreUnused (processorRef);
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
+    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+
+    // linkin parameters
+    attackAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "attack",attackSlider);
+    decayAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "decay",decaySlider);
+    sustainAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "sustain",sustainSlider);
+    releaseAttachment = std::make_unique<SliderAttachment>(audioProcessor.apvts, "release",releaseSlider);
+
+    oscSelectAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.apvts,"osc",oscillatorSelect);
     setSize (400, 300);
 }
 

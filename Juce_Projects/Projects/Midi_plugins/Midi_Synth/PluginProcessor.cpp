@@ -2,15 +2,14 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-AudioPluginAudioProcessor::AudioPluginAudioProcessor()
-     : AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
-                       )
+AudioPluginAudioProcessor::AudioPluginAudioProcessor() :
+    AudioProcessor
+    (BusesProperties()
+        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
+        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
+    ),
+        apvts(*this, nullptr,"Parameters", createParameters())
+
 {
     // adding a sound and a voice
     synth.addSound(new Synth_Sound());
@@ -190,4 +189,25 @@ void AudioPluginAudioProcessor::setStateInformation (const void* data, int sizeI
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new AudioPluginAudioProcessor();
+}
+
+
+juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameters()
+{
+    // Switchen Oscillators
+
+    // vector for all parameters
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+
+    // ADSR Parameters
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"attack",1}, "Attack", 0.1f, 1.0f,0.1));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"decay",2}, "Decay", 0.1f, 1.0f,0.1));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"sustain",3}, "Sustain", 0.1f, 1.0f,1.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"release",4}, "Release", 0.1f, 3.0f,0.4));
+
+    // parameter choice for choosing oscillators
+    params.push_back (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID {"osc",5}, "Oscillator", juce::StringArray { "Sine", "Saw", "Square"}, 0));
+
+
+    return {params.begin(), params.end()};
 }
