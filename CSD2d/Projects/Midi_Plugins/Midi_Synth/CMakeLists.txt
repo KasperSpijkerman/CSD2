@@ -23,7 +23,7 @@ project(MidiSynth VERSION 1.0.0)
 
 # find_package(JUCE CONFIG REQUIRED)        # If you've installed JUCE to your system
 # or
-# add_subdirectory(JUCE)                    # If you've put JUCE in a subdirectory called JUCE
+
 
 # If you are building a VST2 or AAX plugin, CMake needs to be told where to find these SDKs on your
 # system. This setup should be done before calling `juce_add_plugin`.
@@ -67,12 +67,15 @@ juce_generate_juce_header(MidiSynth)
 # Finally, we supply a list of source files that will be built into the target. This is a standard
 # CMake command.
 
+
 target_sources(MidiSynth
     PRIVATE
         PluginEditor.cpp
         PluginProcessor.cpp
         Synth_Voice.cpp
         Synth_Sound.cpp
+        UI/AdsrComponent.cpp
+        Data/AdsrData.cpp
         )
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
@@ -96,7 +99,7 @@ target_compile_definitions(MidiSynth
 # static library. These source files can be of any kind (wav data, images, fonts, icons etc.).
 # Conversion to binary-data will happen when your target is built.
 
-# juce_add_binary_data(AudioPluginData SOURCES ...)
+ juce_add_binary_data(AudioPluginData SOURCES UI)
 
 # `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
 # we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module

@@ -150,11 +150,13 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
             // OSC controls
             // ADSR
             // LFO
+            // retreiving values realtime
             auto& attack = *apvts.getRawParameterValue("attack");
             auto& decay = *apvts.getRawParameterValue("decay");
             auto& sustain = *apvts.getRawParameterValue("sustain");
             auto& release = *apvts.getRawParameterValue("release");
-            voice->updateADSR(attack.load(),decay.load(),sustain.load(),release.load());
+            // updating the parameters
+            voice->updateParameters(attack.load(),decay.load(),sustain.load(),release.load());
         }
     }
     // outputting the sound by rendering next block
