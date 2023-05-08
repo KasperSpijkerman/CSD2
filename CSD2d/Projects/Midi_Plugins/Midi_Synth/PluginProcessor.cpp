@@ -212,8 +212,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"sustain",3}, "Sustain", 0.1f, 1.0f,1.0f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"release",4}, "Release", 0.1f, 3.0f,0.7));
 
-    // parameter choice for choosing oscillators
-    params.push_back (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID {"osc",5}, "Oscillator", juce::StringArray { "Sine", "Saw", "Square"}, 0));
+    // parameter choice for choosing different oscillators
+    params.push_back (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID {"oscwavetype1",5}, "Oscillator Wave Type", juce::StringArray { "Sine", "Saw", "Square"}, 0));
 
 
     return {params.begin(), params.end()};
