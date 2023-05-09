@@ -2,6 +2,7 @@
 
 #include "PluginProcessor.h"
 #include "UI/AdsrComponent.h"
+#include "UI/OscComponent.h"
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor,
@@ -23,7 +24,9 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> oscSelectAttachment;
     // reference to processor
     AudioPluginAudioProcessor& audioProcessor;
-    // ADSR object
+    // ADSR object UI
     AdsrComponent adsr;
+    // oscillator component UI
+    OscComponent osc;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };

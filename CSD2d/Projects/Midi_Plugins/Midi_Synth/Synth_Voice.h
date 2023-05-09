@@ -17,6 +17,7 @@ public:
     void renderNextBlock (AudioBuffer< float > &outputBuffer, int startSample, int numSamples) override;
     // function updatind ADSR
     void updateParameters(const float attack, const float decay, const float sustain, const float release);
+    // returning oscillator object
     OscData& getOscillator() { return osc; };
 
 

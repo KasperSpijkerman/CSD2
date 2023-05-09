@@ -155,8 +155,11 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
             auto& decay = *apvts.getRawParameterValue("decay");
             auto& sustain = *apvts.getRawParameterValue("sustain");
             auto& release = *apvts.getRawParameterValue("release");
+
+            auto& oscWave = *apvts.getRawParameterValue("oscwavetype1");
             // updating the parameters
             voice->updateParameters(attack.load(),decay.load(),sustain.load(),release.load());
+            voice->getOscillator().setWaveType(oscWave);
         }
     }
     // outputting the sound by rendering next block

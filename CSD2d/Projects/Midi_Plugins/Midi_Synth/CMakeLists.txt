@@ -75,6 +75,7 @@ target_sources(MidiSynth
         Synth_Voice.cpp
         Synth_Sound.cpp
         UI/AdsrComponent.cpp
+        UI/OscComponent.cpp
         Data/AdsrData.cpp
         Data/OscData.cpp
         )
@@ -100,7 +101,7 @@ target_compile_definitions(MidiSynth
 # static library. These source files can be of any kind (wav data, images, fonts, icons etc.).
 # Conversion to binary-data will happen when your target is built.
 
- juce_add_binary_data(AudioPluginData SOURCES UI)
+#juce_add_binary_data(AudioPluginData SOURCES UI)
 
 # `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
 # we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module

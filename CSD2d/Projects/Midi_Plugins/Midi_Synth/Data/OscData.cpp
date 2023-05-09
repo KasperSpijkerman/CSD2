@@ -1,5 +1,12 @@
 #include "OscData.h"
 
+
+
+void OscData::prepareToPlay(juce::dsp::ProcessSpec& spec)
+{
+    prepare(spec);
+}
+
 void OscData::setWaveType(const int choice)
 {
    // making choices for the oscillators
@@ -24,4 +31,14 @@ void OscData::setWaveType(const int choice)
             jassertfalse;
 
     }
+}
+
+void OscData::getNextAudioBlock(juce::dsp::AudioBlock<float>& block)
+{
+    process (juce::dsp::ProcessContextReplacing<float> (block));
+}
+
+void OscData::setWaveFrequency(const int midiNoteNumber)
+{
+    setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber));
 }
