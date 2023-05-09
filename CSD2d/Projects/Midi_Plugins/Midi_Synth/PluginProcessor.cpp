@@ -147,19 +147,25 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     {
         if (auto voice = dynamic_cast <Synth_Voice*>(synth.getVoice(i)))
         {
-            // OSC controls
-            // ADSR
-            // LFO
             // retreiving values realtime
+            // ADSR
             auto& attack = *apvts.getRawParameterValue("attack");
             auto& decay = *apvts.getRawParameterValue("decay");
             auto& sustain = *apvts.getRawParameterValue("sustain");
             auto& release = *apvts.getRawParameterValue("release");
 
+            // OSC wavetype
             auto& oscWave = *apvts.getRawParameterValue("oscwavetype1");
+            // FM parameters, depth and frequency
+            auto& fmDepth = *apvts.getRawParameterValue("fmdepth");
+            auto& fmFrequency = *apvts.getRawParameterValue("fmfreq");
+
+
+
             // updating the parameters
-            voice->updateParameters(attack.load(),decay.load(),sustain.load(),release.load());
             voice->getOscillator().setWaveType(oscWave);
+            voice->getOscillator().setFMParams(fmDepth,fmFrequency);
+            voice->updateParameters(attack.load(),decay.load(),sustain.load(),release.load());
         }
     }
     // outputting the sound by rendering next block
@@ -210,13 +216,17 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
     // ADSR Parameters
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"attack",1}, "Attack", 0.1f, 1.0f,0.5));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"decay",2}, "Decay", 0.1f, 1.0f,0.1));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"sustain",3}, "Sustain", 0.1f, 1.0f,1.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"release",4}, "Release", 0.1f, 3.0f,0.7));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"attack",1}, "Attack",juce::NormalisableRange<float>{ 0.1f, 1.0f,0.1},0.3f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"decay",2}, "Decay", juce::NormalisableRange<float>{0.1f, 1.0f,0.1},0.1));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"sustain",3}, "Sustain", juce::NormalisableRange<float>{0.1f, 1.0f,0.1},1.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"release",4}, "Release", juce::NormalisableRange<float>{0.1f, 3.0f,0.2},0.7));
+
+    // FM parameters
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"fmfreq",5}, "FM Freq", juce::NormalisableRange<float>{0.0f, 1000.0f},5.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"fmdepth",6}, "FM Depth", juce::NormalisableRange<float>{0.0f, 1000.0f},500.0f));
 
     // parameter choice for choosing different oscillators
-    params.push_back (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID {"oscwavetype1",5}, "Oscillator Wave Type", juce::StringArray { "Sine", "Saw", "Square"}, 0));
+    params.push_back (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID {"oscwavetype1",7}, "Oscillator Wave Type", juce::StringArray { "Sine", "Saw", "Square"}, 0));
 
 
     return {params.begin(), params.end()};
