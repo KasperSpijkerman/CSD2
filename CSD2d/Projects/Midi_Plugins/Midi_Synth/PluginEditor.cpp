@@ -3,7 +3,7 @@
 
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p) , osc(audioProcessor.apvts, "oscwavetype1"), adsr (audioProcessor.apvts)
+    : AudioProcessorEditor (&p), audioProcessor (p) , osc(audioProcessor.apvts, "oscwavetype1", "fmfreq", "fmdepth"), adsr (audioProcessor.apvts)
 {
     setSize (400, 300);
     oscSelectAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.apvts,"osc",oscillatorSelect);
@@ -23,7 +23,8 @@ void AudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
 
 void AudioPluginAudioProcessorEditor::resized()
 {
+    osc.setBounds(10,10,180,200);
     adsr.setBounds(getWidth()/2,0,getWidth() /2, getHeight());
-    osc.setBounds(10,10,100,30);
+
 }
 

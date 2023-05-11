@@ -4,6 +4,7 @@
 
 void OscData::prepareToPlay(juce::dsp::ProcessSpec& spec)
 {
+    // preparing oscillators
     fmOsc.prepare(spec);
     prepare(spec);
 }
@@ -46,21 +47,22 @@ void OscData::getNextAudioBlock(juce::dsp::AudioBlock<float>& block)
     for (int ch =0; ch< block.getNumChannels(); ++ch)
     {
         // processing the fmSynthesis on sample and channel multiplying it with the fmdepth
-        for (int samples = 0; samples <block.getNumSamples(); ++samples)
+        for (int s = 0; s <block.getNumSamples(); ++s)
         {
-            fmMod = fmOsc.processSample(block.getSample(ch,samples)*fmDepth);
+            fmMod = fmOsc.processSample(block.getSample(ch,s))*fmDepth;
         }
     }
 
     process (juce::dsp::ProcessContextReplacing<float> (block));
 }
 
-void OscData::setFMParams(const float depth, const float frequency)
+void OscData::setFmParams(const float depth, const float frequency)
 {
     // setting the fm oscillator
     fmOsc.setFrequency(frequency);
     // setting depth
     fmDepth = depth;
     // making sure the frequency also changes if fm is changed
-    setFrequency(juce::MidiMessage::getMidiNoteInHertz(lastMidiNote) + fmMod);
+    auto currentFrequency = juce::MidiMessage::getMidiNoteInHertz(lastMidiNote) + fmMod;
+    setFrequency( currentFrequency >= 0 ? currentFrequency : currentFrequency *-1.0f );
 }
