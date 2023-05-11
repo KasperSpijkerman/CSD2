@@ -3,12 +3,17 @@
 
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p) , osc(audioProcessor.apvts, "oscwavetype1", "fmfreq", "fmdepth"), adsr (audioProcessor.apvts)
+    : AudioProcessorEditor (&p),
+    audioProcessor (p) ,
+    osc(audioProcessor.apvts,"oscwavetype1","fmfreq","fmdepth"),
+    adsr (audioProcessor.apvts),
+    filter(audioProcessor.apvts, "filtertype", "filtercutoff", "filterresonance")
+
 {
-    setSize (400, 300);
-    oscSelectAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.apvts,"osc",oscillatorSelect);
+    setSize (600, 500);
     addAndMakeVisible(adsr);
     addAndMakeVisible(osc);
+    addAndMakeVisible(filter);
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
@@ -23,8 +28,14 @@ void AudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
 
 void AudioPluginAudioProcessorEditor::resized()
 {
-    osc.setBounds(10,10,180,200);
-    adsr.setBounds(getWidth()/2,0,getWidth() /2, getHeight());
+    const auto paddingX = 5;
+    const auto paddingY = 35;
+    const auto paddingY2 = 235;
+    const auto objectWidth = 300;
+    const auto objectHeight = 200;
+    osc.setBounds(paddingX,paddingY,objectWidth,objectHeight);
+    adsr.setBounds(osc.getRight(),paddingY,objectWidth, objectHeight);
+    filter.setBounds(paddingX,paddingY2,objectWidth,objectHeight);
 
 }
 

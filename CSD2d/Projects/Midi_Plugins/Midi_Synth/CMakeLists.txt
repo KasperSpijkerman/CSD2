@@ -76,8 +76,10 @@ target_sources(MidiSynth
         Synth_Sound.cpp
         UI/AdsrComponent.cpp
         UI/OscComponent.cpp
+        UI/FilterComponent.cpp
         Data/AdsrData.cpp
         Data/OscData.cpp
+        Data/FilterData.cpp
         )
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer

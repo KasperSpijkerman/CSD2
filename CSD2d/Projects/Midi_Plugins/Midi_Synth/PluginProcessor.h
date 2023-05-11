@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 #include "Synth_Sound.h"
 #include "Synth_Voice.h"
+#include "Data/FilterData.h"
 //==============================================================================
 class AudioPluginAudioProcessor  : public juce::AudioProcessor
 {
@@ -43,14 +44,16 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    // synth object
-    juce::Synthesiser synth;
+
     // audio value treestate for parameters
     juce::AudioProcessorValueTreeState apvts;
     // creating the parameters in seperate function
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
 private:
-
+    // synth object
+    juce::Synthesiser synth;
+    // filter object
+    FilterData filter;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
 };
