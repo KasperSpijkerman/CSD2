@@ -4,6 +4,8 @@
 #include "Synth_Sound.h"
 #include "Synth_Voice.h"
 #include "Data/FilterData.h"
+#include "FX/Tremolo/tremolo.h"
+#include "FX/Waveshaper/waveshaper.h"
 //==============================================================================
 class AudioPluginAudioProcessor  : public juce::AudioProcessor
 {
@@ -54,6 +56,9 @@ private:
     juce::Synthesiser synth;
     // filter object
     FilterData filter;
+    std::array<Tremolo, 2> tremolos;
+    std::array<WaveShaper, 2> waveshapers;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
 };

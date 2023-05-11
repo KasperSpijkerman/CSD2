@@ -102,7 +102,13 @@ void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
         }
     }
     filter.prepareToPlay(sampleRate,samplesPerBlock,getTotalNumOutputChannels());
+    for (Tremolo& tremolo : tremolos){
+        tremolo.prepareToPlay(sampleRate);
+    }
+    for (WaveShaper& waveshaper : waveshapers)
+    waveshaper.prepareToPlay(sampleRate);
 }
+
 
 void AudioPluginAudioProcessor::releaseResources()
 {
@@ -176,6 +182,15 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     filter.updateParameters(filterType,filterCutoff,filterResonance);
     // applying filter to buffer
     filter.process(buffer);
+
+
+    for (int channel = 0; channel < 2; ++channel) {
+        auto *channelData = buffer.getWritePointer(channel);
+        // process the audio
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
+            channelData[sample] = tremolos[channel].output(waveshapers[channel].output(buffer.getSample(channel, sample)));
+        }
+    }
 }
 
 //==============================================================================
@@ -220,7 +235,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
 
     // FM parameters
 
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"fmfreq",1}, "FM Freq", juce::NormalisableRange<float>{0.0f, 1000.0f,0.01,0.3f},5.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"fmfreq",1}, "FM Freq", juce::NormalisableRange<float>{0.0f, 1000.0f,0.01f,0.3f},5.0f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"fmdepth",2}, "FM Depth", juce::NormalisableRange<float>{0.0f, 1000.0f,0.01f,0.3f},3.0f));
 
     // ADSR Parameters

@@ -80,6 +80,12 @@ target_sources(MidiSynth
         Data/AdsrData.cpp
         Data/OscData.cpp
         Data/FilterData.cpp
+        FX/Tremolo/sine.cpp
+        FX/Tremolo/tremolo.cpp
+        FX/Tremolo/oscillator.cpp
+        FX/Waveshaper/waveshaper.cpp
+        FX/effect.cpp
+
         )
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
