@@ -14,6 +14,9 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor() :
     // adding a sound and a voice
     synth.addSound(new Synth_Sound());
     synth.addVoice(new Synth_Voice());
+    synth.addVoice(new Synth_Voice());
+    synth.addVoice(new Synth_Voice());
+    synth.addVoice(new Synth_Voice());
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
@@ -277,7 +280,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"lfodepth",11}, "LFO depth", juce::NormalisableRange<float>{0.0f, 1.0f,0.1f},0.0f));
 
     // Shaper
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"drive",12}, "Drive", juce::NormalisableRange<float>{0.0f, 100.0f,1.0f,0.6f},0.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"drive",12}, "Drive", juce::NormalisableRange<float>{1.0f, 100.0f,1.0f,0.6f},0.0f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"trim",13}, "Trim", juce::NormalisableRange<float>{0.000001, 1.0f,0.001f},1.0f));
 
     return {params.begin(), params.end()};
