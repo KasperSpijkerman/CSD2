@@ -13,13 +13,16 @@ public:
 
     float output (float input);
     void prepareToPlay(double samplerate);
-    void bypass (bool bypass);
     
     // setters 
     void setDrive (float k);
+    void setAmplitude(float amplitude);
+    // updating parameters
+    void updateParameters(const float drive, const float amplitude);
 private:
     uint bufferSize { 512 };
     float* buffer;
     Util util;
+    float amplitude{1.0f};
 
 };

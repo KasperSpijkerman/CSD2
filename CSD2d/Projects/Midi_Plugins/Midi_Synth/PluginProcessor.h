@@ -56,6 +56,7 @@ private:
     juce::Synthesiser synth;
     // filter object
     FilterData filter;
+    // FX objects
     std::array<Tremolo, 2> tremolos;
     std::array<WaveShaper, 2> waveshapers;
 

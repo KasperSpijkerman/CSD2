@@ -23,7 +23,7 @@ float WaveShaper::output(float input)
     int i = (int) trunc (index);
     float indexDecimal = index - (float) i;
     // returning shaped signal and dry signal 
-	return (util.linearMap (indexDecimal, buffer[i], buffer[i + 1])*wet) + input*dry;
+	return ((util.linearMap (indexDecimal, buffer[i], buffer[i + 1])*wet) + input*dry)*amplitude;
 }
 
 void WaveShaper::setDrive(float k)
@@ -38,8 +38,13 @@ void WaveShaper::setDrive(float k)
 	}	
 }
 
-//// TODO create bypass
-//void WaveShaper::bypass (bool bypass)
-//{
-//
-//}
+void WaveShaper::setAmplitude(float amplitude)
+{
+    this->amplitude = amplitude;
+}
+
+void WaveShaper::updateParameters(const float drive, const float amplitude)
+{
+    setDrive(drive);
+    setAmplitude(amplitude);
+}

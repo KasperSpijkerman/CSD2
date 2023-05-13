@@ -101,6 +101,7 @@ void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
             voice->prepareToPlay(sampleRate,samplesPerBlock,getTotalNumOutputChannels());
         }
     }
+    // prepare to play effects
     filter.prepareToPlay(sampleRate,samplesPerBlock,getTotalNumOutputChannels());
     for (Tremolo& tremolo : tremolos){
         tremolo.prepareToPlay(sampleRate);
@@ -183,6 +184,22 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     // applying filter to buffer
     filter.process(buffer);
 
+    // LFO updating
+    auto& LFOfreq = *apvts.getRawParameterValue("lfofreq");
+    auto& LFOdepth = *apvts.getRawParameterValue("lfodepth");
+
+    for (Tremolo& tremolo : tremolos){
+        tremolo.updateParameters(LFOfreq,LFOdepth);
+    }
+    // waveshaper updating
+    //TODO Make a different function to work with make up gain instead of amplitude
+    auto& drive = *apvts.getRawParameterValue("drive");
+    auto& trim = *apvts.getRawParameterValue("trim");
+
+    for (WaveShaper& waveShaper : waveshapers){
+        waveShaper.updateParameters(drive,trim);
+    }
+
 
     for (int channel = 0; channel < 2; ++channel) {
         auto *channelData = buffer.getWritePointer(channel);
@@ -255,6 +272,13 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"filtercutoff",9}, "Filter Cutoff", juce::NormalisableRange<float>{20.0f, 20000.0f,0.1f,0.6f},20000.0f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"filterresonance",10}, "Resonance", juce::NormalisableRange<float>{1.0f, 10.0f,0.1f},0.0f));
 
+    // LFO (Tremolo)
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"lfofreq",10}, "LFO Freq", juce::NormalisableRange<float>{0.0f, 60.0f,0.1f,0.6f},0.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"lfodepth",11}, "LFO depth", juce::NormalisableRange<float>{0.0f, 1.0f,0.1f},0.0f));
+
+    // Shaper
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"drive",12}, "Drive", juce::NormalisableRange<float>{0.0f, 100.0f,1.0f,0.6f},0.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"trim",13}, "Trim", juce::NormalisableRange<float>{0.000001, 1.0f,0.001f},1.0f));
 
     return {params.begin(), params.end()};
 }

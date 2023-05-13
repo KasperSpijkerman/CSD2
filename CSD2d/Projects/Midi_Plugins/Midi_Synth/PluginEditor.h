@@ -4,6 +4,8 @@
 #include "UI/AdsrComponent.h"
 #include "UI/OscComponent.h"
 #include "UI/FilterComponent.h"
+#include "UI/LFOComponent.h"
+#include "UI/ShaperComponent.h"
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor,
@@ -31,5 +33,9 @@ private:
     OscComponent osc;
     // filter component UI
     FilterComponent filter;
+    //LFO component UI
+    LFOComponent LFO;
+    // Waveshaper UI Component
+    ShaperComponent shaper;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };
