@@ -79,6 +79,7 @@ target_sources(MidiSynth
         UI/FilterComponent.cpp
         UI/LFOComponent.cpp
         UI/ShaperComponent.cpp
+        UI/ControlComponent.cpp
         Data/AdsrData.cpp
         Data/OscData.cpp
         Data/FilterData.cpp

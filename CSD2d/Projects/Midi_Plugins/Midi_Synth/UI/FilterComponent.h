@@ -10,7 +10,6 @@ public:
 
     void paint(juce::Graphics&) override;
     void resized() override;
-private:
     juce::ComboBox filterTypeSelector {"Filter Type" };
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> filterTypeSelectorAttachment;
 
@@ -22,6 +21,8 @@ private:
     juce::Label filterCutofflabel {"filtercutoff", "Cutoff"};
     std::unique_ptr<Attachment> filterResonanceAttachment;
     juce::Label filterResonancelabel {"filterresonance", "Resonance"};
+protected:
+
 
 
     void setSliderWithLabel (juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<Attachment>& attachment);

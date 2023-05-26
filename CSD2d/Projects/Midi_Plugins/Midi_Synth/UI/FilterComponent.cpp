@@ -20,19 +20,23 @@ FilterComponent::~FilterComponent()
 }
 void FilterComponent::paint(juce::Graphics& g)
 {
+
 g.fillAll(juce::Colours::purple);
+    g.setColour (juce::Colours::white);
+    g.setFont (30.0f);
+    g.drawFittedText ("Filter", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 // layout slider positions
 void FilterComponent::resized()
 {
     // creating variables to make it easier to read and adjust everything all at once.
-    const auto sliderPosY = 55;
+    const auto sliderPosY = 100;
     const auto sliderWidth = 100;
     const auto sliderHeigth = 90;
     const auto labelYOffset = 20;
     const auto labelHeight = 20;
     // setting positions of sliders and labels
-    filterTypeSelector.setBounds(0,0,90,20);
+    filterTypeSelector.setBounds(0,50,90,20);
 
     filterCutoffSlider.setBounds(0,sliderPosY,sliderWidth,sliderHeigth);
     filterCutofflabel.setBounds(filterCutoffSlider.getX(),filterCutoffSlider.getY()- labelYOffset,filterCutoffSlider.getWidth(),labelHeight);
@@ -50,6 +54,7 @@ void FilterComponent::setSliderWithLabel (juce::Slider& slider, juce::Label& lab
     addAndMakeVisible(slider);
 
     attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts,paramID,slider);
+
 
     // creating the label, textfont, and colour.
     label.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);

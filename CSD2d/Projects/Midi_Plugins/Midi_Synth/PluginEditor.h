@@ -6,10 +6,12 @@
 #include "UI/FilterComponent.h"
 #include "UI/LFOComponent.h"
 #include "UI/ShaperComponent.h"
+#include "UI/ControlComponent.h"
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor,
-                                         public AudioPluginAudioProcessor
+                                         public AudioPluginAudioProcessor,
+                                         private juce::Timer
 {
 public:
     explicit AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor&);
@@ -19,6 +21,7 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
     void setSliderParams(juce::Slider& slider);
+    void updateControlData();
 
 private:
     // Oscillator combobox select
@@ -37,5 +40,10 @@ private:
     LFOComponent LFO;
     // Waveshaper UI Component
     ShaperComponent shaper;
+    // Control UI
+    ControlComponent control;
+
+    void timerCallback();
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };

@@ -21,6 +21,7 @@ public:
     OscData& getOscillator() { return osc; };
 
 
+
 private:
     // ADSR object
     AdsrData adsr;
@@ -30,6 +31,7 @@ private:
     OscData osc;
     juce::dsp::Gain<float> gain;
     bool isPrepared {false};
+
 
 };
 

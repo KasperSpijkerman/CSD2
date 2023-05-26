@@ -60,6 +60,7 @@ private:
     std::array<Tremolo, 2> tremolos;
     std::array<WaveShaper, 2> waveshapers;
 
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
 };

@@ -17,6 +17,9 @@ LFOComponent::~LFOComponent()
 void LFOComponent::paint(juce::Graphics& g)
 {
 g.fillAll(juce::Colours::purple);
+g.setColour (juce::Colours::white);
+g.setFont (30.0f);
+g.drawFittedText ("AM", getLocalBounds(), juce::Justification::topLeft, 1);
 }
 // layout slider positions
 void LFOComponent::resized()

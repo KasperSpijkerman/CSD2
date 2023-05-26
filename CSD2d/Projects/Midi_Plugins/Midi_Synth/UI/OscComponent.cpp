@@ -21,18 +21,21 @@ OscComponent::~OscComponent()
 void OscComponent::paint(juce::Graphics& g)
 {
 g.fillAll(juce::Colours::purple);
+g.setColour (juce::Colours::white);
+g.setFont (30.0f);
+g.drawFittedText ("Waveform", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 // layout slider positions
 void OscComponent::resized()
 {
     // creating variables to make it easier to read and adjust everything all at once.
-    const auto sliderPosY = 80;
+    const auto sliderPosY = 90;
     const auto sliderWidth = 100;
     const auto sliderHeigth = 90;
     const auto labelYOffset = 20;
     const auto labelHeight = 20;
     // setting positions of sliders and labels
-    oscWaveSelector.setBounds(0,0,90,20);
+    oscWaveSelector.setBounds(0,50,90,20);
 
     fmFreqSlider.setBounds(0,sliderPosY,sliderWidth,sliderHeigth);
     fmFreqlabel.setBounds(fmFreqSlider.getX(),fmFreqSlider.getY()- labelYOffset,fmFreqSlider.getWidth(),labelHeight);

@@ -17,6 +17,9 @@ ShaperComponent::~ShaperComponent()
 void ShaperComponent::paint(juce::Graphics& g)
 {
 g.fillAll(juce::Colours::purple);
+g.setColour (juce::Colours::white);
+g.setFont (30.0f);
+g.drawFittedText ("Waveshaper", getLocalBounds(), juce::Justification::topLeft, 1);
 }
 // layout slider positions
 void ShaperComponent::resized()

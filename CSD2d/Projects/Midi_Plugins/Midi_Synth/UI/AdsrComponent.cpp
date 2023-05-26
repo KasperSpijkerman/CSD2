@@ -25,6 +25,9 @@ AdsrComponent::~AdsrComponent()
 void AdsrComponent::paint(juce::Graphics& g)
 {
 g.fillAll(juce::Colours::purple);
+g.setColour (juce::Colours::white);
+g.setFont (20.0f);
+g.drawFittedText ("ADSR", getLocalBounds(), juce::Justification::topLeft, 1);
 }
 // layout slider positions
 void AdsrComponent::resized()
@@ -35,7 +38,7 @@ void AdsrComponent::resized()
     const auto sliderWidth = bounds.getWidth() / 4 - padding;
     const auto sliderHeight = bounds.getHeight();
     const auto sliderStartX = 0;
-    const auto sliderStartY = 0;
+    const auto sliderStartY = 20;
 
     attackSlider.setBounds(sliderStartX,sliderStartY,sliderWidth,sliderHeight);
     decaySlider.setBounds(attackSlider.getRight() + padding,sliderStartY,sliderWidth,sliderHeight);

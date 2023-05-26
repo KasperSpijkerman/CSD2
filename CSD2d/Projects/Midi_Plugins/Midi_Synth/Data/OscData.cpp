@@ -35,9 +35,9 @@ void OscData::setWaveType(const int choice)
     }
 }
 
-void OscData::setWaveFrequency(const int midiNoteNumber)
+void OscData::setWaveFrequency(const int midiNoteNumber,const float detune)
 {
-    setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber) + fmMod);
+    setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber) + fmMod *detune);
     // remembering last midinote when pressed
     lastMidiNote = midiNoteNumber;
 }
