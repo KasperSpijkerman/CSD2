@@ -2,12 +2,14 @@
 #include <iostream>
 
 //constructor
-ControlComponent::ControlComponent(juce::AudioProcessorValueTreeState& apvts, juce::String LightId, juce::String DarkId)
+ControlComponent::ControlComponent(juce::AudioProcessorValueTreeState& apvts, juce::String LightId, juce::String DarkId, juce::String CondId,juce::String SpacId)
 {
 
     // making buttons, linking labels, setting text and colour in a function
     createButton(LightTextButton,apvts,LightId);
     createButton(DarkTextButton,apvts,DarkId);
+    createButton(condensedTextButton,apvts,CondId);
+    createButton(spaciousTextButton,apvts,SpacId);
 
 }
 // destructor
@@ -20,7 +22,7 @@ void ControlComponent::paint(juce::Graphics& g)
 g.fillAll(juce::Colours::purple);
 g.setColour (juce::Colours::white);
 g.setFont (30.0f);
-g.drawFittedText ("Modes", getLocalBounds(), juce::Justification::topLeft, 1);
+g.drawFittedText ("Modes", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 // layout button positions
 void ControlComponent::resized() {
@@ -31,6 +33,8 @@ void ControlComponent::resized() {
 
     LightTextButton.setBounds(0, buttonPosY, buttonWidth, buttonHeigth);
     DarkTextButton.setBounds(LightTextButton.getRight(), buttonPosY, buttonWidth, buttonHeigth);
+    condensedTextButton.setBounds(0, buttonPosY + 100, buttonWidth, buttonHeigth);
+    spaciousTextButton.setBounds(condensedTextButton.getRight(), buttonPosY + 100, buttonWidth, buttonHeigth);
 
 }
 
@@ -43,42 +47,33 @@ void ControlComponent::createButton (juce::TextButton& textButton, juce::AudioPr
 
 void ControlComponent::changeFilter()
 {
-    LightTextButton.onClick = [&](){value += stepLight; counterLight ++; counterDark = 0; };
-    DarkTextButton.onClick = [&](){value -= stepDark; counterDark ++; counterLight = 0; };
+    LightTextButton.onClick = [&](){brightness += stepLight; counterLight ++; counterDark = 0; stepLight +=50; stepDark = 50; };
+    DarkTextButton.onClick = [&](){brightness-= stepDark; counterDark ++; counterLight = 0; stepDark += 50; stepLight = 50;  };
 
-    if (counterLight == 0)
-    {
-        stepLight = 50;
-    }
-    if(counterLight == 1)
-    {
-        stepLight = 100;
-    }
 
-    else if(counterLight == 2)
-    {
-        stepLight = 200;
-    }
-    else if(counterLight == 3 )
-    {
-        stepLight = 500;
-    }
 
-    if (counterDark == 0)
-    {
-        stepDark = 50;
-    }
-    else if(counterDark == 1)
-    {
-        stepDark = 100;
-    }
 
-    else if(counterDark == 2)
-    {
-        stepDark = 200;
-    }
-    else if(counterDark == 3 )
-    {
-        stepDark = 500;
-    }
+}
+
+void ControlComponent::changeSpace()
+{
+    condensedTextButton.onClick = [&]()
+            {
+                distance -= stepCondDW;
+                length -= stepCondDT;
+                counterCond ++;
+                counterSpac = 0;
+                // increase stepsize
+                stepCondDT += 100;
+                stepSpacDT = 50;
+            };
+    spaciousTextButton.onClick = [&]()
+            {
+                distance += stepSpacDW;
+                length += stepSpacDT;
+                counterSpac ++;
+                counterCond = 0;
+                stepSpacDT += 100;
+                stepCondDT = 50;
+            };
 }

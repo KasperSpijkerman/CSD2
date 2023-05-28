@@ -13,5 +13,5 @@ protected:
     float dry { 0 };
     float wet { 0 };
     // empty samplerate var for every effect, will be overwritten by actual samplerate
-    double samplerateFX { 0 };
+    double sampleRate { 44100 };
 };

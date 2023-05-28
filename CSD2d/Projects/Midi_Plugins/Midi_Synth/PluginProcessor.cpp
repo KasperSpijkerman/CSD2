@@ -111,6 +111,7 @@ void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     }
     for (WaveShaper& waveshaper : waveshapers)
     waveshaper.prepareToPlay(sampleRate);
+    delay.lcrDelayPrepareToPlay(sampleRate);
 }
 
 
@@ -191,7 +192,8 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     auto& LFOfreq = *apvts.getRawParameterValue("lfofreq");
     auto& LFOdepth = *apvts.getRawParameterValue("lfodepth");
 
-    for (Tremolo& tremolo : tremolos){
+    for (Tremolo& tremolo : tremolos)
+    {
         tremolo.updateParameters(LFOfreq,LFOdepth);
     }
     // waveshaper updating
@@ -203,14 +205,40 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         waveShaper.updateParameters(drive,trim);
     }
 
+    // retrieving delay parameters
+    auto& dryWetL = *apvts.getRawParameterValue("drywetL");
+    auto& dryWetR = *apvts.getRawParameterValue("drywetR");
+    auto& dryWetC = *apvts.getRawParameterValue("drywetC");
+    auto& feedbackL = *apvts.getRawParameterValue("feedbackL");
+    auto& feedbackR = *apvts.getRawParameterValue("feedbackR");
+    auto& feedbackC = *apvts.getRawParameterValue("feedbackC");
+    auto& delayTimeL = *apvts.getRawParameterValue("delaytimeL");
+    auto& delayTimeR = *apvts.getRawParameterValue("delaytimeR");
+    auto& delayTimeC = *apvts.getRawParameterValue("delaytimeC");
 
-    for (int channel = 0; channel < 2; ++channel) {
-        auto *channelData = buffer.getWritePointer(channel);
-        // process the audio
-        for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
+    //
+    delay.changeDelayLine(0,delayTimeL,feedbackL,dryWetL);
+    delay.changeDelayLine(1,delayTimeR,feedbackR,dryWetR);
+    delay.changeDelayLine(2,delayTimeC,feedbackC,dryWetC);
+
+
+//    for (int channel = 0; channel < 2; ++channel) {
+//        auto *channelData = buffer.getWritePointer(channel);
+//        // process the audio
+//        for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
+//            channelData[sample] = tremolos[channel].output(waveshapers[channel].output(buffer.getSample(channel, sample)));
+//        }
+    // process the audio
+    for(int sample = 0; sample < buffer.getNumSamples(); ++sample)
+    {
+        for (int channel = 0; channel < 2; ++channel) {
+            auto* channelData = buffer.getWritePointer (channel);
+            channelData[sample] = delay.lcrDelayOutput(buffer.getSample(channel, sample), channel);
             channelData[sample] = tremolos[channel].output(waveshapers[channel].output(buffer.getSample(channel, sample)));
         }
+        delay.lcrIncrementC();
     }
+
 }
 
 //==============================================================================
@@ -282,6 +310,18 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     // Shaper
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"drive",12}, "Drive", juce::NormalisableRange<float>{1.0f, 100.0f,1.0f,0.6f},0.0f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"trim",13}, "Trim", juce::NormalisableRange<float>{0.000001, 1.0f,0.001f},1.0f));
+
+
+    // Delay
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "drywetL", 14 }, "Dry-Wet-L", 0.0f, 1.0f,0.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "drywetR", 15 }, "Dry-Wet-R", 0.0f, 1.0f,0.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "drywetC", 16 }, "Dry-Wet-C", 0.0f, 1.0f,1.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"feedbackL",17}, "Feedback-L", 0.0f, 0.99f,0.5f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"feedbackR",18}, "Feedback-R", 0.0f, 0.99f,0.5f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"feedbackC",19}, "Feedback-C", 0.0f, 0.99f,0.5f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"delaytimeL",20}, "Delaytime-L", 0.0f, 3000.0f,100.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"delaytimeR",21}, "Delaytime-R", 0.0f, 3000.0f,100.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"delaytimeC",22}, "Delaytime-C", 0.0f, 3000.0f,100.0f));
 
 
     return {params.begin(), params.end()};

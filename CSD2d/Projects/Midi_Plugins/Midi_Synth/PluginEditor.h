@@ -7,6 +7,7 @@
 #include "UI/LFOComponent.h"
 #include "UI/ShaperComponent.h"
 #include "UI/ControlComponent.h"
+#include "UI/DelayComponent.h"
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor,
@@ -42,6 +43,8 @@ private:
     ShaperComponent shaper;
     // Control UI
     ControlComponent control;
+    // Delay UI
+    DelayComponent delay;
 
     void timerCallback();
 

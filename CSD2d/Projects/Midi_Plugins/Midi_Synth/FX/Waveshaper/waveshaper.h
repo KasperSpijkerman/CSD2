@@ -1,5 +1,5 @@
 #pragma once
-#include "utilities.h"
+#include "../utilities.h"
 #include "../effect.h"
 #include <cmath>
 

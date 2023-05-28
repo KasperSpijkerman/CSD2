@@ -80,6 +80,7 @@ target_sources(MidiSynth
         UI/LFOComponent.cpp
         UI/ShaperComponent.cpp
         UI/ControlComponent.cpp
+        UI/DelayComponent.cpp
         Data/AdsrData.cpp
         Data/OscData.cpp
         Data/FilterData.cpp
@@ -88,7 +89,10 @@ target_sources(MidiSynth
         FX/Tremolo/oscillator.cpp
         FX/Waveshaper/waveshaper.cpp
         FX/effect.cpp
-
+        FX/Delay/circBuffer.cpp
+        FX/Delay/delay.cpp
+        FX/Delay/lcrDelay.cpp
+        FX/Delay/onePole.cpp
         )
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
