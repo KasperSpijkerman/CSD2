@@ -10,7 +10,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     filter(audioProcessor.apvts, "filtertype", "filtercutoff", "filterresonance"),
     LFO(audioProcessor.apvts,"lfofreq","lfodepth"),
     shaper(audioProcessor.apvts,"drive","trim"),
-    control(audioProcessor.apvts,"Light","Dark","Condensed","Spacious"),
+    control(audioProcessor.apvts,"Light","Dark","Condensed","Atmospheric","Predictable","Experimental"),
     delay(audioProcessor.apvts,"drywetL","drywetR","drywetC","feedbackL","feedbackR","feedbackC","delaytimeL","delaytimeR","delaytimeC")
 
 {
@@ -62,6 +62,7 @@ void AudioPluginAudioProcessorEditor::updateControlData()
 {
     control.changeFilter();
     control.changeSpace();
+    control.changePredict();
     // changing filter cutoff
     filter.filterCutoffSlider.setValue(juce::jlimit (0.0f, 20000.0f,control.brightness) );
     // changing dry wet
@@ -69,9 +70,13 @@ void AudioPluginAudioProcessorEditor::updateControlData()
     delay.drywetRSlider.setValue(juce::jlimit(0.1f,1.0f,control.distance));
     delay.drywetCSlider.setValue(juce::jlimit(0.1f,1.0f,control.distance));
     // changing delaytime
-    delay.delayTimeLSlider.setValue(juce::jlimit(0.1f,3000.0f,control.length*0.897631f));
-    delay.delayTimeRSlider.setValue(juce::jlimit(0.1f,3000.0f,control.length*0.912315715f));
-    delay.delayTimeCSlider.setValue(juce::jlimit(0.1f,3000.0f,control.length*1.253456f));
+    delay.delayTimeLSlider.setValue(juce::jlimit(0.0f,3000.0f,control.length*0.897631f));
+    delay.delayTimeRSlider.setValue(juce::jlimit(0.0f,3000.0f,control.length*0.912315715f));
+    delay.delayTimeCSlider.setValue(juce::jlimit(0.0f,3000.0f,control.length*1.253456f));
+    //changing FM and Resonance
+    osc.fmDepthSlider.setValue(juce::jlimit(0.0f,1000.0f,control.fmDepth*1.253246135f));
+    osc.fmFreqSlider.setValue(juce::jlimit(0.0f,1000.0f,control.fmSpeed));
+    filter.filterResonanceSlider.setValue(juce::jlimit(0.0f,1000.0f,control.reso));
 }
 
 void AudioPluginAudioProcessorEditor::timerCallback()

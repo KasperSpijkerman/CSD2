@@ -10,13 +10,14 @@ public:
 
     void paint(juce::Graphics&) override;
     void resized() override;
+    juce::Slider fmFreqSlider;
+    juce::Slider fmDepthSlider;
 private:
     juce::ComboBox oscWaveSelector;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> oscWaveSelectorAttachment;
 
 
-    juce::Slider fmFreqSlider;
-    juce::Slider fmDepthSlider;
+
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     std::unique_ptr<Attachment> fmFreqAttachment;
     juce::Label fmFreqlabel {"fmfreq", "FM Freq"};
