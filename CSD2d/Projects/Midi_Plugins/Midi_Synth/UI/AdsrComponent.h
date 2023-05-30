@@ -11,11 +11,6 @@ public:
 
     void paint(juce::Graphics&) override;
     void resized() override;
-private:
-    //==============================================================================
-    // ADSR Sliders and labels for Parameter control
-    void setSliderParams(juce::Slider& slider);
-
     juce::Slider attackSlider;
     juce::Label  attackLabel;
 
@@ -27,6 +22,12 @@ private:
 
     juce::Slider releaseSlider;
     juce::Label  releaseLabel;
+private:
+    //==============================================================================
+    // ADSR Sliders and labels for Parameter control
+    void setSliderParams(juce::Slider& slider);
+
+
 
     // short
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;

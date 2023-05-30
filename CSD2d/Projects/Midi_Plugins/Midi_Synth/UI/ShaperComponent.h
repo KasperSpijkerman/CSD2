@@ -10,10 +10,11 @@ public:
 
     void paint(juce::Graphics&) override;
     void resized() override;
-private:
     // Drive & Trim
     juce::Slider ShaperDriveSlider;
     juce::Slider ShaperTrimSlider;
+private:
+
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     std::unique_ptr<Attachment> ShaperDriveAttachment;
     juce::Label ShaperDrivelabel {"ShaperDrive", "Drive"};

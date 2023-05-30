@@ -10,10 +10,11 @@ public:
 
     void paint(juce::Graphics&) override;
     void resized() override;
-private:
     // Freq & Depth
     juce::Slider LFOFreqSlider;
     juce::Slider LFODepthSlider;
+private:
+
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     std::unique_ptr<Attachment> LFOFreqAttachment;
     juce::Label LFOFreqlabel {"LFOFreq", "Freq"};
