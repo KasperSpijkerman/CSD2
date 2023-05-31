@@ -20,6 +20,7 @@ public:
 
     void paint(juce::Graphics&) override;
     void resized() override;
+    void protectRange(float min, float max, std::atomic<float> &value);
     // functions for changing the sliders
     void changeFilter(juce::AudioProcessorValueTreeState& apvts,juce::Slider& slider);
     void changeSpace(juce::AudioProcessorValueTreeState& apvts,
@@ -60,8 +61,8 @@ private:
     int counterRough{0};
     int counterSmooth {0};
     // Stepsize for Dark and Light increasing when user pressed a button more times.
-    int stepLight {50};
-    int stepDark {50};
+    int stepLight {1};
+    int stepDark {1};
     // Stepsize dry wet
     float stepCondDW {0.2f};
     float stepSpacDW {0.2f};

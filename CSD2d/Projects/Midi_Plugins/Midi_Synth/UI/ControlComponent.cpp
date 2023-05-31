@@ -88,33 +88,44 @@ void ControlComponent::createButton (juce::TextButton& textButton, juce::AudioPr
     addAndMakeVisible(textButton);
 }
 
+void ControlComponent::protectRange(float min, float max, std::atomic<float> &value)
+{
+    if (value >= max)
+    {
+        value = max;
+    }
+    if (value <= min)
+    {
+        value = min;
+    }
+}
+
 void ControlComponent::changeFilter(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider)
 {
     // retrieve current parameter value
     auto& filterCutoffnew = *apvts.getRawParameterValue("filtercutoff");
+    // making sure parameters don't go out of range
+    protectRange(0,20000,filterCutoffnew);
     LightTextButton.onClick = [&]()
             {
                // and adjust the slider
                 stepDark = 1;
                 stepLight++;
-                if (filterCutoffnew >= 20000)
-                {
-                    stepLight = 0;
-                }
+                // making sure it doesn't go out of range
+
                 filterCutoffnew = filterCutoffnew + 50*stepLight;
                 slider.setValue(filterCutoffnew);
 
             };
+
 
     DarkTextButton.onClick = [&]()
             {
             // and adjust the slider
                 stepLight = 1;
                 stepDark++;
-                if (filterCutoffnew <= 0)
-                {
-                    stepDark = 0;
-                }
+                // making sure it doesn't go out of range
+
                 filterCutoffnew = filterCutoffnew - 50*stepDark;
                 slider.setValue(filterCutoffnew);
             };
@@ -135,6 +146,13 @@ void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
     auto& delaytimeLnew = *apvts.getRawParameterValue("delaytimeL");
     auto& delaytimeRnew = *apvts.getRawParameterValue("delaytimeR");
     auto& delaytimeCnew = *apvts.getRawParameterValue("delaytimeC");
+    // making sure parameters don't go out of range.
+    protectRange(0,1,drywetLnew);
+    protectRange(0,1,drywetCnew);
+    protectRange(0,1,drywetRnew);
+    protectRange(0,3000,drywetLnew);
+    protectRange(0,3000,drywetCnew);
+    protectRange(0,3000,drywetRnew);
     condensedTextButton.onClick = [&]()
             {
                 counterCond ++;
