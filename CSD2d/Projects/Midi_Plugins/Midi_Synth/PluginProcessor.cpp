@@ -8,7 +8,8 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor() :
         .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
         .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
     ),
-        apvts(*this, nullptr,"Parameters", createParameters())
+        apvts(*this, nullptr,"Parameters", createParameters()),
+        control(apvts,"Light","Dark","Condensed","Atmospheric","Predictable","Experimental","Fast","Slow","Rough","Smooth")
 
 {
     // adding a sound and a voice
@@ -215,7 +216,6 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     auto& delayTimeL = *apvts.getRawParameterValue("delaytimeL");
     auto& delayTimeR = *apvts.getRawParameterValue("delaytimeR");
     auto& delayTimeC = *apvts.getRawParameterValue("delaytimeC");
-
     //
     delay.changeDelayLine(0,delayTimeL,feedbackL,dryWetL);
     delay.changeDelayLine(1,delayTimeR,feedbackR,dryWetR);

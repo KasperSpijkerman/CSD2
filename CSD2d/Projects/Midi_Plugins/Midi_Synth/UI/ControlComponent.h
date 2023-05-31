@@ -21,27 +21,17 @@ public:
     void paint(juce::Graphics&) override;
     void resized() override;
     // functions for changing the sliders
-    void changeFilter();
-    void changeSpace();
-    void changePredict();
-    void changeSpeed();
-    void changeTexture();
-    // cutoff value
-    float brightness {1000.0f};
-    // dry wet value
-    float distance{0.0f};
-    // delay time value
-    float length{200.0f};
-    // fm and resonance
-    float fmDepth {0.0f};
-    float fmSpeed {0.0f};
-    float reso {0.0f};
-    // AM
-    float amSpeed{0.0f};
-    float attackTime{0.0f};
-    // Shaper variables
-    float driveShaper{1.0f};
-    float trim{1.0f};
+    void changeFilter(juce::AudioProcessorValueTreeState& apvts,juce::Slider& slider);
+    void changeSpace(juce::AudioProcessorValueTreeState& apvts,
+                     juce::Slider& slider1,
+                     juce::Slider& slider2,
+                     juce::Slider& slider3,
+                     juce::Slider& slider4,
+                     juce::Slider& slider5,
+                     juce::Slider& slider6);
+    void changePredict(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider);
+    void changeSpeed(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider);
+    void changeTexture(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider);
 private:
     // buttons for different opposites
     juce::TextButton LightTextButton;

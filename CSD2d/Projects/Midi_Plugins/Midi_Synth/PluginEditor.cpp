@@ -61,31 +61,28 @@ void AudioPluginAudioProcessorEditor::resized()
 // updating the data based on buttons
 void AudioPluginAudioProcessorEditor::updateControlData()
 {
-    control.changeFilter();
-    control.changeSpace();
-    control.changePredict();
-    control.changeSpeed();
-    control.changeTexture();
-    // changing filter cutoff
-    filter.filterCutoffSlider.setValue(juce::jlimit (0.0f, 20000.0f,control.brightness) );
-    // changing dry wet
-    delay.drywetLSlider.setValue(juce::jlimit(0.1f,1.0f,control.distance));
-    delay.drywetRSlider.setValue(juce::jlimit(0.1f,1.0f,control.distance));
-    delay.drywetCSlider.setValue(juce::jlimit(0.1f,1.0f,control.distance));
-    // changing delaytime
-    delay.delayTimeLSlider.setValue(juce::jlimit(0.0f,3000.0f,control.length*0.897631f));
-    delay.delayTimeRSlider.setValue(juce::jlimit(0.0f,3000.0f,control.length*0.912315715f));
-    delay.delayTimeCSlider.setValue(juce::jlimit(0.0f,3000.0f,control.length*1.253456f));
-    // changing FM and Resonance
-    osc.fmDepthSlider.setValue(juce::jlimit(0.0f,1000.0f,control.fmDepth*1.253246135f));
-    osc.fmFreqSlider.setValue(juce::jlimit(0.0f,1000.0f,control.fmSpeed));
-    filter.filterResonanceSlider.setValue(juce::jlimit(0.0f,1000.0f,control.reso));
-    // changing AM and AttackTime
-    LFO.LFOFreqSlider.setValue(juce::jlimit(0.0f,50.0f,control.amSpeed));
-    adsr.attackSlider.setValue(juce::jlimit(0.0f,3.0f,control.attackTime));
-    // changing drive and trim
-    shaper.ShaperDriveSlider.setValue(juce::jlimit(0.0f,100.0f,control.driveShaper));
-    shaper.ShaperTrimSlider.setValue(juce::jlimit(0.0f,1.0f,control.trim));
+    control.changeFilter(audioProcessor.apvts,filter.filterCutoffSlider);
+    control.changeSpace(audioProcessor.apvts,
+                        delay.drywetLSlider,
+                        delay.drywetRSlider,
+                        delay.drywetCSlider,
+                        delay.delayTimeLSlider,
+                        delay.delayTimeRSlider,
+                        delay.delayTimeCSlider);
+
+//    control.changePredict();
+//    control.changeSpeed();
+//    control.changeTexture();
+//    // changing FM and Resonance
+//    osc.fmDepthSlider.setValue(juce::jlimit(0.0f,1000.0f,control.fmDepth*1.253246135f));
+//    osc.fmFreqSlider.setValue(juce::jlimit(0.0f,1000.0f,control.fmSpeed));
+//    filter.filterResonanceSlider.setValue(juce::jlimit(0.0f,1000.0f,control.reso));
+//    // changing AM and AttackTime
+//    LFO.LFOFreqSlider.setValue(juce::jlimit(0.0f,50.0f,control.amSpeed));
+//    adsr.attackSlider.setValue(juce::jlimit(0.0f,3.0f,control.attackTime));
+//    // changing drive and trim
+//    shaper.ShaperDriveSlider.setValue(juce::jlimit(0.0f,100.0f,control.driveShaper));
+//    shaper.ShaperTrimSlider.setValue(juce::jlimit(0.0f,1.0f,control.trim));
 }
 
 void AudioPluginAudioProcessorEditor::timerCallback()

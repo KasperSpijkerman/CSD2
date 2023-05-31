@@ -88,62 +88,105 @@ void ControlComponent::createButton (juce::TextButton& textButton, juce::AudioPr
     addAndMakeVisible(textButton);
 }
 
-void ControlComponent::changeFilter()
+void ControlComponent::changeFilter(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider)
 {
+    // retrieve current parameter value
+    auto& filterCutoffnew = *apvts.getRawParameterValue("filtercutoff");
     LightTextButton.onClick = [&]()
             {
-                counterDark = 0;
-                stepDark = 50;
-                brightness += stepLight;
-                counterLight ++;
-                stepLight +=50;
+               // and adjust the slider
+                stepDark = 1;
+                stepLight++;
+                if (filterCutoffnew >= 20000)
+                {
+                    stepLight = 0;
+                }
+                filterCutoffnew = filterCutoffnew + 50*stepLight;
+                slider.setValue(filterCutoffnew);
+
             };
+
     DarkTextButton.onClick = [&]()
             {
-                counterLight = 0;
-                stepLight = 50;
-                brightness-= stepDark;
-                counterDark ++;
-                stepDark += 50;
+            // and adjust the slider
+                stepLight = 1;
+                stepDark++;
+                if (filterCutoffnew <= 0)
+                {
+                    stepDark = 0;
+                }
+                filterCutoffnew = filterCutoffnew - 50*stepDark;
+                slider.setValue(filterCutoffnew);
             };
-
-
-
-
 }
 
-void ControlComponent::changeSpace()
+void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
+                                   juce::Slider& slider1,
+                                   juce::Slider& slider2,
+                                   juce::Slider& slider3,
+                                   juce::Slider& slider4,
+                                   juce::Slider& slider5,
+                                   juce::Slider& slider6)
 {
+    // retrieving current parameter values
+    auto& drywetLnew = *apvts.getRawParameterValue("drywetL");
+    auto& drywetRnew = *apvts.getRawParameterValue("drywetR");
+    auto& drywetCnew = *apvts.getRawParameterValue("drywetC");
+    auto& delaytimeLnew = *apvts.getRawParameterValue("delaytimeL");
+    auto& delaytimeRnew = *apvts.getRawParameterValue("delaytimeR");
+    auto& delaytimeCnew = *apvts.getRawParameterValue("delaytimeC");
     condensedTextButton.onClick = [&]()
             {
-                distance -= stepCondDW;
-                length -= stepCondDT;
                 counterCond ++;
                 counterSpac = 0;
-                // increase stepsize
-                stepCondDT += 100;
-                stepSpacDT = 50;
+                drywetLnew = drywetLnew - 0.1;
+                drywetRnew = drywetRnew - 0.1;
+                drywetCnew = drywetCnew - 0.1;
+
+                delaytimeLnew = delaytimeLnew - 50;
+                delaytimeRnew = delaytimeRnew - 50;
+                delaytimeCnew = delaytimeCnew - 50;
+                // updating the slider values
+                slider1.setValue(drywetLnew);
+                slider2.setValue(drywetRnew);
+                slider3.setValue(drywetCnew);
+                slider4.setValue(delaytimeLnew);
+                slider5.setValue(delaytimeRnew);
+                slider6.setValue(delaytimeCnew);
+
             };
     spaciousTextButton.onClick = [&]()
             {
-                distance += stepSpacDW;
-                length += stepSpacDT;
                 counterSpac ++;
                 counterCond = 0;
-                stepSpacDT += 100;
-                stepCondDT = 50;
+                // adjusting dry wet
+                drywetLnew = drywetLnew + 0.1;
+                drywetRnew = drywetRnew + 0.1;
+                drywetCnew = drywetCnew + 0.1;
+                // adjusting delay time
+                delaytimeLnew = delaytimeLnew + 50;
+                delaytimeRnew = delaytimeRnew + 50;
+                delaytimeCnew = delaytimeCnew + 50;
+                // setting sliders
+                slider1.setValue(drywetLnew);
+                slider2.setValue(drywetRnew);
+                slider3.setValue(drywetCnew);
+                slider4.setValue(delaytimeLnew);
+                slider5.setValue(delaytimeRnew);
+                slider6.setValue(delaytimeCnew);
+
             };
 }
 // Algorithm for changing the predictablity
-void ControlComponent::changePredict()
+void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider)
 {
     predictableTextButton.onClick = [&]()
     {
         counterExp = 0;
         stepExp = 0.5;
-        fmDepth -= stepPred;
-        fmSpeed -= stepPred;
-        reso -=stepRes;
+//        fmDepth -= stepPred;
+//        fmSpeed -= stepPred;
+//        reso -=stepRes;
         counterPred ++;
         stepPred +=0.5;
 
@@ -153,23 +196,23 @@ void ControlComponent::changePredict()
         counterPred = 0;
         stepPred = 0.5f;
         counterExp ++;
-        fmDepth += stepExp;
-        fmSpeed += stepExp;
-        reso +=stepRes;
+//        fmDepth += stepExp;
+//        fmSpeed += stepExp;
+//        reso +=stepRes;
         stepExp += 0.5;
     };
 }
 
 // Algorithm for changing the predictablity
-void ControlComponent::changeSpeed()
+void ControlComponent::changeSpeed(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider)
 {
     fastTextButton.onClick = [&]()
     {
         counterSlow = 0;
         stepSlowAm = 0.5f;
         stepSlowAtt = 0.1f;
-        attackTime += stepFastAtt;
-        amSpeed += stepFastAm;
+//        attackTime += stepFastAtt;
+//        amSpeed += stepFastAm;
         counterFast ++;
         stepFastAtt +=0.1f;
         stepFastAm += 0.5f;
@@ -179,8 +222,8 @@ void ControlComponent::changeSpeed()
         counterFast = 0;
         stepFastAm = 0.5;
         stepFastAtt = 0.1f;
-        attackTime -= stepSlowAtt;
-        amSpeed -= stepSlowAm;
+//        attackTime -= stepSlowAtt;
+//        amSpeed -= stepSlowAm;
         counterSlow ++;
         stepSlowAtt += 0.5f;
         stepSlowAm += 0.1f;
@@ -188,15 +231,15 @@ void ControlComponent::changeSpeed()
 }
 
 // Algorithm for changing the predictablity
-void ControlComponent::changeTexture()
+void ControlComponent::changeTexture(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider)
 {
     roughTextButton.onClick = [&]()
     {
         counterSmooth = 0;
         stepSmoothDr = 0.5;
         stepSmoothtrim = 0.5;
-        driveShaper += stepRoughDr;
-        trim -= stepRoughtrim;
+//        driveShaper += stepRoughDr;
+//        trim -= stepRoughtrim;
         counterRough ++;
         stepRoughDr +=0.5f;
         stepRoughtrim += 0.1f;
@@ -208,8 +251,8 @@ void ControlComponent::changeTexture()
         stepRoughDr = 0.5;
         stepRoughtrim = 0.2;
         counterSmooth ++;
-        driveShaper -= stepRoughDr;
-        trim += stepRoughtrim;
+//        driveShaper -= stepRoughDr;
+//        trim += stepRoughtrim;
         stepSmoothDr += 0.5;
         stepSmoothtrim +=0.05f;
     };

@@ -7,6 +7,7 @@
 #include "FX/Tremolo/tremolo.h"
 #include "FX/Waveshaper/waveshaper.h"
 #include "FX/Delay/lcrDelay.h"
+#include "UI/ControlComponent.h"
 //==============================================================================
 class AudioPluginAudioProcessor  : public juce::AudioProcessor
 {
@@ -52,6 +53,7 @@ public:
     juce::AudioProcessorValueTreeState apvts;
     // creating the parameters in seperate function
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
+    float filtercutoffnew {0};
 private:
     // synth object
     juce::Synthesiser synth;
@@ -60,8 +62,10 @@ private:
     // FX objects
     std::array<Tremolo, 2> tremolos;
     std::array<WaveShaper, 2> waveshapers;
+
     // lcr delay
     LcrDelay delay;
+    ControlComponent control;
 
 
     //==============================================================================
