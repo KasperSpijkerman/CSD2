@@ -196,17 +196,26 @@ void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
             };
 }
 // Algorithm for changing the predictablity
-void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider)
+void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider1,juce::Slider& slider2,juce::Slider& slider3)
 {
+    auto& fmDepthNew = *apvts.getRawParameterValue("fmdepth");
+    auto& fmSpeedNew = *apvts.getRawParameterValue("fmfreq");
+    auto& resNew = *apvts.getRawParameterValue("filterresonance");
+    protectRange(0,1000,fmDepthNew);
+    protectRange(0,1000,fmSpeedNew);
+    protectRange(0,3,resNew);
     predictableTextButton.onClick = [&]()
     {
         counterExp = 0;
         stepExp = 0.5;
-//        fmDepth -= stepPred;
-//        fmSpeed -= stepPred;
-//        reso -=stepRes;
+        fmDepthNew = fmDepthNew - stepPred;
+        fmSpeedNew = fmSpeedNew - stepPred;
+        resNew = resNew - stepRes;
         counterPred ++;
         stepPred +=0.5;
+        slider1.setValue(fmDepthNew);
+        slider2.setValue(fmSpeedNew);
+        slider3.setValue(resNew);
 
     };
     experimentalTextButton.onClick = [&]()
@@ -214,37 +223,55 @@ void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, 
         counterPred = 0;
         stepPred = 0.5f;
         counterExp ++;
-//        fmDepth += stepExp;
-//        fmSpeed += stepExp;
-//        reso +=stepRes;
+        fmDepthNew = fmDepthNew + stepExp;
+        fmSpeedNew = fmSpeedNew + stepExp;
+        resNew = resNew + stepRes;
         stepExp += 0.5;
+        slider1.setValue(fmDepthNew);
+        slider2.setValue(fmSpeedNew);
+        slider3.setValue(resNew);
     };
 }
 
 // Algorithm for changing the predictablity
-void ControlComponent::changeSpeed(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider)
+void ControlComponent::changeSpeed(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider1,juce::Slider& slider2,juce::Slider& slider3)
 {
+    auto& amDepthNew = *apvts.getRawParameterValue("lfodepth");
+    auto& amSpeedNew = *apvts.getRawParameterValue("lfofreq");
+    auto& attackNew = *apvts.getRawParameterValue("attack");
+    protectRange(0,1,amDepthNew);
+    protectRange(0,60,amSpeedNew);
+    protectRange(0,1,attackNew);
     fastTextButton.onClick = [&]()
     {
         counterSlow = 0;
-        stepSlowAm = 0.5f;
+        stepSlowAmf = 0.5f;
         stepSlowAtt = 0.1f;
-//        attackTime += stepFastAtt;
-//        amSpeed += stepFastAm;
+        amDepthNew = amDepthNew + stepFastAmd ;
+        amSpeedNew = amDepthNew + stepFastAmf;
+        attackNew = attackNew - 0.1;
         counterFast ++;
         stepFastAtt +=0.1f;
-        stepFastAm += 0.5f;
+        stepFastAmf += 0.5f;
+        slider1.setValue(amDepthNew);
+        slider2.setValue(amSpeedNew);
+        slider3.setValue(attackNew);
     };
     slowTextButton.onClick = [&]()
     {
         counterFast = 0;
-        stepFastAm = 0.5;
+        stepFastAmf = 0.5;
+        stepFastAmd = 0.1;
         stepFastAtt = 0.1f;
-//        attackTime -= stepSlowAtt;
-//        amSpeed -= stepSlowAm;
+        amDepthNew = amDepthNew - stepFastAmd ;
+        amSpeedNew = amDepthNew - stepFastAmf;
+        attackNew = attackNew + 0.1;
         counterSlow ++;
         stepSlowAtt += 0.5f;
-        stepSlowAm += 0.1f;
+        stepSlowAmf += 0.1f;
+        slider1.setValue(amDepthNew);
+        slider2.setValue(amSpeedNew);
+        slider3.setValue(attackNew);
     };
 }
 

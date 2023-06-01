@@ -61,7 +61,11 @@ void AudioPluginAudioProcessorEditor::resized()
 // updating the data based on buttons
 void AudioPluginAudioProcessorEditor::updateControlData()
 {
-    control.changeFilter(audioProcessor.apvts,filter.filterCutoffSlider);
+    // passing audio parameters and the right sliders to adjust
+    // changing cutoff frequency
+    control.changeFilter(audioProcessor.apvts,
+                         filter.filterCutoffSlider);
+    // changing Delay dry wet and delay times
     control.changeSpace(audioProcessor.apvts,
                         delay.drywetLSlider,
                         delay.drywetRSlider,
@@ -69,17 +73,17 @@ void AudioPluginAudioProcessorEditor::updateControlData()
                         delay.delayTimeLSlider,
                         delay.delayTimeRSlider,
                         delay.delayTimeCSlider);
-
-//    control.changePredict();
-//    control.changeSpeed();
+    // changing FM params and Resonance
+    control.changePredict(audioProcessor.apvts,
+                          osc.fmDepthSlider,
+                          osc.fmFreqSlider,
+                          filter.filterResonanceSlider);
+    // changing AM and Attack time
+    control.changeSpeed(audioProcessor.apvts,
+                        LFO.LFODepthSlider,
+                        LFO.LFOFreqSlider,
+                        adsr.attackSlider);
 //    control.changeTexture();
-//    // changing FM and Resonance
-//    osc.fmDepthSlider.setValue(juce::jlimit(0.0f,1000.0f,control.fmDepth*1.253246135f));
-//    osc.fmFreqSlider.setValue(juce::jlimit(0.0f,1000.0f,control.fmSpeed));
-//    filter.filterResonanceSlider.setValue(juce::jlimit(0.0f,1000.0f,control.reso));
-//    // changing AM and AttackTime
-//    LFO.LFOFreqSlider.setValue(juce::jlimit(0.0f,50.0f,control.amSpeed));
-//    adsr.attackSlider.setValue(juce::jlimit(0.0f,3.0f,control.attackTime));
 //    // changing drive and trim
 //    shaper.ShaperDriveSlider.setValue(juce::jlimit(0.0f,100.0f,control.driveShaper));
 //    shaper.ShaperTrimSlider.setValue(juce::jlimit(0.0f,1.0f,control.trim));

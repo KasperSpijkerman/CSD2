@@ -30,8 +30,14 @@ public:
                      juce::Slider& slider4,
                      juce::Slider& slider5,
                      juce::Slider& slider6);
-    void changePredict(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider);
-    void changeSpeed(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider);
+    void changePredict(juce::AudioProcessorValueTreeState& apvts,
+                       juce::Slider& slider1,
+                       juce::Slider& slider2,
+                       juce::Slider& slider3);
+    void changeSpeed(juce::AudioProcessorValueTreeState& apvts,
+                     juce::Slider& slider1,
+                     juce::Slider& slider2,
+                     juce::Slider& slider3);
     void changeTexture(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider);
 private:
     // buttons for different opposites
@@ -75,8 +81,10 @@ private:
     // Resonance step
     float stepRes {0.1};
     // AM amount
-    float stepFastAm {0.5f};
-    float stepSlowAm {0.5};
+    float stepFastAmf {0.5f};
+    float stepFastAmd {0.1f};
+    float stepSlowAmf {0.5};
+    float stepSlowAmd {0.1};
     float stepFastAtt {0.1f};
     float stepSlowAtt {0.1};
     // Gain/trim amount
