@@ -51,6 +51,7 @@ void AudioPluginAudioProcessorEditor::resized()
     const auto objectHeight = 200;
     // bigger format
     const auto objectWidthBig = 300;
+    const auto objectWidthControl = 200;
     const auto objectHeightBig = 600;
     const auto moveRight = 400;
     // placing objects on screen
@@ -59,7 +60,7 @@ void AudioPluginAudioProcessorEditor::resized()
     filter.setBounds(paddingX,paddingY2,objectWidth,objectHeight);
     LFO.setBounds(osc.getRight()+moveRight,paddingY2,objectWidth,objectHeight);
     shaper.setBounds(osc.getRight()+moveRight,paddingY3,objectWidth,objectHeight);
-    control.setBounds(getWidth()/2.7,getHeight()/500,objectWidthBig,objectHeightBig);
+    control.setBounds(getWidth()/2.7,getHeight()/500,objectWidthControl,objectHeightBig);
     delay.setBounds(getWidth()/3,getHeight()/2,objectWidthBig,objectHeightBig);
 }
 // updating the data based on buttons

@@ -63,8 +63,8 @@ private:
     juce::TextButton shortTextButton;
     juce::TextButton longTextButton;
     // counter for how many times user has pressed Light or Dark in a row
-    int counterLight{0};
-    int counterDark {0};
+    int counterLight{5};
+    int counterDark {5};
     // counters for 2nd set
     int counterCond{0};
     int counterSpac {0};
@@ -81,11 +81,11 @@ private:
     int counterShort{0};
     int counterLong {0};
     // Stepsize for Dark and Light increasing when user pressed a button more times.
-    int stepLight {1};
-    int stepDark {1};
+    int stepLight {50};
+    int stepDark {50};
     // Stepsize dry wet
-    float stepCondDW {0.2f};
-    float stepSpacDW {0.2f};
+    float stepCondDW {0.1f};
+    float stepSpacDW {0.1f};
     // Stepsize delaytime
     float stepCondDT {30.0f};
     float stepSpacDT {30.0f};
@@ -111,6 +111,7 @@ private:
     float stepShortFb {0.05};
     float stepLongR {0.05};
     float stepLongFb {0.05};
+    bool driveStageHigh {true};
 
 
     void createButton (juce::TextButton& button, juce::AudioProcessorValueTreeState& apvts, juce::String paramID);

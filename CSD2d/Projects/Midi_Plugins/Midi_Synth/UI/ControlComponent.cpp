@@ -40,9 +40,12 @@ ControlComponent::~ControlComponent()
 void ControlComponent::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colours::purple);
-    g.setColour (juce::Colours::white);
-    g.setFont (30.0f);
-    g.drawFittedText ("Modes", getLocalBounds(), juce::Justification::centredTop, 1);
+    g.setColour (juce::Colours::deeppink);
+    g.setFont (35.0f);
+    g.drawFittedText ("The Teleporter", getLocalBounds(), juce::Justification::centredTop, 1);
+    g.setColour (juce::Colours::powderblue);
+    g.setFont (37.0f);
+    g.drawFittedText ("The Teleporter", getLocalBounds(), juce::Justification::centredTop, 1);
     // colours per button
     LightTextButton.setColour(TextButton::buttonColourId, Colours::white);
     LightTextButton.setColour(TextButton::textColourOffId, Colours::black);
@@ -59,14 +62,14 @@ void ControlComponent::paint(juce::Graphics& g)
     fastTextButton.setColour(TextButton::buttonColourId, Colours::green);
     fastTextButton.setColour(TextButton::textColourOffId, Colours::yellow);
     slowTextButton.setColour(TextButton::buttonColourId, Colours::lightgoldenrodyellow);
-    slowTextButton.setColour(TextButton::textColourOffId, Colours::lightcyan);
+    slowTextButton.setColour(TextButton::textColourOffId, Colours::black);
     roughTextButton.setColour(TextButton::buttonColourId, Colours::blue);
     roughTextButton.setColour(TextButton::textColourOffId, Colours::red);
     smoothTextButton.setColour(TextButton::buttonColourId, Colours::orange);
     smoothTextButton.setColour(TextButton::textColourOffId, Colours::yellow);
-    shortTextButton.setColour(TextButton::buttonColourId, Colours::blue);
-    shortTextButton.setColour(TextButton::textColourOffId, Colours::red);
-    longTextButton.setColour(TextButton::buttonColourId, Colours::lightsteelblue);
+    shortTextButton.setColour(TextButton::buttonColourId, Colours::lightsteelblue);
+    shortTextButton.setColour(TextButton::textColourOffId, Colours::salmon);
+    longTextButton.setColour(TextButton::buttonColourId, Colours::lightgreen);
     longTextButton.setColour(TextButton::textColourOffId, Colours::lightyellow);
 }
 // layout button positions
@@ -116,15 +119,32 @@ void ControlComponent::changeFilter(juce::AudioProcessorValueTreeState& apvts, j
     // retrieve current parameter value
     auto& filterCutoffnew = *apvts.getRawParameterValue("filtercutoff");
     // making sure parameters don't go out of range
-    protectRange(0,20000,filterCutoffnew);
+
+
+
+
+
     LightTextButton.onClick = [&]()
             {
-               // and adjust the slider
-                stepDark = 1;
-                stepLight++;
-                // making sure it doesn't go out of range
 
-                filterCutoffnew = filterCutoffnew + 50*stepLight;
+                counterDark -= 2;
+                stepLight += 50;
+                // decreasing dark counter
+                stepDark -= 50;
+                counterLight++;
+                // making sure it doesn't go out of range
+                if (stepLight <= 0)
+                {
+                    stepLight = 50;
+                }
+                if (counterLight <= 0)
+                {
+                    counterLight = 1;
+                }
+                // setting cutoff based on counter position and stepsize.
+                filterCutoffnew = filterCutoffnew + stepLight*counterLight;
+                // protecting the range
+                protectRange(0,20000,filterCutoffnew);
                 slider.setValue(filterCutoffnew);
 
             };
@@ -132,12 +152,24 @@ void ControlComponent::changeFilter(juce::AudioProcessorValueTreeState& apvts, j
 
     DarkTextButton.onClick = [&]()
             {
-            // and adjust the slider
-                stepLight = 1;
-                stepDark++;
-                // making sure it doesn't go out of range
 
-                filterCutoffnew = filterCutoffnew - 50*stepDark;
+                counterLight -=2;
+                stepDark += 50;
+                // decreasing light counter
+                stepLight -= 50;
+                // making sure it doesn't go out of range
+                if (stepDark <= 0)
+                {
+                    stepDark = 50;
+                }
+                if (counterDark <= 0)
+                {
+                    counterDark = 1;
+                }
+
+                // setting cutoff based on counter position and stepsize.
+                filterCutoffnew = filterCutoffnew - stepDark*counterDark;
+                protectRange(0,20000,filterCutoffnew);
                 slider.setValue(filterCutoffnew);
             };
 }
@@ -168,13 +200,13 @@ void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
             {
                 counterCond ++;
                 counterSpac = 0;
-                drywetLnew = drywetLnew - 0.1;
-                drywetRnew = drywetRnew - 0.1;
-                drywetCnew = drywetCnew - 0.1;
+                drywetLnew = drywetLnew - stepCondDW;
+                drywetRnew = drywetRnew - stepCondDW;
+                drywetCnew = drywetCnew - stepCondDW;
 
-                delaytimeLnew = delaytimeLnew - 50;
-                delaytimeRnew = delaytimeRnew - 50;
-                delaytimeCnew = delaytimeCnew - 50;
+                delaytimeLnew = delaytimeLnew - stepCondDT*0.78903467530;
+                delaytimeRnew = delaytimeRnew - stepCondDT*0.835469835476;
+                delaytimeCnew = delaytimeCnew - stepCondDT*1.374689743;
                 // updating the slider values
                 slider1.setValue(drywetLnew);
                 slider2.setValue(drywetRnew);
@@ -189,13 +221,13 @@ void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
                 counterSpac ++;
                 counterCond = 0;
                 // adjusting dry wet
-                drywetLnew = drywetLnew + 0.1;
-                drywetRnew = drywetRnew + 0.1;
-                drywetCnew = drywetCnew + 0.1;
+                drywetLnew = drywetLnew + stepSpacDW;
+                drywetRnew = drywetRnew + stepSpacDW;
+                drywetCnew = drywetCnew + stepSpacDW;
                 // adjusting delay time
-                delaytimeLnew = delaytimeLnew + 50;
-                delaytimeRnew = delaytimeRnew + 50;
-                delaytimeCnew = delaytimeCnew + 50;
+                delaytimeLnew = delaytimeLnew + stepSpacDT*0.92385637;
+                delaytimeRnew = delaytimeRnew + stepSpacDT*0.890567985;
+                delaytimeCnew = delaytimeCnew + stepSpacDT*1.32572946;
                 // setting sliders
                 slider1.setValue(drywetLnew);
                 slider2.setValue(drywetRnew);
@@ -293,8 +325,27 @@ void ControlComponent::changeTexture(juce::AudioProcessorValueTreeState& apvts, 
     auto& trimNew  = *apvts.getRawParameterValue("trim");
     protectRange(1,100,driveNew);
     protectRange(0.01,1.0,trimNew);
+
     roughTextButton.onClick = [&]()
     {
+        // the first few switches in drive give a lot of volume so a bigger trim value is used
+        if (driveStageHigh == true)
+        {
+            if(driveNew < 6)
+            {
+                driveStageHigh = false;
+                stepRoughtrim = {0.1};
+            }
+            // after 6 it will make smaller steps
+            else if (driveStageHigh == false)
+            {
+
+                stepRoughtrim -= 0.05;
+                driveStageHigh = true;
+
+            }
+        }
+
         counterSmooth = 0;
         stepSmoothDr = 0.5;
         stepSmoothtrim = 0.05;
@@ -344,8 +395,8 @@ void ControlComponent::changeLength(juce::AudioProcessorValueTreeState& apvts,
         counterShort ++;
         releaseNew = releaseNew - stepLongR;
         feedbackLNew = feedbackLNew - stepShortFb*0.82094567;
-        feedbackRNew = feedbackRNew - stepShortFb*0.456724569;
-        feedbackCNew = feedbackCNew - stepShortFb*0.34587934567;
+        feedbackRNew = feedbackRNew - stepShortFb*0.66724569;
+        feedbackCNew = feedbackCNew - stepShortFb*0.74587934567;
         stepShortFb += 0.05;
         stepShortR +=0.005f;
         slider1.setValue(releaseNew);
@@ -363,7 +414,7 @@ void ControlComponent::changeLength(juce::AudioProcessorValueTreeState& apvts,
         releaseNew = releaseNew + stepLongR;
         feedbackLNew = feedbackLNew + stepLongFb*0.987673342;
         feedbackRNew = feedbackRNew + stepLongFb*0.789834;
-        feedbackCNew = feedbackCNew + stepLongFb*0.234634596;
+        feedbackCNew = feedbackCNew + stepLongFb*0.674634596;
         stepLongFb += 0.05;
         stepLongR += 0.005f;
         slider1.setValue(releaseNew);
