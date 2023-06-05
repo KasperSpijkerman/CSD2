@@ -10,7 +10,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     filter(audioProcessor.apvts, "filtertype", "filtercutoff", "filterresonance"),
     LFO(audioProcessor.apvts,"lfofreq","lfodepth"),
     shaper(audioProcessor.apvts,"drive","trim"),
-    control(audioProcessor.apvts,"Light","Dark","Condensed","Atmospheric","Predictable","Experimental","Fast","Slow","Rough","Smooth"),
+    control(audioProcessor.apvts,"Light","Dark","Condensed","Atmospheric","Predictable","Experimental","Fast","Slow","Rough","Smooth","Short", "Long"),
     delay(audioProcessor.apvts,"drywetL","drywetR","drywetC","feedbackL","feedbackR","feedbackC","delaytimeL","delaytimeR","delaytimeC")
 
 {
@@ -91,6 +91,11 @@ void AudioPluginAudioProcessorEditor::updateControlData()
     control.changeTexture(audioProcessor.apvts,
                           shaper.ShaperDriveSlider,
                           shaper.ShaperTrimSlider);
+    control.changeLength(audioProcessor.apvts,
+                         adsr.releaseSlider,
+                         delay.feedbackLSlider,
+                         delay.feedbackRSlider,
+                         delay.feedbackCSlider);
 }
 
 void AudioPluginAudioProcessorEditor::timerCallback()

@@ -8,9 +8,7 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor() :
         .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
         .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
     ),
-        apvts(*this, nullptr,"Parameters", createParameters()),
-        control(apvts,"Light","Dark","Condensed","Atmospheric","Predictable","Experimental","Fast","Slow","Rough","Smooth")
-
+        apvts(*this, nullptr,"Parameters", createParameters())
 {
     // adding a sound and a voice
     synth.addSound(new Synth_Sound());
@@ -221,14 +219,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     delay.changeDelayLine(1,delayTimeR,feedbackR,dryWetR);
     delay.changeDelayLine(2,delayTimeC,feedbackC,dryWetC);
 
-
-//    for (int channel = 0; channel < 2; ++channel) {
-//        auto *channelData = buffer.getWritePointer(channel);
-//        // process the audio
-//        for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
-//            channelData[sample] = tremolos[channel].output(waveshapers[channel].output(buffer.getSample(channel, sample)));
-//        }
-    // process the audio
+    // process the audio with FX
     for(int sample = 0; sample < buffer.getNumSamples(); ++sample)
     {
         for (int channel = 0; channel < 2; ++channel) {

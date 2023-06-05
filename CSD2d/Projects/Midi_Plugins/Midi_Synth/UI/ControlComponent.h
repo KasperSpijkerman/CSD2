@@ -15,7 +15,9 @@ public:
                      juce::String FastId,
                      juce::String SlowId,
                      juce::String RoughId,
-                     juce::String SmoothId);
+                     juce::String SmoothId,
+                     juce::String ShortId,
+                     juce::String LongId);
     ~ControlComponent() override;
 
     void paint(juce::Graphics&) override;
@@ -41,6 +43,11 @@ public:
     void changeTexture(juce::AudioProcessorValueTreeState& apvts,
                        juce::Slider& slider1,
                        juce::Slider& slider2);
+    void changeLength(juce::AudioProcessorValueTreeState& apvts,
+                       juce::Slider& slider1,
+                       juce::Slider& slider2,
+                       juce::Slider& slider3,
+                       juce::Slider& slider4);
 private:
     // buttons for different opposites
     juce::TextButton LightTextButton;
@@ -53,6 +60,8 @@ private:
     juce::TextButton slowTextButton;
     juce::TextButton roughTextButton;
     juce::TextButton smoothTextButton;
+    juce::TextButton shortTextButton;
+    juce::TextButton longTextButton;
     // counter for how many times user has pressed Light or Dark in a row
     int counterLight{0};
     int counterDark {0};
@@ -68,6 +77,9 @@ private:
     // counter for 5th set
     int counterRough{0};
     int counterSmooth {0};
+    // counter 6th set
+    int counterShort{0};
+    int counterLong {0};
     // Stepsize for Dark and Light increasing when user pressed a button more times.
     int stepLight {1};
     int stepDark {1};
@@ -94,6 +106,12 @@ private:
     float stepSmoothDr {1.0f};
     float stepRoughtrim {0.05f};
     float stepSmoothtrim {0.05f};
+    // Step for feedback and release
+    float stepShortR {0.05};
+    float stepShortFb {0.05};
+    float stepLongR {0.05};
+    float stepLongFb {0.05};
+
 
     void createButton (juce::TextButton& button, juce::AudioProcessorValueTreeState& apvts, juce::String paramID);
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ControlComponent)

@@ -12,7 +12,9 @@ ControlComponent::ControlComponent(juce::AudioProcessorValueTreeState& apvts,
                                    juce::String FastId,
                                    juce::String SlowId,
                                    juce::String RoughId,
-                                   juce::String SmoothId)
+                                   juce::String SmoothId,
+                                   juce::String ShortId,
+                                   juce::String LongId)
 {
 
     // making buttons, linking labels, setting text and colour in a function
@@ -26,6 +28,8 @@ ControlComponent::ControlComponent(juce::AudioProcessorValueTreeState& apvts,
     createButton(slowTextButton,apvts,SlowId);
     createButton(roughTextButton,apvts,RoughId);
     createButton(smoothTextButton,apvts,SmoothId);
+    createButton(shortTextButton,apvts,ShortId);
+    createButton(longTextButton,apvts,LongId);
 
 }
 // destructor
@@ -52,14 +56,18 @@ void ControlComponent::paint(juce::Graphics& g)
     predictableTextButton.setColour(TextButton::textColourOffId, Colours::white);
     experimentalTextButton.setColour(TextButton::buttonColourId, Colours::yellow);
     experimentalTextButton.setColour(TextButton::textColourOffId, Colours::red);
-    fastTextButton.setColour(TextButton::buttonColourId, Colours::grey);
-    fastTextButton.setColour(TextButton::textColourOffId, Colours::white);
-    slowTextButton.setColour(TextButton::buttonColourId, Colours::blue);
-    slowTextButton.setColour(TextButton::textColourOffId, Colours::black);
+    fastTextButton.setColour(TextButton::buttonColourId, Colours::green);
+    fastTextButton.setColour(TextButton::textColourOffId, Colours::yellow);
+    slowTextButton.setColour(TextButton::buttonColourId, Colours::lightgoldenrodyellow);
+    slowTextButton.setColour(TextButton::textColourOffId, Colours::lightcyan);
     roughTextButton.setColour(TextButton::buttonColourId, Colours::blue);
     roughTextButton.setColour(TextButton::textColourOffId, Colours::red);
     smoothTextButton.setColour(TextButton::buttonColourId, Colours::orange);
     smoothTextButton.setColour(TextButton::textColourOffId, Colours::yellow);
+    shortTextButton.setColour(TextButton::buttonColourId, Colours::blue);
+    shortTextButton.setColour(TextButton::textColourOffId, Colours::red);
+    longTextButton.setColour(TextButton::buttonColourId, Colours::lightsteelblue);
+    longTextButton.setColour(TextButton::textColourOffId, Colours::lightyellow);
 }
 // layout button positions
 void ControlComponent::resized() {
@@ -79,6 +87,8 @@ void ControlComponent::resized() {
     fastTextButton.setBounds(slowTextButton.getRight(), buttonPosY + 150, buttonWidth, buttonHeigth);
     smoothTextButton.setBounds(0, buttonPosY + 200, buttonWidth, buttonHeigth);
     roughTextButton.setBounds(smoothTextButton.getRight(), buttonPosY + 200, buttonWidth, buttonHeigth);
+    shortTextButton.setBounds(0, buttonPosY + 250, buttonWidth, buttonHeigth);
+    longTextButton.setBounds(shortTextButton.getRight(), buttonPosY + 250, buttonWidth, buttonHeigth);
 
 }
 
@@ -209,8 +219,8 @@ void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, 
     {
         counterExp = 0;
         stepExp = 0.5;
-        fmDepthNew = fmDepthNew - stepPred;
-        fmSpeedNew = fmSpeedNew - stepPred;
+        fmDepthNew = fmDepthNew - stepPred*0.890780568956;
+        fmSpeedNew = fmSpeedNew - stepPred*0.76249634987;
         resNew = resNew - stepRes;
         counterPred ++;
         stepPred +=0.5;
@@ -224,8 +234,8 @@ void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, 
         counterPred = 0;
         stepPred = 0.5f;
         counterExp ++;
-        fmDepthNew = fmDepthNew + stepExp;
-        fmSpeedNew = fmSpeedNew + stepExp;
+        fmDepthNew = fmDepthNew + stepExp*0.67852547957;
+        fmSpeedNew = fmSpeedNew + stepExp*0.5639;
         resNew = resNew + stepRes;
         stepExp += 0.5;
         slider1.setValue(fmDepthNew);
@@ -309,5 +319,56 @@ void ControlComponent::changeTexture(juce::AudioProcessorValueTreeState& apvts, 
         stepSmoothtrim +=0.005f;
         slider1.setValue(driveNew);
         slider2.setValue(trimNew);
+    };
+}
+
+void ControlComponent::changeLength(juce::AudioProcessorValueTreeState& apvts,
+                                    juce::Slider& slider1,
+                                    juce::Slider& slider2,
+                                    juce::Slider& slider3,
+                                    juce::Slider& slider4)
+{
+    auto& releaseNew  = *apvts.getRawParameterValue("release");
+    auto& feedbackLNew  = *apvts.getRawParameterValue("feedbackL");
+    auto& feedbackRNew  = *apvts.getRawParameterValue("feedbackR");
+    auto& feedbackCNew  = *apvts.getRawParameterValue("feedbackC");
+    protectRange(0,3,releaseNew);
+    protectRange(0,1,feedbackLNew);
+    protectRange(0,1,feedbackRNew);
+    protectRange(0,1,feedbackCNew);
+    shortTextButton.onClick = [&]()
+    {
+        counterLong = 0;
+        stepLongFb = 0.05;
+        stepLongR = 0.05;
+        counterShort ++;
+        releaseNew = releaseNew - stepLongR;
+        feedbackLNew = feedbackLNew - stepShortFb*0.82094567;
+        feedbackRNew = feedbackRNew - stepShortFb*0.456724569;
+        feedbackCNew = feedbackCNew - stepShortFb*0.34587934567;
+        stepShortFb += 0.05;
+        stepShortR +=0.005f;
+        slider1.setValue(releaseNew);
+        slider2.setValue(feedbackLNew);
+        slider3.setValue(feedbackRNew);
+        slider4.setValue(feedbackCNew);
+
+    };
+    longTextButton.onClick = [&]()
+    {
+        counterShort = 0;
+        stepShortFb = 0.05;
+        stepShortR = 0.05;
+        counterLong ++;
+        releaseNew = releaseNew + stepLongR;
+        feedbackLNew = feedbackLNew + stepLongFb*0.987673342;
+        feedbackRNew = feedbackRNew + stepLongFb*0.789834;
+        feedbackCNew = feedbackCNew + stepLongFb*0.234634596;
+        stepLongFb += 0.05;
+        stepLongR += 0.005f;
+        slider1.setValue(releaseNew);
+        slider2.setValue(feedbackLNew);
+        slider3.setValue(feedbackRNew);
+        slider4.setValue(feedbackCNew);
     };
 }
