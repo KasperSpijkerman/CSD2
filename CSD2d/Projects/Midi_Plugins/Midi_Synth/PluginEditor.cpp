@@ -33,7 +33,11 @@ AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 //==============================================================================
 void AudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
 {
+
     g.fillAll(juce::Colours::purple);
+    g.setColour(juce::Colours::green);
+    g.setFont (30.0f);
+//    g.drawFittedText ("The Teleporter", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 
 void AudioPluginAudioProcessorEditor::resized()
@@ -83,10 +87,10 @@ void AudioPluginAudioProcessorEditor::updateControlData()
                         LFO.LFODepthSlider,
                         LFO.LFOFreqSlider,
                         adsr.attackSlider);
-//    control.changeTexture();
-//    // changing drive and trim
-//    shaper.ShaperDriveSlider.setValue(juce::jlimit(0.0f,100.0f,control.driveShaper));
-//    shaper.ShaperTrimSlider.setValue(juce::jlimit(0.0f,1.0f,control.trim));
+    // changing Drive and trim
+    control.changeTexture(audioProcessor.apvts,
+                          shaper.ShaperDriveSlider,
+                          shaper.ShaperTrimSlider);
 }
 
 void AudioPluginAudioProcessorEditor::timerCallback()

@@ -38,7 +38,9 @@ public:
                      juce::Slider& slider1,
                      juce::Slider& slider2,
                      juce::Slider& slider3);
-    void changeTexture(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider);
+    void changeTexture(juce::AudioProcessorValueTreeState& apvts,
+                       juce::Slider& slider1,
+                       juce::Slider& slider2);
 private:
     // buttons for different opposites
     juce::TextButton LightTextButton;

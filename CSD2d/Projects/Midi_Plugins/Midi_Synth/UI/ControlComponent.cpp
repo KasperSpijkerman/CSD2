@@ -68,16 +68,17 @@ void ControlComponent::resized() {
     const auto buttonWidth = 100;
     const auto buttonHeigth = 40;
 
-    LightTextButton.setBounds(0, buttonPosY, buttonWidth, buttonHeigth);
-    DarkTextButton.setBounds(LightTextButton.getRight(), buttonPosY, buttonWidth, buttonHeigth);
+
+    DarkTextButton.setBounds(0, buttonPosY, buttonWidth, buttonHeigth);
+    LightTextButton.setBounds(DarkTextButton.getRight(), buttonPosY, buttonWidth, buttonHeigth);
     condensedTextButton.setBounds(0, buttonPosY + 50, buttonWidth, buttonHeigth);
     spaciousTextButton.setBounds(condensedTextButton.getRight(), buttonPosY + 50, buttonWidth, buttonHeigth);
     predictableTextButton.setBounds(0, buttonPosY + 100, buttonWidth, buttonHeigth);
     experimentalTextButton.setBounds(predictableTextButton.getRight(), buttonPosY + 100, buttonWidth, buttonHeigth);
-    fastTextButton.setBounds(0, buttonPosY + 150, buttonWidth, buttonHeigth);
-    slowTextButton.setBounds(fastTextButton.getRight(), buttonPosY + 150, buttonWidth, buttonHeigth);
-    roughTextButton.setBounds(0, buttonPosY + 200, buttonWidth, buttonHeigth);
-    smoothTextButton.setBounds(roughTextButton.getRight(), buttonPosY + 200, buttonWidth, buttonHeigth);
+    slowTextButton.setBounds(0, buttonPosY + 150, buttonWidth, buttonHeigth);
+    fastTextButton.setBounds(slowTextButton.getRight(), buttonPosY + 150, buttonWidth, buttonHeigth);
+    smoothTextButton.setBounds(0, buttonPosY + 200, buttonWidth, buttonHeigth);
+    roughTextButton.setBounds(smoothTextButton.getRight(), buttonPosY + 200, buttonWidth, buttonHeigth);
 
 }
 
@@ -276,29 +277,37 @@ void ControlComponent::changeSpeed(juce::AudioProcessorValueTreeState& apvts, ju
 }
 
 // Algorithm for changing the predictablity
-void ControlComponent::changeTexture(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider)
+void ControlComponent::changeTexture(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider1,juce::Slider& slider2)
 {
+    auto& driveNew  = *apvts.getRawParameterValue("drive");
+    auto& trimNew  = *apvts.getRawParameterValue("trim");
+    protectRange(1,100,driveNew);
+    protectRange(0.01,1.0,trimNew);
     roughTextButton.onClick = [&]()
     {
         counterSmooth = 0;
         stepSmoothDr = 0.5;
-        stepSmoothtrim = 0.5;
-//        driveShaper += stepRoughDr;
-//        trim -= stepRoughtrim;
+        stepSmoothtrim = 0.05;
+        driveNew = driveNew + stepRoughDr;
+        trimNew = trimNew - stepRoughtrim;
         counterRough ++;
         stepRoughDr +=0.5f;
-        stepRoughtrim += 0.1f;
+        stepRoughtrim += 0.005f;
+        slider1.setValue(driveNew);
+        slider2.setValue(trimNew);
 
     };
     smoothTextButton.onClick = [&]()
     {
         counterRough = 0;
-        stepRoughDr = 0.5;
-        stepRoughtrim = 0.2;
+        stepRoughDr = 0.005;
+        stepRoughtrim = 0.1;
         counterSmooth ++;
-//        driveShaper -= stepRoughDr;
-//        trim += stepRoughtrim;
+        driveNew = driveNew - stepSmoothDr;
+        trimNew = trimNew + stepSmoothtrim;
         stepSmoothDr += 0.5;
-        stepSmoothtrim +=0.05f;
+        stepSmoothtrim +=0.005f;
+        slider1.setValue(driveNew);
+        slider2.setValue(trimNew);
     };
 }
