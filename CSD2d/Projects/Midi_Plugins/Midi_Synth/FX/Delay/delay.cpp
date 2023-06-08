@@ -5,6 +5,7 @@ Delay::Delay()
 {
     // create delaybuffer with a size
     delayBuffer = new CircBuffer(sampleRate*20);
+    memset(delayBuffer, 0, sizeof(delayBuffer));
 }
 
 Delay::~Delay()
@@ -14,11 +15,8 @@ Delay::~Delay()
 
 void Delay::prepareToPlay(double samplerate)
 {
-	// setting the effect samplerate equal to given samplerate
 	sampleRate = samplerate;
-
-    delayBuffer->setDistance(0);
-	setDryWet(1);
+    memset(delayBuffer, 0, sizeof(delayBuffer));
 }
 
 
@@ -44,7 +42,8 @@ void Delay::setDelayTime(float delayMs) {
     delayBuffer->setDistance(delaySamples);
 }
 
-float Delay::outputNoIncrement(float input){
+float Delay::outputNoIncrement(float input)
+{
     // giving the input to writehead with feedback
     delayBuffer->input(input +(outputDelay*delayFeedback));
     // reading output and store in variable

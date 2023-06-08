@@ -19,8 +19,8 @@ public:
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     std::unique_ptr<Attachment> filterCutoffAttachment;
     juce::Label filterCutofflabel {"filtercutoff", "Cutoff"};
-    std::unique_ptr<Attachment> filterResonanceAttachment;
     juce::Label filterResonancelabel {"filterresonance", "Resonance"};
+    std::unique_ptr<Attachment> filterResonanceAttachment;
 protected:
 
 

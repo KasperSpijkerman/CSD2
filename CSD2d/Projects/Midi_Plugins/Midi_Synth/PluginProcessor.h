@@ -52,6 +52,8 @@ public:
     juce::AudioProcessorValueTreeState apvts;
     // creating the parameters in seperate function
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
+
+
 private:
     // synth object
     juce::Synthesiser synth;
@@ -60,10 +62,38 @@ private:
     // FX objects
     std::array<Tremolo, 2> tremolos;
     std::array<WaveShaper, 2> waveshapers;
-
     // lcr delay
     LcrDelay delay;
 
+    // Creating atomic float pointers for all the parameters.
+    std::atomic<float>* attack = nullptr;
+    std::atomic<float>* decay = nullptr;
+    std::atomic<float>* sustain = nullptr;
+    std::atomic<float>* release = nullptr;
+    // OSC wavetype
+    std::atomic<float>* oscWave = nullptr;
+    // FM parameters, depth and frequency
+    std::atomic<float>* FMDepth = nullptr;
+    std::atomic<float>* FMFrequency = nullptr;
+    std::atomic<float>* filterType = nullptr;
+    std::atomic<float>* filterCutoff = nullptr;
+    std::atomic<float>* filterResonance = nullptr;
+    // AM
+    std::atomic<float>* LFOfreq = nullptr;
+    std::atomic<float>* LFOdepth = nullptr;
+    // Shaper
+    std::atomic<float>* drive = nullptr;
+    std::atomic<float>* trim = nullptr;
+    // Delay
+    std::atomic<float>* dryWetL = nullptr;
+    std::atomic<float>* dryWetR = nullptr;
+    std::atomic<float>* dryWetC = nullptr;
+    std::atomic<float>* feedbackL = nullptr;
+    std::atomic<float>* feedbackR = nullptr;
+    std::atomic<float>* feedbackC = nullptr;
+    std::atomic<float>* delayTimeL = nullptr;
+    std::atomic<float>* delayTimeR = nullptr;
+    std::atomic<float>* delayTimeC = nullptr;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)

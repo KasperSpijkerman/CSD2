@@ -190,12 +190,8 @@ void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
     auto& delaytimeRnew = *apvts.getRawParameterValue("delaytimeR");
     auto& delaytimeCnew = *apvts.getRawParameterValue("delaytimeC");
     // making sure parameters don't go out of range.
-    protectRange(0,1,drywetLnew);
-    protectRange(0,1,drywetCnew);
-    protectRange(0,1,drywetRnew);
-    protectRange(0,3000,drywetLnew);
-    protectRange(0,3000,drywetCnew);
-    protectRange(0,3000,drywetRnew);
+
+
     condensedTextButton.onClick = [&]()
             {
                 counterCond ++;
@@ -204,9 +200,17 @@ void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
                 drywetRnew = drywetRnew - stepCondDW;
                 drywetCnew = drywetCnew - stepCondDW;
 
+                protectRange(0,1,drywetLnew);
+                protectRange(0,1,drywetCnew);
+                protectRange(0,1,drywetRnew);
+
                 delaytimeLnew = delaytimeLnew - stepCondDT*0.78903467530;
                 delaytimeRnew = delaytimeRnew - stepCondDT*0.835469835476;
                 delaytimeCnew = delaytimeCnew - stepCondDT*1.374689743;
+
+                protectRange(0,3000,drywetLnew);
+                protectRange(0,3000,drywetCnew);
+                protectRange(0,3000,drywetRnew);
                 // updating the slider values
                 slider1.setValue(drywetLnew);
                 slider2.setValue(drywetRnew);
@@ -224,10 +228,18 @@ void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
                 drywetLnew = drywetLnew + stepSpacDW;
                 drywetRnew = drywetRnew + stepSpacDW;
                 drywetCnew = drywetCnew + stepSpacDW;
+
+                protectRange(0,3000,drywetLnew);
+                protectRange(0,3000,drywetCnew);
+                protectRange(0,3000,drywetRnew);
                 // adjusting delay time
                 delaytimeLnew = delaytimeLnew + stepSpacDT*0.92385637;
                 delaytimeRnew = delaytimeRnew + stepSpacDT*0.890567985;
                 delaytimeCnew = delaytimeCnew + stepSpacDT*1.32572946;
+
+                protectRange(0,3000,drywetLnew);
+                protectRange(0,3000,drywetCnew);
+                protectRange(0,3000,drywetRnew);
                 // setting sliders
                 slider1.setValue(drywetLnew);
                 slider2.setValue(drywetRnew);
@@ -244,9 +256,7 @@ void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, 
     auto& fmDepthNew = *apvts.getRawParameterValue("fmdepth");
     auto& fmSpeedNew = *apvts.getRawParameterValue("fmfreq");
     auto& resNew = *apvts.getRawParameterValue("filterresonance");
-    protectRange(0,1000,fmDepthNew);
-    protectRange(0,1000,fmSpeedNew);
-    protectRange(0,3,resNew);
+
     predictableTextButton.onClick = [&]()
     {
         counterExp = 0;
@@ -256,6 +266,9 @@ void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, 
         resNew = resNew - stepRes;
         counterPred ++;
         stepPred +=0.5;
+        protectRange(0,1000,fmDepthNew);
+        protectRange(0,1000,fmSpeedNew);
+        protectRange(1,3,resNew);
         slider1.setValue(fmDepthNew);
         slider2.setValue(fmSpeedNew);
         slider3.setValue(resNew);
@@ -270,6 +283,9 @@ void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, 
         fmSpeedNew = fmSpeedNew + stepExp*0.5639;
         resNew = resNew + stepRes;
         stepExp += 0.5;
+        protectRange(0,1000,fmDepthNew);
+        protectRange(0,1000,fmSpeedNew);
+        protectRange(1,3,resNew);
         slider1.setValue(fmDepthNew);
         slider2.setValue(fmSpeedNew);
         slider3.setValue(resNew);
@@ -339,10 +355,8 @@ void ControlComponent::changeTexture(juce::AudioProcessorValueTreeState& apvts, 
             // after 6 it will make smaller steps
             else if (driveStageHigh == false)
             {
-
                 stepRoughtrim -= 0.05;
                 driveStageHigh = true;
-
             }
         }
 

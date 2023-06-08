@@ -3,19 +3,11 @@
 //constructor
 AdsrComponent::AdsrComponent(juce::AudioProcessorValueTreeState& apvts)
 {
-    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-
-    // linkin parameters
-    attackAttachment = std::make_unique<SliderAttachment>(apvts, "attack",attackSlider);
-    decayAttachment = std::make_unique<SliderAttachment>(apvts, "decay",decaySlider);
-    sustainAttachment = std::make_unique<SliderAttachment>(apvts, "sustain",sustainSlider);
-    releaseAttachment = std::make_unique<SliderAttachment>(apvts, "release",releaseSlider);
-
     // setting the sliders
-    setSliderParams(attackSlider);
-    setSliderParams(decaySlider);
-    setSliderParams(sustainSlider);
-    setSliderParams(releaseSlider);
+    setSliderParams(attackSlider,apvts,"attack",attackAttachment);
+    setSliderParams(decaySlider,apvts,"decay",decayAttachment);
+    setSliderParams(sustainSlider,apvts,"sustain",sustainAttachment);
+    setSliderParams(releaseSlider,apvts,"release",releaseAttachment);
 }
 // destructor
 AdsrComponent::~AdsrComponent()
@@ -46,9 +38,11 @@ void AdsrComponent::resized()
     releaseSlider.setBounds(sustainSlider.getRight() + padding,sliderStartY,sliderWidth,sliderHeight);
 }
 
-void AdsrComponent::setSliderParams(juce::Slider& slider)
+void AdsrComponent::setSliderParams(juce::Slider& slider,juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<Attachment>& attachment)
 {
     slider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     slider.setTextBoxStyle(juce::Slider::TextBoxBelow,true, 50, 25);
+
+    attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts,paramID,slider);
     addAndMakeVisible(slider);
 }

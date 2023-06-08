@@ -27,15 +27,10 @@ void CircBuffer::input(float value)
 // reading values and outputting them according to readhead
 float CircBuffer::output() 
 {
-    //
-
-
     // Interpolating output
     int i = (int) trunc (readHead);
     float factor = readHead - (float) i;
     return util.linearMap(factor, buffer[i], buffer[i + 1]);
-
-
 }
 
 // setting a distance between readheader and writeheader

@@ -21,7 +21,6 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
-    void setSliderParams(juce::Slider& slider);
     void updateControlData();
 
 private:

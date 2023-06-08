@@ -25,17 +25,14 @@ public:
 private:
     //==============================================================================
     // ADSR Sliders and labels for Parameter control
-    void setSliderParams(juce::Slider& slider);
+    using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    void setSliderParams(juce::Slider& slider,juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<Attachment>& attachment);
 
-
-
-    // short
-    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     // attachments for ADSR parameters
-    std::unique_ptr<SliderAttachment> attackAttachment;
-    std::unique_ptr<SliderAttachment> decayAttachment;
-    std::unique_ptr<SliderAttachment> sustainAttachment;
-    std::unique_ptr<SliderAttachment> releaseAttachment;
+    std::unique_ptr<Attachment> attackAttachment;
+    std::unique_ptr<Attachment> decayAttachment;
+    std::unique_ptr<Attachment> sustainAttachment;
+    std::unique_ptr<Attachment> releaseAttachment;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AdsrComponent)
 };
 

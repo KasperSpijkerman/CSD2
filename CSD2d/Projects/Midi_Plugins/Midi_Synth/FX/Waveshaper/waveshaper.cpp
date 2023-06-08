@@ -1,20 +1,23 @@
 // based on code from example
 #include "waveshaper.h"
 
-WaveShaper::WaveShaper() {}
+WaveShaper::WaveShaper()
+{
+    buffer = new float[bufferSize];
+    memset(buffer, 0, sizeof(buffer));
+    setDryWet(1);
+}
 
 WaveShaper::~WaveShaper() 
 {
-    delete[] buffer;
+    deleteBuffer();
 }
 
 void WaveShaper::prepareToPlay(double samplerate) 
 {
-	buffer = new float[bufferSize];
-    // setting drive
-    setDrive(10.0f);
-    // setting dry wet
-    setDryWet(1);
+    // clearing buffer
+    memset(buffer, 0, sizeof(buffer));
+
 }
 
 float WaveShaper::output(float input)
@@ -33,8 +36,6 @@ void WaveShaper::setDrive(float k)
 	{
         float x = util.mapInRange (i, 0.0f, bufferSize, -1.0f, 1.0f);
         buffer[i] = tanh (k * x) / tanh (k);
-        //formula for different distortion.
-        //atan (k * x) / atan (k);
 	}	
 }
 
@@ -47,4 +48,9 @@ void WaveShaper::updateParameters(const float drive, const float amplitude)
 {
     setDrive(drive);
     setAmplitude(amplitude);
+}
+
+void WaveShaper::deleteBuffer()
+{
+    delete[] buffer;
 }

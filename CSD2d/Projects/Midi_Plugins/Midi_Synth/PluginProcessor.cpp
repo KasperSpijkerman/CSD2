@@ -11,11 +11,38 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor() :
         apvts(*this, nullptr,"Parameters", createParameters())
 {
     // adding a sound and a voice
-    synth.addSound(new Synth_Sound());
-    synth.addVoice(new Synth_Voice());
-    synth.addVoice(new Synth_Voice());
-    synth.addVoice(new Synth_Voice());
-    synth.addVoice(new Synth_Voice());
+     synth.addSound(new Synth_Sound());
+     synth.addVoice(new Synth_Voice());
+     synth.addVoice(new Synth_Voice());
+     synth.addVoice(new Synth_Voice());
+     synth.addVoice(new Synth_Voice());
+
+     // reference to parameter IDs
+     attack = apvts.getRawParameterValue("attack");
+     decay = apvts.getRawParameterValue("decay");
+     sustain = apvts.getRawParameterValue("sustain");
+     release = apvts.getRawParameterValue("release");
+     oscWave = apvts.getRawParameterValue("oscwavetype1");
+     FMDepth = apvts.getRawParameterValue("fmdepth");
+     FMFrequency = apvts.getRawParameterValue("fmfreq");
+     filterType = apvts.getRawParameterValue("filtertype");
+     filterCutoff = apvts.getRawParameterValue("filtercutoff");
+     filterResonance = apvts.getRawParameterValue("filterresonance");
+     LFOfreq = apvts.getRawParameterValue("lfofreq");
+     LFOdepth = apvts.getRawParameterValue("lfodepth");
+     drive = apvts.getRawParameterValue("drive");
+     trim = apvts.getRawParameterValue("trim");
+     dryWetL = apvts.getRawParameterValue("drywetL");
+     dryWetR = apvts.getRawParameterValue("drywetR");
+     dryWetC = apvts.getRawParameterValue("drywetC");
+     feedbackL = apvts.getRawParameterValue("feedbackL");
+     feedbackR = apvts.getRawParameterValue("feedbackR");
+     feedbackC = apvts.getRawParameterValue("feedbackC");
+     delayTimeL = apvts.getRawParameterValue("delaytimeL");
+     delayTimeR = apvts.getRawParameterValue("delaytimeR");
+     delayTimeC = apvts.getRawParameterValue("delaytimeC");
+
+
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
@@ -110,7 +137,9 @@ void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     }
     for (WaveShaper& waveshaper : waveshapers)
     waveshaper.prepareToPlay(sampleRate);
+
     delay.lcrDelayPrepareToPlay(sampleRate);
+
 }
 
 
@@ -160,69 +189,68 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         {
             // retreiving values realtime
             // ADSR
-            auto& attack = *apvts.getRawParameterValue("attack");
-            auto& decay = *apvts.getRawParameterValue("decay");
-            auto& sustain = *apvts.getRawParameterValue("sustain");
-            auto& release = *apvts.getRawParameterValue("release");
+            auto attackNew = *attack *1.0f;
+            auto decayNew = *decay*1.0f;
+            auto sustainNew = *sustain*1.0f;
+            auto releaseNew = *release*1.0f;
 
             // OSC wavetype
-            auto& oscWave = *apvts.getRawParameterValue("oscwavetype1");
+            auto oscWaveNew = *oscWave*1.0f;
             // FM parameters, depth and frequency
-            auto& FMDepth = *apvts.getRawParameterValue("fmdepth");
-            auto& FMFrequency = *apvts.getRawParameterValue("fmfreq");
+            auto FMDepthNew = *FMDepth*1.0f;
+            auto FMFrequencyNew = *FMFrequency*1.0f;
 
             // updating the parameters
-            voice->getOscillator().setWaveType(oscWave);
-            voice->getOscillator().setFmParams(FMDepth,FMFrequency);
-            voice->updateParameters(attack.load(),decay.load(),sustain.load(),release.load());
+            voice->getOscillator().setWaveType(oscWaveNew);
+            voice->getOscillator().setFmParams(FMDepthNew,FMFrequencyNew);
+            voice->updateParameters(attackNew,decayNew,sustainNew,releaseNew);
         }
     }
     // outputting the sound by rendering next block
     synth.renderNextBlock(buffer,midiMessages,0,buffer.getNumSamples());
 
-    auto& filterType = *apvts.getRawParameterValue("filtertype");
-    auto& filterCutoff = *apvts.getRawParameterValue("filtercutoff");
-    auto& filterResonance = *apvts.getRawParameterValue("filterresonance");
-    filter.updateParameters(filterType,filterCutoff,filterResonance);
+    auto filterTypeNew = *filterType*1.0f;
+    auto filterCutoffNew = *filterCutoff*1.0f;
+    auto filterResonanceNew = *filterResonance*1.0f;
+    filter.updateParameters(filterTypeNew,filterCutoffNew,filterResonanceNew);
     // applying filter to buffer
     filter.process(buffer);
 
     // LFO updating
-    auto& LFOfreq = *apvts.getRawParameterValue("lfofreq");
-    auto& LFOdepth = *apvts.getRawParameterValue("lfodepth");
+    auto LFOfreqNew = *LFOfreq*1.0f;
+    auto LFOdepthNew = *LFOdepth*1.0f;
 
     for (Tremolo& tremolo : tremolos)
     {
-        tremolo.updateParameters(LFOfreq,LFOdepth);
+        tremolo.updateParameters(LFOfreqNew,LFOdepthNew);
     }
-    // waveshaper updating
-    //TODO Make a different function to work with make up gain instead of amplitude
-    auto& drive = *apvts.getRawParameterValue("drive");
-    auto& trim = *apvts.getRawParameterValue("trim");
+    // Waveshaper Updating
+    auto driveNew = *drive*1.0f;
+    auto trimNew = *trim*1.0f;
 
     for (WaveShaper& waveShaper : waveshapers){
-        waveShaper.updateParameters(drive,trim);
+        waveShaper.updateParameters(driveNew,trimNew);
     }
 
     // retrieving delay parameters
-    auto& dryWetL = *apvts.getRawParameterValue("drywetL");
-    auto& dryWetR = *apvts.getRawParameterValue("drywetR");
-    auto& dryWetC = *apvts.getRawParameterValue("drywetC");
-    auto& feedbackL = *apvts.getRawParameterValue("feedbackL");
-    auto& feedbackR = *apvts.getRawParameterValue("feedbackR");
-    auto& feedbackC = *apvts.getRawParameterValue("feedbackC");
-    auto& delayTimeL = *apvts.getRawParameterValue("delaytimeL");
-    auto& delayTimeR = *apvts.getRawParameterValue("delaytimeR");
-    auto& delayTimeC = *apvts.getRawParameterValue("delaytimeC");
+    auto dryWetLNew = *dryWetL *1.0f;
+    auto dryWetRNew = *dryWetR *1.0f;
+    auto dryWetCNew = *dryWetC*1.0f;
+    auto feedbackLNew = *feedbackL*1.0f;
+    auto feedbackRNew = *feedbackR*1.0f;
+    auto feedbackCNew = *feedbackC*1.0f;
+    auto delayTimeLNew = *delayTimeL*1.0f;
+    auto delayTimeRNew = *delayTimeR*1.0f;
+    auto delayTimeCNew = *delayTimeC*1.0f;
     //
-    delay.changeDelayLine(0,delayTimeL,feedbackL,dryWetL);
-    delay.changeDelayLine(1,delayTimeR,feedbackR,dryWetR);
-    delay.changeDelayLine(2,delayTimeC,feedbackC,dryWetC);
+    delay.changeDelayLine(0,delayTimeLNew,feedbackLNew,dryWetLNew);
+    delay.changeDelayLine(1,delayTimeRNew,feedbackRNew,dryWetRNew);
+    delay.changeDelayLine(2,delayTimeCNew,feedbackCNew,dryWetCNew);
 
     // process the audio with FX
     for(int sample = 0; sample < buffer.getNumSamples(); ++sample)
     {
-        for (int channel = 0; channel < 2; ++channel) {
+        for (int channel = 0; channel < buffer.getNumChannels(); ++channel) {
             auto* channelData = buffer.getWritePointer (channel);
             channelData[sample] = delay.lcrDelayOutput(buffer.getSample(channel, sample), channel);
             channelData[sample] = tremolos[channel].output(waveshapers[channel].output(buffer.getSample(channel, sample)));
@@ -246,17 +274,18 @@ juce::AudioProcessorEditor* AudioPluginAudioProcessor::createEditor()
 //==============================================================================
 void AudioPluginAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
-    juce::ignoreUnused (destData);
+    auto state = apvts.copyState();
+    std::unique_ptr<juce::XmlElement> xml (state.createXml());
+    copyXmlToBinary (*xml, destData);
 }
 
 void AudioPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
-    juce::ignoreUnused (data, sizeInBytes);
+    std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName (apvts.state.getType()))
+            apvts.replaceState (juce::ValueTree::fromXml (*xmlState));
 }
 
 //==============================================================================
@@ -269,9 +298,9 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameters()
 {
+
     // vector for all parameters
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
-
     // FM parameters
 
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"fmfreq",1}, "FM Freq", juce::NormalisableRange<float>{0.0f, 1000.0f,0.01f,0.3f},5.0f));

@@ -13,6 +13,7 @@ public:
 
     float output (float input);
     void prepareToPlay(double samplerate);
+    void deleteBuffer();
     
     // setters 
     void setDrive (float k);
@@ -24,5 +25,6 @@ private:
     float* buffer;
     Util util;
     float amplitude{1.0f};
+
 
 };

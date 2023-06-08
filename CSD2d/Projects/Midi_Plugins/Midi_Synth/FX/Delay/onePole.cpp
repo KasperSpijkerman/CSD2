@@ -2,17 +2,20 @@
 
 class OnePole{
 public:
-    OnePole(){
-        std::cout << "OnePole" << std::endl;
+    OnePole()
+    {
+        setCoefficient(0.98);
     }
 
-    float output(float input){
+    float output(float input)
+    {
         float output = input * b + y1 * a;
         y1 = output;
         return output;
     }
 
-    void setCoefficient(float coefficient){
+    void setCoefficient(float coefficient)
+    {
         a = coefficient;
         b = 1.0f - a;
     }
