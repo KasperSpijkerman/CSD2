@@ -177,18 +177,13 @@ void ControlComponent::changeFilter(juce::AudioProcessorValueTreeState& apvts, j
 void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
                                    juce::Slider& slider1,
                                    juce::Slider& slider2,
-                                   juce::Slider& slider3,
-                                   juce::Slider& slider4,
-                                   juce::Slider& slider5,
-                                   juce::Slider& slider6)
+                                   juce::Slider& slider3)
 {
     // retrieving current parameter values
     auto& drywetLnew = *apvts.getRawParameterValue("drywetL");
     auto& drywetRnew = *apvts.getRawParameterValue("drywetR");
     auto& drywetCnew = *apvts.getRawParameterValue("drywetC");
-    auto& delaytimeLnew = *apvts.getRawParameterValue("delaytimeL");
-    auto& delaytimeRnew = *apvts.getRawParameterValue("delaytimeR");
-    auto& delaytimeCnew = *apvts.getRawParameterValue("delaytimeC");
+
     // making sure parameters don't go out of range.
 
 
@@ -199,25 +194,14 @@ void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
                 drywetLnew = drywetLnew - stepCondDW;
                 drywetRnew = drywetRnew - stepCondDW;
                 drywetCnew = drywetCnew - stepCondDW;
-
                 protectRange(0,1,drywetLnew);
                 protectRange(0,1,drywetCnew);
                 protectRange(0,1,drywetRnew);
-
-                delaytimeLnew = delaytimeLnew - stepCondDT*0.78903467530;
-                delaytimeRnew = delaytimeRnew - stepCondDT*0.835469835476;
-                delaytimeCnew = delaytimeCnew - stepCondDT*1.374689743;
-
-                protectRange(0,3000,drywetLnew);
-                protectRange(0,3000,drywetCnew);
-                protectRange(0,3000,drywetRnew);
                 // updating the slider values
                 slider1.setValue(drywetLnew);
                 slider2.setValue(drywetRnew);
                 slider3.setValue(drywetCnew);
-                slider4.setValue(delaytimeLnew);
-                slider5.setValue(delaytimeRnew);
-                slider6.setValue(delaytimeCnew);
+
 
             };
     spaciousTextButton.onClick = [&]()
@@ -228,34 +212,24 @@ void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
                 drywetLnew = drywetLnew + stepSpacDW;
                 drywetRnew = drywetRnew + stepSpacDW;
                 drywetCnew = drywetCnew + stepSpacDW;
-
-                protectRange(0,3000,drywetLnew);
-                protectRange(0,3000,drywetCnew);
-                protectRange(0,3000,drywetRnew);
-                // adjusting delay time
-                delaytimeLnew = delaytimeLnew + stepSpacDT*0.92385637;
-                delaytimeRnew = delaytimeRnew + stepSpacDT*0.890567985;
-                delaytimeCnew = delaytimeCnew + stepSpacDT*1.32572946;
-
-                protectRange(0,3000,drywetLnew);
-                protectRange(0,3000,drywetCnew);
-                protectRange(0,3000,drywetRnew);
+                protectRange(0,1,drywetLnew);
+                protectRange(0,1,drywetCnew);
+                protectRange(0,1,drywetRnew);
                 // setting sliders
                 slider1.setValue(drywetLnew);
                 slider2.setValue(drywetRnew);
                 slider3.setValue(drywetCnew);
-                slider4.setValue(delaytimeLnew);
-                slider5.setValue(delaytimeRnew);
-                slider6.setValue(delaytimeCnew);
+
 
             };
 }
 // Algorithm for changing the predictablity
-void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider1,juce::Slider& slider2,juce::Slider& slider3)
+void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider1,juce::Slider& slider2,juce::Slider& slider3,juce::Slider& slider4)
 {
     auto& fmDepthNew = *apvts.getRawParameterValue("fmdepth");
     auto& fmSpeedNew = *apvts.getRawParameterValue("fmfreq");
     auto& resNew = *apvts.getRawParameterValue("filterresonance");
+    auto& amDepthNew = *apvts.getRawParameterValue("lfodepth");
 
     predictableTextButton.onClick = [&]()
     {
@@ -263,15 +237,26 @@ void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, 
         stepExp = 0.5;
         fmDepthNew = fmDepthNew - stepPred*0.890780568956;
         fmSpeedNew = fmSpeedNew - stepPred*0.76249634987;
+        amDepthNew = amDepthNew - stepPredamDepth ;
+        if (fmDepthNew >= 150)
+        {
+            stepPredamDepth = 0;
+        }
+        else
+        {
+            stepPredamDepth = 0.1;
+        }
         resNew = resNew - stepRes;
         counterPred ++;
         stepPred +=0.5;
         protectRange(0,1000,fmDepthNew);
         protectRange(0,1000,fmSpeedNew);
         protectRange(1,3,resNew);
+        protectRange(0,1,amDepthNew);
         slider1.setValue(fmDepthNew);
         slider2.setValue(fmSpeedNew);
         slider3.setValue(resNew);
+        slider4.setValue(amDepthNew);
 
     };
     experimentalTextButton.onClick = [&]()
@@ -279,6 +264,7 @@ void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, 
         counterPred = 0;
         stepPred = 0.5f;
         counterExp ++;
+        amDepthNew = amDepthNew + stepFastAmd ;
         fmDepthNew = fmDepthNew + stepExp*0.67852547957;
         fmSpeedNew = fmSpeedNew + stepExp*0.5639;
         resNew = resNew + stepRes;
@@ -286,49 +272,54 @@ void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, 
         protectRange(0,1000,fmDepthNew);
         protectRange(0,1000,fmSpeedNew);
         protectRange(1,3,resNew);
+        protectRange(0,1,amDepthNew);
         slider1.setValue(fmDepthNew);
         slider2.setValue(fmSpeedNew);
         slider3.setValue(resNew);
+        slider4.setValue(amDepthNew);
     };
 }
 
 // Algorithm for changing the predictablity
-void ControlComponent::changeSpeed(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider1,juce::Slider& slider2,juce::Slider& slider3)
+void ControlComponent::changeSpeed(juce::AudioProcessorValueTreeState& apvts,juce::Slider& slider2,juce::Slider& slider3,juce::Slider& slider4)
 {
-    auto& amDepthNew = *apvts.getRawParameterValue("lfodepth");
     auto& amSpeedNew = *apvts.getRawParameterValue("lfofreq");
     auto& attackNew = *apvts.getRawParameterValue("attack");
-    protectRange(0,1,amDepthNew);
-    protectRange(0,60,amSpeedNew);
-    protectRange(0,1,attackNew);
+    auto& amDepthNew = *apvts.getRawParameterValue("lfodepth");
+
     fastTextButton.onClick = [&]()
     {
-        counterSlow = 0;
+        if (amDepthNew == 0)
+        {
+           amDepthNew = 0.3;
+        }
+        counterSlow = 1;
         stepSlowAmf = 0.5f;
         stepSlowAtt = 0.1f;
-        amDepthNew = amDepthNew + stepFastAmd ;
-        amSpeedNew = amDepthNew + stepFastAmf;
-        attackNew = attackNew - 0.1;
+        amSpeedNew = amSpeedNew + stepFastAmf*(counterFast/2);
+        attackNew = attackNew - 0.005;
         counterFast ++;
         stepFastAtt +=0.1f;
         stepFastAmf += 0.5f;
-        slider1.setValue(amDepthNew);
+        protectRange(0,60,amSpeedNew);
+        protectRange(0,1,attackNew);
         slider2.setValue(amSpeedNew);
         slider3.setValue(attackNew);
+        slider4.setValue(amDepthNew);
     };
     slowTextButton.onClick = [&]()
     {
-        counterFast = 0;
+        counterFast = 1;
         stepFastAmf = 0.5;
         stepFastAmd = 0.1;
         stepFastAtt = 0.1f;
-        amDepthNew = amDepthNew - stepFastAmd ;
-        amSpeedNew = amDepthNew - stepFastAmf;
-        attackNew = attackNew + 0.1;
+        amSpeedNew = amSpeedNew - stepFastAmf*(counterSlow/2);
+        attackNew = attackNew + 0.005;
         counterSlow ++;
         stepSlowAtt += 0.5f;
         stepSlowAmf += 0.1f;
-        slider1.setValue(amDepthNew);
+        protectRange(0,60,amSpeedNew);
+        protectRange(0,1,attackNew);
         slider2.setValue(amSpeedNew);
         slider3.setValue(attackNew);
     };
@@ -339,28 +330,21 @@ void ControlComponent::changeTexture(juce::AudioProcessorValueTreeState& apvts, 
 {
     auto& driveNew  = *apvts.getRawParameterValue("drive");
     auto& trimNew  = *apvts.getRawParameterValue("trim");
-    protectRange(1,100,driveNew);
-    protectRange(0.01,1.0,trimNew);
+
 
     roughTextButton.onClick = [&]()
     {
-        // the first few switches in drive give a lot of volume so a bigger trim value is used
-        if (driveStageHigh == true)
-        {
-            if(driveNew < 6)
-            {
-                driveStageHigh = false;
-                stepRoughtrim = {0.1};
-            }
-            // after 6 it will make smaller steps
-            else if (driveStageHigh == false)
-            {
-                stepRoughtrim -= 0.05;
-                driveStageHigh = true;
-            }
-        }
 
-        counterSmooth = 0;
+        if(driveNew < 6)
+        {
+            stepRoughtrim = {0.1};
+        }
+        // after 6 it will make smaller steps
+        else
+        {
+            stepRoughtrim = 0.05;
+        }
+        counterSmooth = 2;
         stepSmoothDr = 0.5;
         stepSmoothtrim = 0.05;
         driveNew = driveNew + stepRoughDr;
@@ -368,12 +352,23 @@ void ControlComponent::changeTexture(juce::AudioProcessorValueTreeState& apvts, 
         counterRough ++;
         stepRoughDr +=0.5f;
         stepRoughtrim += 0.005f;
+        protectRange(1,100,driveNew);
+        protectRange(0.2,1.0,trimNew);
         slider1.setValue(driveNew);
         slider2.setValue(trimNew);
 
     };
     smoothTextButton.onClick = [&]()
     {
+        if(driveNew >= 20)
+        {
+            stepSmoothtrim = {0.005};
+        }
+        else
+        {
+            stepSmoothtrim = 0.1;
+        }
+
         counterRough = 0;
         stepRoughDr = 0.005;
         stepRoughtrim = 0.1;
@@ -382,6 +377,8 @@ void ControlComponent::changeTexture(juce::AudioProcessorValueTreeState& apvts, 
         trimNew = trimNew + stepSmoothtrim;
         stepSmoothDr += 0.5;
         stepSmoothtrim +=0.005f;
+        protectRange(1,100,driveNew);
+        protectRange(0.2,1.0,trimNew);
         slider1.setValue(driveNew);
         slider2.setValue(trimNew);
     };
@@ -391,16 +388,20 @@ void ControlComponent::changeLength(juce::AudioProcessorValueTreeState& apvts,
                                     juce::Slider& slider1,
                                     juce::Slider& slider2,
                                     juce::Slider& slider3,
-                                    juce::Slider& slider4)
+                                    juce::Slider& slider4,
+                                    juce::Slider& slider5,
+                                    juce::Slider& slider6,
+                                    juce::Slider& slider7)
 {
     auto& releaseNew  = *apvts.getRawParameterValue("release");
     auto& feedbackLNew  = *apvts.getRawParameterValue("feedbackL");
     auto& feedbackRNew  = *apvts.getRawParameterValue("feedbackR");
     auto& feedbackCNew  = *apvts.getRawParameterValue("feedbackC");
+    auto& delaytimeLnew = *apvts.getRawParameterValue("delaytimeL");
+    auto& delaytimeRnew = *apvts.getRawParameterValue("delaytimeR");
+    auto& delaytimeCnew = *apvts.getRawParameterValue("delaytimeC");
     protectRange(0,3,releaseNew);
-    protectRange(0,1,feedbackLNew);
-    protectRange(0,1,feedbackRNew);
-    protectRange(0,1,feedbackCNew);
+
     shortTextButton.onClick = [&]()
     {
         counterLong = 0;
@@ -411,12 +412,24 @@ void ControlComponent::changeLength(juce::AudioProcessorValueTreeState& apvts,
         feedbackLNew = feedbackLNew - stepShortFb*0.82094567;
         feedbackRNew = feedbackRNew - stepShortFb*0.66724569;
         feedbackCNew = feedbackCNew - stepShortFb*0.74587934567;
-        stepShortFb += 0.05;
+        stepShortFb += 0.005;
         stepShortR +=0.005f;
+
+        // adjusting delay time
+        delaytimeLnew = delaytimeLnew - counterShort*10.92385637;
+        delaytimeRnew = delaytimeRnew - counterShort*10.890567985;
+        delaytimeCnew = delaytimeCnew - counterShort*10.32572946;
+
+        protectRange(0,3000,delaytimeLnew);
+        protectRange(0,3000,delaytimeCnew);
+        protectRange(0,3000,delaytimeRnew);
         slider1.setValue(releaseNew);
         slider2.setValue(feedbackLNew);
         slider3.setValue(feedbackRNew);
         slider4.setValue(feedbackCNew);
+        slider5.setValue(delaytimeLnew);
+        slider6.setValue(delaytimeRnew);
+        slider7.setValue(delaytimeCnew);
 
     };
     longTextButton.onClick = [&]()
@@ -429,11 +442,37 @@ void ControlComponent::changeLength(juce::AudioProcessorValueTreeState& apvts,
         feedbackLNew = feedbackLNew + stepLongFb*0.987673342;
         feedbackRNew = feedbackRNew + stepLongFb*0.789834;
         feedbackCNew = feedbackCNew + stepLongFb*0.674634596;
-        stepLongFb += 0.05;
+
+        if (counterLong <= 30)
+        {
+            protectRange(0,0.75,feedbackLNew);
+            protectRange(0,0.75,feedbackRNew);
+            protectRange(0,0.75,feedbackCNew);
+        }
+        else
+        {
+            protectRange(0,1,feedbackLNew);
+            protectRange(0,1,feedbackRNew);
+            protectRange(0,1,feedbackCNew);
+        }
+
+
+        // adjusting delay time
+        delaytimeLnew = delaytimeLnew + counterLong*5.92385637;
+        delaytimeRnew = delaytimeRnew + counterLong*5.890567985;
+        delaytimeCnew = delaytimeCnew + counterLong*5.32572946;
+
+        protectRange(0,3000,delaytimeLnew);
+        protectRange(0,3000,delaytimeCnew);
+        protectRange(0,3000,delaytimeRnew);
+        stepLongFb += 0.005;
         stepLongR += 0.005f;
         slider1.setValue(releaseNew);
         slider2.setValue(feedbackLNew);
         slider3.setValue(feedbackRNew);
         slider4.setValue(feedbackCNew);
+        slider5.setValue(delaytimeLnew);
+        slider6.setValue(delaytimeRnew);
+        slider7.setValue(delaytimeCnew);
     };
 }

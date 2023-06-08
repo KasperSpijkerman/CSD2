@@ -19,6 +19,8 @@ public:
     // setters
     void setDistance (float distance);
     void setSize(uint size);
+    float sinc(float x);
+    float sincInterpolation(float x, float y0, float y1, float y2, float y3);
 
 
 protected:
@@ -36,4 +38,5 @@ protected:
     uint writeHead { 0 };
     // float of readhead so it can interpolate
     float readHead { 0 };
+    float previousReadHead;
 };

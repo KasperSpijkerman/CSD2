@@ -7,10 +7,10 @@
 // short 
 using namespace std;
 
-CircBuffer::CircBuffer(uint size) : buffer(new float[size]), currentSize(size)
+CircBuffer::CircBuffer(uint size) : buffer(new float[size]), currentSize(size),previousReadHead(0.0f)
 {
     // setting all values to zero in the buffer.
-    memset(buffer, 0, sizeof(buffer));
+    memset(buffer, 0, sizeof(float) * currentSize);
 }
 
 CircBuffer::~CircBuffer()
@@ -24,13 +24,20 @@ void CircBuffer::input(float value)
     buffer[writeHead] = value;   
 }
 
+
+
+
 // reading values and outputting them according to readhead
 float CircBuffer::output() 
 {
-    // Interpolating output
-    int i = (int) trunc (readHead);
-    float factor = readHead - (float) i;
-    return util.linearMap(factor, buffer[i], buffer[i + 1]);
+    int index0 = static_cast<int>(readHead);
+    int index1 = (index0 + 1) % currentSize;
+    float fraction = readHead - static_cast<float>(index0);
+
+    // Perform linear interpolation between adjacent samples
+    float interpolatedSample = util.linearMap(fraction, buffer[index0], buffer[index1]);
+    return interpolatedSample;
+
 }
 
 // setting a distance between readheader and writeheader

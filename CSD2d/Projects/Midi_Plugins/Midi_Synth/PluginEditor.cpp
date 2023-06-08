@@ -10,7 +10,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     filter(audioProcessor.apvts, "filtertype", "filtercutoff", "filterresonance"),
     LFO(audioProcessor.apvts,"lfofreq","lfodepth"),
     shaper(audioProcessor.apvts,"drive","trim"),
-    control(audioProcessor.apvts,"Light","Dark","Condensed","Atmospheric","Predictable","Experimental","Fast","Slow","Rough","Smooth","Short", "Long"),
+    control(audioProcessor.apvts,"Lighter","Darker","Closer","Spacier","Earthlier","Weirder","Faster","Slower","Rougher","Smoother","Shorter", "Longer"),
     delay(audioProcessor.apvts,"drywetL","drywetR","drywetC","feedbackL","feedbackR","feedbackC","delaytimeL","delaytimeR","delaytimeC")
 
 {
@@ -22,7 +22,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     addAndMakeVisible(shaper);
     addAndMakeVisible(control);
     addAndMakeVisible(delay);
-    startTimer(10);
+    startTimer(1);
 
 }
 
@@ -74,20 +74,18 @@ void AudioPluginAudioProcessorEditor::updateControlData()
     control.changeSpace(audioProcessor.apvts,
                         delay.drywetLSlider,
                         delay.drywetRSlider,
-                        delay.drywetCSlider,
-                        delay.delayTimeLSlider,
-                        delay.delayTimeRSlider,
-                        delay.delayTimeCSlider);
+                        delay.drywetCSlider);
     // changing FM params and Resonance
     control.changePredict(audioProcessor.apvts,
                           osc.fmDepthSlider,
                           osc.fmFreqSlider,
-                          filter.filterResonanceSlider);
+                          filter.filterResonanceSlider,
+                          LFO.LFODepthSlider);
     // changing AM and Attack time
     control.changeSpeed(audioProcessor.apvts,
-                        LFO.LFODepthSlider,
                         LFO.LFOFreqSlider,
-                        adsr.attackSlider);
+                        adsr.attackSlider,
+                        LFO.LFODepthSlider);
     // changing Drive and trim
     control.changeTexture(audioProcessor.apvts,
                           shaper.ShaperDriveSlider,
@@ -96,7 +94,10 @@ void AudioPluginAudioProcessorEditor::updateControlData()
                          adsr.releaseSlider,
                          delay.feedbackLSlider,
                          delay.feedbackRSlider,
-                         delay.feedbackCSlider);
+                         delay.feedbackCSlider,
+                         delay.delayTimeLSlider,
+                         delay.delayTimeRSlider,
+                         delay.delayTimeCSlider);
 }
 
 void AudioPluginAudioProcessorEditor::timerCallback()

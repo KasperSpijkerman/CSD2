@@ -28,18 +28,16 @@ public:
     void changeSpace(juce::AudioProcessorValueTreeState& apvts,
                      juce::Slider& slider1,
                      juce::Slider& slider2,
-                     juce::Slider& slider3,
-                     juce::Slider& slider4,
-                     juce::Slider& slider5,
-                     juce::Slider& slider6);
+                     juce::Slider& slider3);
     void changePredict(juce::AudioProcessorValueTreeState& apvts,
                        juce::Slider& slider1,
                        juce::Slider& slider2,
-                       juce::Slider& slider3);
+                       juce::Slider& slider3,
+                       juce::Slider& slider4);
     void changeSpeed(juce::AudioProcessorValueTreeState& apvts,
-                     juce::Slider& slider1,
                      juce::Slider& slider2,
-                     juce::Slider& slider3);
+                     juce::Slider& slider3,
+                     juce::Slider& slider4);
     void changeTexture(juce::AudioProcessorValueTreeState& apvts,
                        juce::Slider& slider1,
                        juce::Slider& slider2);
@@ -47,7 +45,10 @@ public:
                        juce::Slider& slider1,
                        juce::Slider& slider2,
                        juce::Slider& slider3,
-                       juce::Slider& slider4);
+                       juce::Slider& slider4,
+                       juce::Slider& slider5,
+                       juce::Slider& slider6,
+                       juce::Slider& slider7);
 private:
     // buttons for different opposites
     juce::TextButton LightTextButton;
@@ -111,7 +112,7 @@ private:
     float stepShortFb {0.05};
     float stepLongR {0.05};
     float stepLongFb {0.05};
-    bool driveStageHigh {true};
+    float stepPredamDepth{0.1};
 
 
     void createButton (juce::TextButton& button, juce::AudioProcessorValueTreeState& apvts, juce::String paramID);
