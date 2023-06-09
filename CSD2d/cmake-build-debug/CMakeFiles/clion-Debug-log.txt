@@ -1,7 +1,0 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S /Volumes/SSD_Kasper/HKU/Jaar_2/CSD2/CSD2d -B /Volumes/SSD_Kasper/HKU/Jaar_2/CSD2/CSD2d/cmake-build-debug
--- Configuring juceaide
--- Building juceaide
--- Exporting juceaide
--- Configuring done
--- Generating done
--- Build files have been written to: /Volumes/SSD_Kasper/HKU/Jaar_2/CSD2/CSD2d/cmake-build-debug
