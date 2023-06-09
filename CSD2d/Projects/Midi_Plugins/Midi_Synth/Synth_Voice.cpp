@@ -7,6 +7,7 @@ bool Synth_Voice::canPlaySound (SynthesiserSound * sound)
 }
 void Synth_Voice::startNote (int midiNoteNumber, float velocity, SynthesiserSound *sound, int currentPitchWheelPosition)
 {
+    ignoreUnused(velocity), ignoreUnused(*sound), ignoreUnused(currentPitchWheelPosition);
     // pass the midinote and activate note on from the ADSR
     osc.setWaveFrequency(midiNoteNumber,1);
     adsr.noteOn();
@@ -15,6 +16,7 @@ void Synth_Voice::startNote (int midiNoteNumber, float velocity, SynthesiserSoun
 }
 void Synth_Voice::stopNote (float velocity, bool allowTailOff)
 {
+    ignoreUnused(velocity);
     adsr.noteOff();
 
     if (! allowTailOff || ! adsr.isActive())
@@ -25,14 +27,14 @@ void Synth_Voice::stopNote (float velocity, bool allowTailOff)
 }
 void Synth_Voice::controllerMoved (int controllerNumber, int newControllerValue)
 {
-
+    ignoreUnused(controllerNumber), ignoreUnused(newControllerValue);
 }
 
 
 
 void Synth_Voice::pitchWheelMoved (int newPitchWheelValue)
 {
-
+    ignoreUnused(newPitchWheelValue);
 }
 
 void Synth_Voice::updateParameters(const float attack, const float decay, const float sustain, const float release)
@@ -45,9 +47,9 @@ void Synth_Voice::prepareToPlay(double sampleRate, int samplesPerBlock, int outp
     adsr.setSampleRate(sampleRate);
 
     juce::dsp::ProcessSpec spec;
-    spec.maximumBlockSize = samplesPerBlock;
+    spec.maximumBlockSize = static_cast<uint32>(samplesPerBlock);
     spec.sampleRate = sampleRate;
-    spec.numChannels = outputChannels;
+    spec.numChannels = static_cast<uint32>(outputChannels);
     osc.prepareToPlay(spec);
     gain.prepare (spec);
     gain.setGainLinear (0.05f);

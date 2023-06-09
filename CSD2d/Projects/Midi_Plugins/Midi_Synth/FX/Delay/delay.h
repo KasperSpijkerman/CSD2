@@ -7,7 +7,7 @@ public:
 	Delay();
 	~Delay();
 
-    float output(float input) ;
+    float output(float input) override ;
 	void prepareToPlay(double samplerate) override;
 	// function for converting miliseconds to samples 
 	float msToSamp(float ms, double samplerate);

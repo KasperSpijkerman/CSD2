@@ -1,7 +1,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-
+#include "myLookAndFeel.h"
 class ShaperComponent : public juce::Component
 {
 public:
@@ -20,7 +20,7 @@ private:
     juce::Label ShaperTrimlabel {"ShaperTrim", "Trim"};
     std::unique_ptr<Attachment> ShaperDriveAttachment;
     std::unique_ptr<Attachment> ShaperTrimAttachment;
-
+    myLookAndFeelV1 drivetrimknob;
     void setSliderWithLabel (juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<Attachment>& attachment);
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ShaperComponent)
 };

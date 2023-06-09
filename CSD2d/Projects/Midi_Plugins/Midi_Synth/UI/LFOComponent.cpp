@@ -2,12 +2,16 @@
 
 //constructor
 LFOComponent::LFOComponent(juce::AudioProcessorValueTreeState& apvts, juce::String LFOFreqId, juce::String LFODepthId)
+:
+        lfofreqknob("knobblue.png"),
+        lfodepthknob("knobblue.png")
 {
 
     // making sliders, linking labels, setting text and colour in a function
     setSliderWithLabel(LFOFreqSlider,LFOFreqlabel,apvts,LFOFreqId,LFOFreqAttachment);
     setSliderWithLabel(LFODepthSlider,LFODepthlabel,apvts,LFODepthId,LFODepthAttachment);
-
+    LFOFreqSlider.setLookAndFeel(&lfofreqknob);
+    LFODepthSlider.setLookAndFeel(&lfodepthknob);
 }
 // destructor
 LFOComponent::~LFOComponent()
@@ -36,22 +40,5 @@ void LFOComponent::resized()
 
     LFODepthSlider.setBounds(LFOFreqSlider.getRight(),sliderPosY,sliderWidth,sliderHeigth);
     LFODepthlabel.setBounds(LFODepthSlider.getX(),LFODepthSlider.getY()-labelYOffset,LFODepthSlider.getWidth(),labelHeight);
-
-}
-using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-void LFOComponent::setSliderWithLabel (juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<Attachment>& attachment)
-{
-    // Slider style, textbox and making visible
-    slider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    slider.setTextBoxStyle(juce::Slider::TextBoxBelow, true,50,25);
-    addAndMakeVisible(slider);
-
-    attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts,paramID,slider);
-
-    // creating the label, textfont, and colour.
-    label.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
-    label.setFont(15.0f);
-    label.setJustificationType(juce::Justification::centred);
-    addAndMakeVisible(label);
 
 }

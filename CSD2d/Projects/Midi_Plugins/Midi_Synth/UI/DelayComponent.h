@@ -1,8 +1,9 @@
 #pragma once
 
 #include <JuceHeader.h>
-
-class DelayComponent : public juce::Component
+#include "GeneralComponent.h"
+#include "myLookAndFeel.h"
+class DelayComponent : public GeneralComponent
 {
 public:
     DelayComponent(juce::AudioProcessorValueTreeState& apvts,
@@ -59,11 +60,8 @@ public:
     juce::Label  delayTimeCLabel{"delaytimeC", "Delay time C"};
     std::unique_ptr<Attachment> delayTimeCSliderAttachment;
 private:
-
-
-
-
-    void setSliderWithLabel (juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<Attachment>& attachment);
+    myLookAndFeelV1 delayknobs;
+    myLookAndFeelV1 delayknobsDT;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DelayComponent)
 };
 

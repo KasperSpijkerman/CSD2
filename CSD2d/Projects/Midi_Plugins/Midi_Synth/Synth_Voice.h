@@ -18,7 +18,7 @@ public:
     // function updatind ADSR
     void updateParameters(const float attack, const float decay, const float sustain, const float release);
     // returning oscillator object
-    OscData& getOscillator() { return osc; };
+    OscData& getOscillator() { return osc; }
 
 
 

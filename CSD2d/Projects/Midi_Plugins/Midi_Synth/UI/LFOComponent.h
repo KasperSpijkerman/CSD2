@@ -1,8 +1,9 @@
 #pragma once
 
 #include <JuceHeader.h>
-
-class LFOComponent : public juce::Component
+#include "GeneralComponent.h"
+#include "myLookAndFeel.h"
+class LFOComponent : public GeneralComponent
 {
 public:
     LFOComponent(juce::AudioProcessorValueTreeState& apvts, juce::String LFOFreqId, juce::String LFODepthId);
@@ -20,8 +21,8 @@ private:
     juce::Label LFODepthlabel {"LFODepth", "Depth"};
     std::unique_ptr<Attachment> LFOFreqAttachment;
     std::unique_ptr<Attachment> LFODepthAttachment;
-
-    void setSliderWithLabel (juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<Attachment>& attachment);
+    myLookAndFeelV1 lfofreqknob;
+    myLookAndFeelV1 lfodepthknob;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LFOComponent)
 };
 

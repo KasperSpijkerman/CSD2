@@ -2,6 +2,8 @@
 
 //constructor
 OscComponent::OscComponent(juce::AudioProcessorValueTreeState& apvts, juce::String wavetypeID, juce::String fmFreqId, juce::String fmDepthId)
+:
+        fmknobs("knobblue.png")
 {
     juce::StringArray choices {"Sine","Saw", "Square"};
     oscWaveSelector.addItemList(choices,1);
@@ -11,7 +13,8 @@ OscComponent::OscComponent(juce::AudioProcessorValueTreeState& apvts, juce::Stri
     // making sliders, linking labels, setting text and colour in a function
     setSliderWithLabel(fmFreqSlider,fmFreqlabel,apvts,fmFreqId,fmFreqAttachment);
     setSliderWithLabel(fmDepthSlider,fmDepthlabel,apvts,fmDepthId,fmdepthAttachment);
-
+    fmFreqSlider.setLookAndFeel(&fmknobs);
+    fmDepthSlider.setLookAndFeel(&fmknobs);
 }
 // destructor
 OscComponent::~OscComponent()
@@ -42,22 +45,5 @@ void OscComponent::resized()
 
     fmDepthSlider.setBounds(fmFreqSlider.getRight(),sliderPosY,sliderWidth,sliderHeigth);
     fmDepthlabel.setBounds(fmDepthSlider.getX(),fmDepthSlider.getY()-labelYOffset,fmDepthSlider.getWidth(),labelHeight);
-
-}
-using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-void OscComponent::setSliderWithLabel (juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<Attachment>& attachment)
-{
-    // Slider style, textbox and making visible
-    slider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    slider.setTextBoxStyle(juce::Slider::TextBoxBelow, true,50,25);
-    addAndMakeVisible(slider);
-
-    attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts,paramID,slider);
-
-    // creating the label, textfont, and colour.
-    label.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
-    label.setFont(15.0f);
-    label.setJustificationType(juce::Justification::centred);
-    addAndMakeVisible(label);
 
 }

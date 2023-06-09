@@ -2,6 +2,9 @@
 
 //constructor
 FilterComponent::FilterComponent(juce::AudioProcessorValueTreeState& apvts, juce::String filterTypeID, juce::String filterCutoffId, juce::String filterResonanceId)
+:
+filterknob("knobgreenorange.png"),
+resknob("knobpurple.png")
 {
     juce::StringArray choices {"Lowpass","Bandpass", "Highpass"};
     filterTypeSelector.addItemList(choices,1);
@@ -11,7 +14,8 @@ FilterComponent::FilterComponent(juce::AudioProcessorValueTreeState& apvts, juce
     // making sliders, linking labels, setting text and colour in a function
     setSliderWithLabel(filterCutoffSlider,filterCutofflabel,apvts,filterCutoffId,filterCutoffAttachment);
     setSliderWithLabel(filterResonanceSlider,filterResonancelabel,apvts,filterResonanceId,filterResonanceAttachment);
-
+    filterCutoffSlider.setLookAndFeel(&filterknob);
+    filterResonanceSlider.setLookAndFeel(&resknob);
 }
 // destructor
 FilterComponent::~FilterComponent()
@@ -27,8 +31,7 @@ g.fillAll(juce::Colours::purple);
     g.drawFittedText ("Filter", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 // layout slider positions
-void FilterComponent::resized()
-{
+void FilterComponent::resized() {
     // creating variables to make it easier to read and adjust everything all at once.
     const auto sliderPosY = 100;
     const auto sliderWidth = 100;
@@ -36,30 +39,14 @@ void FilterComponent::resized()
     const auto labelYOffset = 20;
     const auto labelHeight = 20;
     // setting positions of sliders and labels
-    filterTypeSelector.setBounds(0,50,90,20);
+    filterTypeSelector.setBounds(0, 50, 90, 20);
 
-    filterCutoffSlider.setBounds(0,sliderPosY,sliderWidth,sliderHeigth);
-    filterCutofflabel.setBounds(filterCutoffSlider.getX(),filterCutoffSlider.getY()- labelYOffset,filterCutoffSlider.getWidth(),labelHeight);
+    filterCutoffSlider.setBounds(0, sliderPosY, sliderWidth, sliderHeigth);
+    filterCutofflabel.setBounds(filterCutoffSlider.getX(), filterCutoffSlider.getY() - labelYOffset,
+                                filterCutoffSlider.getWidth(), labelHeight);
 
-    filterResonanceSlider.setBounds(filterCutoffSlider.getRight(),sliderPosY,sliderWidth,sliderHeigth);
-    filterResonancelabel.setBounds(filterResonanceSlider.getX(),filterResonanceSlider.getY()-labelYOffset,filterResonanceSlider.getWidth(),labelHeight);
-
-}
-using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-void FilterComponent::setSliderWithLabel (juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<Attachment>& attachment)
-{
-    // Slider style, textbox and making visible
-    slider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    slider.setTextBoxStyle(juce::Slider::TextBoxBelow, true,50,25);
-    addAndMakeVisible(slider);
-
-    attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts,paramID,slider);
-
-
-    // creating the label, textfont, and colour.
-    label.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
-    label.setFont(15.0f);
-    label.setJustificationType(juce::Justification::centred);
-    addAndMakeVisible(label);
+    filterResonanceSlider.setBounds(filterCutoffSlider.getRight(), sliderPosY, sliderWidth, sliderHeigth);
+    filterResonancelabel.setBounds(filterResonanceSlider.getX(), filterResonanceSlider.getY() - labelYOffset,
+                                   filterResonanceSlider.getWidth(), labelHeight);
 
 }

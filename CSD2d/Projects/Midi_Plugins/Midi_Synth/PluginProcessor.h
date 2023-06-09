@@ -94,7 +94,6 @@ private:
     std::atomic<float>* delayTimeL = nullptr;
     std::atomic<float>* delayTimeR = nullptr;
     std::atomic<float>* delayTimeC = nullptr;
-
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
 };

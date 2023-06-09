@@ -55,6 +55,7 @@ private:
     juce::TextButton DarkTextButton;
     juce::TextButton condensedTextButton;
     juce::TextButton spaciousTextButton;
+    // names got changed to earthlier and weirder
     juce::TextButton predictableTextButton;
     juce::TextButton experimentalTextButton;
     juce::TextButton fastTextButton;
@@ -94,25 +95,25 @@ private:
     float stepPred {0.5f};
     float stepExp {0.5};
     // Resonance step
-    float stepRes {0.1};
+    float stepRes {static_cast<float>(0.1)};
     // AM amount
     float stepFastAmf {0.5f};
     float stepFastAmd {0.1f};
     float stepSlowAmf {0.5};
-    float stepSlowAmd {0.1};
+    float stepSlowAmd {static_cast<float>(0.1)};
     float stepFastAtt {0.1f};
-    float stepSlowAtt {0.1};
+    float stepSlowAtt {static_cast<float>(0.1)};
     // Gain/trim amount
     float stepRoughDr {1.0f};
     float stepSmoothDr {1.0f};
     float stepRoughtrim {0.05f};
     float stepSmoothtrim {0.05f};
     // Step for feedback and release
-    float stepShortR {0.05};
-    float stepShortFb {0.05};
-    float stepLongR {0.05};
-    float stepLongFb {0.05};
-    float stepPredamDepth{0.1};
+    float stepShortR {static_cast<float>(0.05)};
+    float stepShortFb {static_cast<float>(0.05)};
+    float stepLongR {static_cast<float>(0.05)};
+    float stepLongFb {static_cast<float>(0.05)};
+    float stepPredamDepth{static_cast<float>(0.1)};
 
 
     void createButton (juce::TextButton& button, juce::AudioProcessorValueTreeState& apvts, juce::String paramID);

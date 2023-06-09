@@ -10,9 +10,10 @@ DelayComponent::DelayComponent(juce::AudioProcessorValueTreeState& apvts,
                                juce::String fbCid,
                                juce::String dtLid,
                                juce::String dtRid,
-                               juce::String dtCid)
+                               juce::String dtCid):
+        delayknobs("knobgrey.png"),
+        delayknobsDT("knobpurple.png")
 {
-
     // DryWet
     setSliderWithLabel(drywetLSlider,drywetLLabel,apvts,dWLid,drywetLSliderAttachment);
     setSliderWithLabel(drywetRSlider,drywetRLabel,apvts,dWRid,drywetRSliderAttachment);
@@ -26,9 +27,17 @@ DelayComponent::DelayComponent(juce::AudioProcessorValueTreeState& apvts,
     setSliderWithLabel(delayTimeRSlider,delayTimeRLabel,apvts,dtRid,delayTimeRSliderAttachment);
     setSliderWithLabel(delayTimeCSlider,delayTimeCLabel,apvts,dtCid,delayTimeCSliderAttachment);
 
+    drywetLSlider.setLookAndFeel(&delayknobs);
+    drywetRSlider.setLookAndFeel(&delayknobs);
+    drywetCSlider.setLookAndFeel(&delayknobs);
 
+    delayTimeLSlider.setLookAndFeel(&delayknobsDT);
+    delayTimeRSlider.setLookAndFeel(&delayknobsDT);
+    delayTimeCSlider.setLookAndFeel(&delayknobsDT);
 
-
+    feedbackLSlider.setLookAndFeel(&delayknobs);
+    feedbackRSlider.setLookAndFeel(&delayknobs);
+    feedbackCSlider.setLookAndFeel(&delayknobs);
 }
 // destructor
 DelayComponent::~DelayComponent()
@@ -37,10 +46,10 @@ DelayComponent::~DelayComponent()
 }
 void DelayComponent::paint(juce::Graphics& g)
 {
-g.fillAll(juce::Colours::purple);
-g.setColour (juce::Colours::white);
-g.setFont (30.0f);
-g.drawFittedText ("Delay", getLocalBounds(), juce::Justification::centredTop, 1);
+    g.fillAll(juce::Colours::purple);
+    g.setColour (juce::Colours::white);
+    g.setFont (30.0f);
+    g.drawFittedText ("Delay", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 // layout slider positions
 void DelayComponent::resized()
@@ -51,7 +60,7 @@ void DelayComponent::resized()
     const auto sliderWidth = 90;
     const auto sliderHeigth = 80;
     const auto labelYOffset = 20;
-    const auto labelHeight = 10;
+    const auto labelHeight = 15;
 
     // dry wet setting position
     drywetLSlider.setBounds(0,sliderPosY,sliderWidth,sliderHeigth);
@@ -68,31 +77,11 @@ void DelayComponent::resized()
     feedbackRLabel.setBounds(feedbackRSlider.getX(),feedbackRSlider.getY()- labelYOffset,feedbackRSlider.getWidth(),labelHeight);
     feedbackCSlider.setBounds(100,sliderPosY + 120,sliderWidth,sliderHeigth);
     feedbackCLabel.setBounds(feedbackCSlider.getX(),feedbackCSlider.getY()- labelYOffset,feedbackCSlider.getWidth(),labelHeight);
-    // delaytime
+    // delaytime setting position
     delayTimeLSlider.setBounds(0,sliderPosY + 240,sliderWidth,sliderHeigth);
     delayTimeLLabel.setBounds(delayTimeLSlider.getX(),delayTimeLSlider.getY()- labelYOffset,delayTimeLSlider.getWidth(),labelHeight);
     delayTimeRSlider.setBounds(200,sliderPosY + 240,sliderWidth,sliderHeigth);
     delayTimeRLabel.setBounds(delayTimeRSlider.getX(),delayTimeRSlider.getY()- labelYOffset,delayTimeRSlider.getWidth(),labelHeight);
     delayTimeCSlider.setBounds(100,sliderPosY + 240,sliderWidth,sliderHeigth);
     delayTimeCLabel.setBounds(delayTimeCSlider.getX(),delayTimeCSlider.getY()- labelYOffset,delayTimeCSlider.getWidth(),labelHeight);
-
-
-
-}
-using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-void DelayComponent::setSliderWithLabel (juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<Attachment>& attachment)
-{
-    // Slider style, textbox and making visible
-    slider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    slider.setTextBoxStyle(juce::Slider::TextBoxBelow, true,50,25);
-    addAndMakeVisible(slider);
-
-    attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts,paramID,slider);
-
-    // creating the label, textfont, and colour.
-    label.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
-    label.setFont(15.0f);
-    label.setJustificationType(juce::Justification::centred);
-    addAndMakeVisible(label);
-
 }

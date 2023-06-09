@@ -4,8 +4,8 @@
 Delay::Delay() 
 {
     // create delaybuffer with a size
-    delayBuffer = new CircBuffer(sampleRate*20);
-    memset(delayBuffer, 0, sizeof(delayBuffer));
+    delayBuffer = new CircBuffer(static_cast<uint>(sampleRate * 20));
+    memset(delayBuffer, 0, sizeof delayBuffer);
 }
 
 Delay::~Delay()
@@ -16,7 +16,7 @@ Delay::~Delay()
 void Delay::prepareToPlay(double samplerate)
 {
 	sampleRate = samplerate;
-    memset(delayBuffer, 0, sizeof(delayBuffer));
+    memset(delayBuffer, 0, sizeof delayBuffer);
 }
 
 
@@ -55,7 +55,7 @@ float Delay::outputNoIncrement(float input)
 float Delay::msToSamp(float ms, double samplerateFX)
 {
 	// amount of samples calculated based on miliseconds and samplerate
-	float samples = ms * samplerateFX/1000;
+	float samples = static_cast<float>(ms * samplerateFX / 1000);
 	return samples;
 }
 
@@ -64,7 +64,7 @@ void Delay::setFeedback(float feedback)
 	// make sure feedback goes not out of range
 	if(feedback > 0.99) 
 	{
-		delayFeedback = 0.99;
+		delayFeedback = static_cast<float>(0.99);
 	} 
 	else if(feedback < 0) 
 	{

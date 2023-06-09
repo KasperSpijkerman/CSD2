@@ -41,10 +41,10 @@ void ControlComponent::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colours::purple);
     g.setColour (juce::Colours::deeppink);
-    g.setFont (35.0f);
+    g.setFont (43.0f);
     g.drawFittedText ("The Teleporter", getLocalBounds(), juce::Justification::centredTop, 1);
     g.setColour (juce::Colours::powderblue);
-    g.setFont (37.0f);
+    g.setFont (45.0f);
     g.drawFittedText ("The Teleporter", getLocalBounds(), juce::Justification::centredTop, 1);
     // colours per button
     LightTextButton.setColour(TextButton::buttonColourId, Colours::white);
@@ -55,8 +55,9 @@ void ControlComponent::paint(juce::Graphics& g)
     condensedTextButton.setColour(TextButton::textColourOffId, Colours::lightsalmon);
     spaciousTextButton.setColour(TextButton::buttonColourId, Colours::deeppink);
     spaciousTextButton.setColour(TextButton::textColourOffId, Colours::greenyellow);
-    predictableTextButton.setColour(TextButton::buttonColourId, Colours::grey);
-    predictableTextButton.setColour(TextButton::textColourOffId, Colours::white);
+    // names got changed to earthlier and weirder
+    predictableTextButton.setColour(TextButton::buttonColourId, Colours::lightgreen);
+    predictableTextButton.setColour(TextButton::textColourOffId, Colours::lightblue);
     experimentalTextButton.setColour(TextButton::buttonColourId, Colours::yellow);
     experimentalTextButton.setColour(TextButton::textColourOffId, Colours::red);
     fastTextButton.setColour(TextButton::buttonColourId, Colours::green);
@@ -66,18 +67,18 @@ void ControlComponent::paint(juce::Graphics& g)
     roughTextButton.setColour(TextButton::buttonColourId, Colours::blue);
     roughTextButton.setColour(TextButton::textColourOffId, Colours::red);
     smoothTextButton.setColour(TextButton::buttonColourId, Colours::orange);
-    smoothTextButton.setColour(TextButton::textColourOffId, Colours::yellow);
+    smoothTextButton.setColour(TextButton::textColourOffId, Colours::lightcyan);
     shortTextButton.setColour(TextButton::buttonColourId, Colours::lightsteelblue);
     shortTextButton.setColour(TextButton::textColourOffId, Colours::salmon);
-    longTextButton.setColour(TextButton::buttonColourId, Colours::lightgreen);
-    longTextButton.setColour(TextButton::textColourOffId, Colours::lightyellow);
+    longTextButton.setColour(TextButton::buttonColourId, Colours::grey);
+    longTextButton.setColour(TextButton::textColourOffId, Colours::white);
 }
 // layout button positions
 void ControlComponent::resized() {
     // creating variables to make it easier to read and adjust everything all at once.
     const auto buttonPosY = 55;
-    const auto buttonWidth = 100;
-    const auto buttonHeigth = 40;
+    const auto buttonWidth = 150;
+    const auto buttonHeigth = 60;
 
 
     DarkTextButton.setBounds(0, buttonPosY, buttonWidth, buttonHeigth);
@@ -98,6 +99,7 @@ void ControlComponent::resized() {
 void ControlComponent::createButton (juce::TextButton& textButton, juce::AudioProcessorValueTreeState& apvts, juce::String paramID)
 {
     // button text and making visible
+    ignoreUnused(apvts);
     textButton.setButtonText(paramID);
     addAndMakeVisible(textButton);
 }
@@ -235,8 +237,8 @@ void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, 
     {
         counterExp = 0;
         stepExp = 0.5;
-        fmDepthNew = fmDepthNew - stepPred*0.890780568956;
-        fmSpeedNew = fmSpeedNew - stepPred*0.76249634987;
+        fmDepthNew = static_cast<float>(fmDepthNew - stepPred * 0.890780568956);
+        fmSpeedNew = static_cast<float>(fmSpeedNew - stepPred * 0.76249634987);
         amDepthNew = amDepthNew - stepPredamDepth ;
         if (fmDepthNew >= 150)
         {
@@ -244,11 +246,11 @@ void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, 
         }
         else
         {
-            stepPredamDepth = 0.1;
+            stepPredamDepth = static_cast<float>(0.1);
         }
         resNew = resNew - stepRes;
         counterPred ++;
-        stepPred +=0.5;
+        stepPred += static_cast<float>(0.5);
         protectRange(0,1000,fmDepthNew);
         protectRange(0,1000,fmSpeedNew);
         protectRange(1,3,resNew);
@@ -265,10 +267,10 @@ void ControlComponent::changePredict(juce::AudioProcessorValueTreeState& apvts, 
         stepPred = 0.5f;
         counterExp ++;
         amDepthNew = amDepthNew + stepFastAmd ;
-        fmDepthNew = fmDepthNew + stepExp*0.67852547957;
-        fmSpeedNew = fmSpeedNew + stepExp*0.5639;
+        fmDepthNew = static_cast<float>(fmDepthNew + stepExp * 0.67852547957);
+        fmSpeedNew = static_cast<float>(fmSpeedNew + stepExp * 0.5639);
         resNew = resNew + stepRes;
-        stepExp += 0.5;
+        stepExp += static_cast<float>(0.5);
         protectRange(0,1000,fmDepthNew);
         protectRange(0,1000,fmSpeedNew);
         protectRange(1,3,resNew);
@@ -291,13 +293,13 @@ void ControlComponent::changeSpeed(juce::AudioProcessorValueTreeState& apvts,juc
     {
         if (amDepthNew == 0)
         {
-           amDepthNew = 0.3;
+           amDepthNew = static_cast<float>(0.3);
         }
         counterSlow = 1;
         stepSlowAmf = 0.5f;
         stepSlowAtt = 0.1f;
         amSpeedNew = amSpeedNew + stepFastAmf*(counterFast/2);
-        attackNew = attackNew - 0.005;
+        attackNew = static_cast<float>(attackNew - 0.005);
         counterFast ++;
         stepFastAtt +=0.1f;
         stepFastAmf += 0.5f;
@@ -311,10 +313,10 @@ void ControlComponent::changeSpeed(juce::AudioProcessorValueTreeState& apvts,juc
     {
         counterFast = 1;
         stepFastAmf = 0.5;
-        stepFastAmd = 0.1;
+        stepFastAmd = static_cast<float>(0.1);
         stepFastAtt = 0.1f;
-        amSpeedNew = amSpeedNew - stepFastAmf*(counterSlow/2);
-        attackNew = attackNew + 0.005;
+        amSpeedNew = amSpeedNew - stepFastAmf*(static_cast<float>(counterSlow / 2));
+        attackNew = static_cast<float>(attackNew + 0.005);
         counterSlow ++;
         stepSlowAtt += 0.5f;
         stepSlowAmf += 0.1f;
@@ -337,23 +339,23 @@ void ControlComponent::changeTexture(juce::AudioProcessorValueTreeState& apvts, 
 
         if(driveNew < 6)
         {
-            stepRoughtrim = {0.1};
+            stepRoughtrim = {static_cast<float>(0.1)};
         }
         // after 6 it will make smaller steps
         else
         {
-            stepRoughtrim = 0.05;
+            stepRoughtrim = static_cast<float>(0.05);
         }
         counterSmooth = 2;
         stepSmoothDr = 0.5;
-        stepSmoothtrim = 0.05;
+        stepSmoothtrim = static_cast<float>(0.05);
         driveNew = driveNew + stepRoughDr;
         trimNew = trimNew - stepRoughtrim;
         counterRough ++;
         stepRoughDr +=0.5f;
         stepRoughtrim += 0.005f;
         protectRange(1,100,driveNew);
-        protectRange(0.2,1.0,trimNew);
+        protectRange(static_cast<float>(0.2), 1.0, trimNew);
         slider1.setValue(driveNew);
         slider2.setValue(trimNew);
 
@@ -362,23 +364,23 @@ void ControlComponent::changeTexture(juce::AudioProcessorValueTreeState& apvts, 
     {
         if(driveNew >= 20)
         {
-            stepSmoothtrim = {0.005};
+            stepSmoothtrim = {static_cast<float>(0.005)};
         }
         else
         {
-            stepSmoothtrim = 0.1;
+            stepSmoothtrim = static_cast<float>(0.1);
         }
 
         counterRough = 0;
-        stepRoughDr = 0.005;
-        stepRoughtrim = 0.1;
+        stepRoughDr = static_cast<float>(0.005);
+        stepRoughtrim = static_cast<float>(0.1);
         counterSmooth ++;
         driveNew = driveNew - stepSmoothDr;
         trimNew = trimNew + stepSmoothtrim;
-        stepSmoothDr += 0.5;
+        stepSmoothDr += static_cast<float>(0.5);
         stepSmoothtrim +=0.005f;
         protectRange(1,100,driveNew);
-        protectRange(0.2,1.0,trimNew);
+        protectRange(static_cast<float>(0.2), 1.0, trimNew);
         slider1.setValue(driveNew);
         slider2.setValue(trimNew);
     };
@@ -405,20 +407,20 @@ void ControlComponent::changeLength(juce::AudioProcessorValueTreeState& apvts,
     shortTextButton.onClick = [&]()
     {
         counterLong = 0;
-        stepLongFb = 0.05;
-        stepLongR = 0.05;
+        stepLongFb = static_cast<float>(0.05);
+        stepLongR = static_cast<float>(0.05);
         counterShort ++;
         releaseNew = releaseNew - stepLongR;
-        feedbackLNew = feedbackLNew - stepShortFb*0.82094567;
-        feedbackRNew = feedbackRNew - stepShortFb*0.66724569;
-        feedbackCNew = feedbackCNew - stepShortFb*0.74587934567;
-        stepShortFb += 0.005;
+        feedbackLNew = static_cast<float>(feedbackLNew - stepShortFb * 0.82094567);
+        feedbackRNew = static_cast<float>(feedbackRNew - stepShortFb * 0.66724569);
+        feedbackCNew = static_cast<float>(feedbackCNew - stepShortFb * 0.74587934567);
+        stepShortFb += static_cast<float>(0.005);
         stepShortR +=0.005f;
 
         // adjusting delay time
-        delaytimeLnew = delaytimeLnew - counterShort*10.92385637;
-        delaytimeRnew = delaytimeRnew - counterShort*10.890567985;
-        delaytimeCnew = delaytimeCnew - counterShort*10.32572946;
+        delaytimeLnew = static_cast<float>(delaytimeLnew - counterShort * 10.92385637);
+        delaytimeRnew = static_cast<float>(delaytimeRnew - counterShort * 10.890567985);
+        delaytimeCnew = static_cast<float>(delaytimeCnew - counterShort * 10.32572946);
 
         protectRange(0,3000,delaytimeLnew);
         protectRange(0,3000,delaytimeCnew);
@@ -435,13 +437,13 @@ void ControlComponent::changeLength(juce::AudioProcessorValueTreeState& apvts,
     longTextButton.onClick = [&]()
     {
         counterShort = 0;
-        stepShortFb = 0.05;
-        stepShortR = 0.05;
+        stepShortFb = static_cast<float>(0.05);
+        stepShortR = static_cast<float>(0.05);
         counterLong ++;
         releaseNew = releaseNew + stepLongR;
-        feedbackLNew = feedbackLNew + stepLongFb*0.987673342;
-        feedbackRNew = feedbackRNew + stepLongFb*0.789834;
-        feedbackCNew = feedbackCNew + stepLongFb*0.674634596;
+        feedbackLNew = static_cast<float>(feedbackLNew + stepLongFb * 0.987673342);
+        feedbackRNew = static_cast<float>(feedbackRNew + stepLongFb * 0.789834);
+        feedbackCNew = static_cast<float>(feedbackCNew + stepLongFb * 0.674634596);
 
         if (counterLong <= 30)
         {
@@ -458,14 +460,14 @@ void ControlComponent::changeLength(juce::AudioProcessorValueTreeState& apvts,
 
 
         // adjusting delay time
-        delaytimeLnew = delaytimeLnew + counterLong*5.92385637;
-        delaytimeRnew = delaytimeRnew + counterLong*5.890567985;
-        delaytimeCnew = delaytimeCnew + counterLong*5.32572946;
+        delaytimeLnew = static_cast<float>(delaytimeLnew + counterLong * 5.92385637);
+        delaytimeRnew = static_cast<float>(delaytimeRnew + counterLong * 5.890567985);
+        delaytimeCnew = static_cast<float>(delaytimeCnew + counterLong * 5.32572946);
 
         protectRange(0,3000,delaytimeLnew);
         protectRange(0,3000,delaytimeCnew);
         protectRange(0,3000,delaytimeRnew);
-        stepLongFb += 0.005;
+        stepLongFb += static_cast<float>(0.005);
         stepLongR += 0.005f;
         slider1.setValue(releaseNew);
         slider2.setValue(feedbackLNew);

@@ -37,7 +37,7 @@ float LcrDelay::lcrDelayOutput(float input, uint ch){
 void LcrDelay::changeDelayLine(const int ch, const float delaytime, const float feedback, const float drywet)
 {
     distChange = true;
-    delayTimesLCR[ch] = delaytime;
+    delayTimesLCR[ch] = (int) delaytime;
     DelayArrP[ch].setDelayTime(delaytime);
     feedbackLCR[ch] = 0;
     distChange = false;

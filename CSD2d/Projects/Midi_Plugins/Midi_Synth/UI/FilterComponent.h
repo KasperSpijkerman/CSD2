@@ -1,8 +1,9 @@
 #pragma once
 
 #include <JuceHeader.h>
-
-class FilterComponent : public juce::Component
+#include "GeneralComponent.h"
+#include "myLookAndFeel.h"
+class FilterComponent : public GeneralComponent
 {
 public:
     FilterComponent(juce::AudioProcessorValueTreeState& apvts,juce::String filterTypeID, juce::String filterCutoffId, juce::String filterResonanceId);
@@ -21,11 +22,12 @@ public:
     juce::Label filterCutofflabel {"filtercutoff", "Cutoff"};
     juce::Label filterResonancelabel {"filterresonance", "Resonance"};
     std::unique_ptr<Attachment> filterResonanceAttachment;
+    // custom knobs
+    myLookAndFeelV1 filterknob;
+    myLookAndFeelV1 resknob;
+
+
 protected:
-
-
-
-    void setSliderWithLabel (juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<Attachment>& attachment);
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FilterComponent)
 };
 

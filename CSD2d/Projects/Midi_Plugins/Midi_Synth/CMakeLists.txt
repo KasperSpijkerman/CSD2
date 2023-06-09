@@ -74,6 +74,7 @@ target_sources(Teleporter
         PluginProcessor.cpp
         Synth_Voice.cpp
         Synth_Sound.cpp
+        UI/GeneralComponent.cpp
         UI/AdsrComponent.cpp
         UI/OscComponent.cpp
         UI/FilterComponent.cpp
@@ -81,6 +82,7 @@ target_sources(Teleporter
         UI/ShaperComponent.cpp
         UI/ControlComponent.cpp
         UI/DelayComponent.cpp
+        UI/myLookAndFeel.cpp
         Data/AdsrData.cpp
         Data/OscData.cpp
         Data/FilterData.cpp
@@ -144,3 +146,6 @@ target_link_libraries(Teleporter
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags)
+
+target_compile_features(Teleporter PRIVATE cxx_std_20)
+target_compile_options(Teleporter PRIVATE -O3)

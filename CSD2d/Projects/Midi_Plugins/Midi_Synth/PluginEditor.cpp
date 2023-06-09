@@ -5,8 +5,8 @@
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
     : AudioProcessorEditor (&p),
     audioProcessor (p) ,
-    osc(audioProcessor.apvts,"oscwavetype1","fmfreq","fmdepth"),
     adsr (audioProcessor.apvts),
+    osc(audioProcessor.apvts,"oscwavetype1","fmfreq","fmdepth"),
     filter(audioProcessor.apvts, "filtertype", "filtercutoff", "filterresonance"),
     LFO(audioProcessor.apvts,"lfofreq","lfodepth"),
     shaper(audioProcessor.apvts,"drive","trim"),
@@ -33,11 +33,9 @@ AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 //==============================================================================
 void AudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
 {
-
     g.fillAll(juce::Colours::purple);
     g.setColour(juce::Colours::green);
     g.setFont (30.0f);
-//    g.drawFittedText ("The Teleporter", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 
 void AudioPluginAudioProcessorEditor::resized()
@@ -51,7 +49,7 @@ void AudioPluginAudioProcessorEditor::resized()
     const auto objectHeight = 200;
     // bigger format
     const auto objectWidthBig = 300;
-    const auto objectWidthControl = 200;
+    const auto objectWidthControl = 300;
     const auto objectHeightBig = 600;
     const auto moveRight = 400;
     // placing objects on screen
@@ -60,7 +58,7 @@ void AudioPluginAudioProcessorEditor::resized()
     filter.setBounds(paddingX,paddingY2,objectWidth,objectHeight);
     LFO.setBounds(osc.getRight()+moveRight,paddingY2,objectWidth,objectHeight);
     shaper.setBounds(osc.getRight()+moveRight,paddingY3,objectWidth,objectHeight);
-    control.setBounds(getWidth()/2.7,getHeight()/500,objectWidthControl,objectHeightBig);
+    control.setBounds(static_cast<int>(getWidth() / 3), getHeight() / 500, objectWidthControl, objectHeightBig);
     delay.setBounds(getWidth()/3,getHeight()/2,objectWidthBig,objectHeightBig);
 }
 // updating the data based on buttons

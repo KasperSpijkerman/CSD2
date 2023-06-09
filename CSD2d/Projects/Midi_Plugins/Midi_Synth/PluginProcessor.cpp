@@ -16,6 +16,7 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor() :
      synth.addVoice(new Synth_Voice());
      synth.addVoice(new Synth_Voice());
      synth.addVoice(new Synth_Voice());
+     synth.addVoice(new Synth_Voice());
 
      // reference to parameter IDs
      attack = apvts.getRawParameterValue("attack");
@@ -41,8 +42,6 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor() :
      delayTimeL = apvts.getRawParameterValue("delaytimeL");
      delayTimeR = apvts.getRawParameterValue("delaytimeR");
      delayTimeC = apvts.getRawParameterValue("delaytimeC");
-
-
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
@@ -200,7 +199,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
             auto FMFrequencyNew = *FMFrequency*1.0f;
 
             // updating the parameters
-            voice->getOscillator().setWaveType(oscWaveNew);
+            voice->getOscillator().setWaveType(static_cast<int>(oscWaveNew));
             voice->getOscillator().setFmParams(FMDepthNew,FMFrequencyNew);
             voice->updateParameters(attackNew,decayNew,sustainNew,releaseNew);
         }
@@ -211,7 +210,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     auto filterTypeNew = *filterType*1.0f;
     auto filterCutoffNew = *filterCutoff*1.0f;
     auto filterResonanceNew = *filterResonance*1.0f;
-    filter.updateParameters(filterTypeNew,filterCutoffNew,filterResonanceNew);
+    filter.updateParameters(static_cast<int>(filterTypeNew), filterCutoffNew, filterResonanceNew);
     // applying filter to buffer
     filter.process(buffer);
 
@@ -241,7 +240,8 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     auto delayTimeLNew = *delayTimeL*1.0f;
     auto delayTimeRNew = *delayTimeR*1.0f;
     auto delayTimeCNew = *delayTimeC*1.0f;
-    //
+
+    // changing delaylines
     delay.changeDelayLine(0,delayTimeLNew,feedbackLNew,dryWetLNew);
     delay.changeDelayLine(1,delayTimeRNew,feedbackRNew,dryWetRNew);
     delay.changeDelayLine(2,delayTimeCNew,feedbackCNew,dryWetCNew);
@@ -251,8 +251,8 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     {
         for (int channel = 0; channel < buffer.getNumChannels(); ++channel) {
             auto* channelData = buffer.getWritePointer (channel);
-            channelData[sample] = delay.lcrDelayOutput(buffer.getSample(channel, sample), channel);
-            channelData[sample] = tremolos[channel].output(waveshapers[channel].output(buffer.getSample(channel, sample)));
+            channelData[sample] = delay.lcrDelayOutput(buffer.getSample(channel, sample), static_cast<uint>(channel));
+            channelData[sample] = tremolos[static_cast<unsigned long>(channel)].output(waveshapers[static_cast<unsigned long>(channel)].output(buffer.getSample(channel, sample)));
         }
         delay.lcrIncrementC();
     }
@@ -328,7 +328,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
 
     // Shaper
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"drive",12}, "Drive", juce::NormalisableRange<float>{1.0f, 100.0f,1.0f,0.6f},0.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"trim",13}, "Trim", juce::NormalisableRange<float>{0.000001, 1.0f,0.001f},1.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"trim",13}, "Trim", juce::NormalisableRange<float>{
+            static_cast<float>(0.000001), 1.0f, 0.001f}, 1.0f));
 
 
     // Delay

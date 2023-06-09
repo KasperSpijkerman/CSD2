@@ -2,12 +2,14 @@
 
 //constructor
 ShaperComponent::ShaperComponent(juce::AudioProcessorValueTreeState& apvts, juce::String ShaperDriveId, juce::String ShaperTrimId)
+:
+        drivetrimknob("knobred.png")
 {
-
     // making sliders, linking labels, setting text and colour in a function
     setSliderWithLabel(ShaperDriveSlider,ShaperDrivelabel,apvts,ShaperDriveId,ShaperDriveAttachment);
     setSliderWithLabel(ShaperTrimSlider,ShaperTrimlabel,apvts,ShaperTrimId,ShaperTrimAttachment);
-
+    ShaperDriveSlider.setLookAndFeel(&drivetrimknob);
+    ShaperTrimSlider.setLookAndFeel(&drivetrimknob);
 }
 // destructor
 ShaperComponent::~ShaperComponent()

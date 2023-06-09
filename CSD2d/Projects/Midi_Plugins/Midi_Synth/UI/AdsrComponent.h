@@ -2,8 +2,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-
-class AdsrComponent : public juce::Component
+#include "GeneralComponent.h"
+class AdsrComponent : public GeneralComponent
 {
 public:
     AdsrComponent(juce::AudioProcessorValueTreeState& apvts);

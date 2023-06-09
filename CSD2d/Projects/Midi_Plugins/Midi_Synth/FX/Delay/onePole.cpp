@@ -4,7 +4,7 @@ class OnePole{
 public:
     OnePole()
     {
-        setCoefficient(0.98);
+        setCoefficient(static_cast<float>(0.98));
     }
 
     float output(float input)
