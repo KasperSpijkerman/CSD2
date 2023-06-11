@@ -28,10 +28,9 @@ void OscData::setWaveType(const int choice)
             // saw
             initialise([](float x) {return  x / MathConstants<float>::pi;});
             break;
-
+        // debug
         default:
             jassertfalse;
-
     }
 }
 

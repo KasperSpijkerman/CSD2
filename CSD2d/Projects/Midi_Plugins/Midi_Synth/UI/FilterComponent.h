@@ -13,6 +13,7 @@ public:
     void resized() override;
     juce::ComboBox filterTypeSelector {"Filter Type" };
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> filterTypeSelectorAttachment;
+    // custom knobs
     knobsLookAndFeel knobsFilter;
     // cutoff & resonance
     juce::Slider filterCutoffSlider;
@@ -22,12 +23,8 @@ public:
     juce::Label filterCutofflabel {"filtercutoff", "Brightness"};
     juce::Label filterResonancelabel {"filterresonance", "Sharpness"};
     std::unique_ptr<Attachment> filterResonanceAttachment;
-    // custom knobs
-
+    // background
     Image background;
-
-
-
 protected:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FilterComponent)
 };

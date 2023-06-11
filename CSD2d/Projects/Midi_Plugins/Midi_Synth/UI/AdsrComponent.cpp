@@ -39,22 +39,17 @@ void AdsrComponent::resized()
     const auto sliderHeight = bounds.getHeight();
     const auto sliderStartX = 0;
     const auto sliderStartY = 20;
-
-
     attackSlider.setBounds(sliderStartX,sliderStartY,sliderWidth,sliderHeight);
     decaySlider.setBounds(attackSlider.getRight() + padding,sliderStartY,sliderWidth,sliderHeight);
     sustainSlider.setBounds(decaySlider.getRight() + padding,sliderStartY,sliderWidth,sliderHeight);
     releaseSlider.setBounds(sustainSlider.getRight() + padding,sliderStartY,sliderWidth,sliderHeight);
     attackSlider.getLookAndFeel().setColour (juce::Slider::thumbColourId, juce::Colours::deeppink);
-
-
 }
-
+// different from the other components so a seperate function
 void AdsrComponent::setSliderParams(juce::Slider& slider,juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<Attachment>& attachment)
 {
     slider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     slider.setTextBoxStyle(juce::Slider::TextBoxBelow,true, 50, 25);
-
     attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts,paramID,slider);
     addAndMakeVisible(slider);
 }

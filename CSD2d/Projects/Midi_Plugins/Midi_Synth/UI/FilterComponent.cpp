@@ -1,7 +1,10 @@
 #include "FilterComponent.h"
 
 //constructor
-FilterComponent::FilterComponent(juce::AudioProcessorValueTreeState& apvts, juce::String filterTypeID, juce::String filterCutoffId, juce::String filterResonanceId)
+FilterComponent::FilterComponent(juce::AudioProcessorValueTreeState& apvts,
+                                 juce::String filterTypeID,
+                                 juce::String filterCutoffId,
+                                 juce::String filterResonanceId)
 :
 knobsFilter("knobgreenorange.png")
 {
@@ -28,7 +31,6 @@ FilterComponent::~FilterComponent()
 }
 void FilterComponent::paint(juce::Graphics& g)
 {
-
     g.drawImageAt(background,0,0);
     g.setColour (juce::Colours::deeppink);
     g.setFont (30.0f);
@@ -55,5 +57,4 @@ void FilterComponent::resized() {
     filterResonanceSlider.setBounds(filterCutoffSlider.getRight()+30, sliderPosY, sliderWidth, sliderHeigth);
     filterResonancelabel.setBounds(filterResonanceSlider.getX(), filterResonanceSlider.getY() - labelYOffset,
                                    filterResonanceSlider.getWidth(), labelHeight);
-
 }

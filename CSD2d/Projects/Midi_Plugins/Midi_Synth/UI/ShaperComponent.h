@@ -16,10 +16,11 @@ public:
     juce::Slider ShaperDriveSlider;
     juce::Slider ShaperTrimSlider;
 private:
-
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    // labels
     juce::Label ShaperDrivelabel {"ShaperDrive", "Drive"};
     juce::Label ShaperTrimlabel {"ShaperTrim", "Level"};
+    // attachments
     std::unique_ptr<Attachment> ShaperDriveAttachment;
     std::unique_ptr<Attachment> ShaperTrimAttachment;
     // background

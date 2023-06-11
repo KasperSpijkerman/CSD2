@@ -11,15 +11,17 @@ public:
 
     void paint(juce::Graphics&) override;
     void resized() override;
+    // sliders and labels
+    // attack
     juce::Slider attackSlider;
     juce::Label  attackLabel;
-
+    // decay
     juce::Slider decaySlider;
     juce::Label  decayLabel;
-
+    // sustain
     juce::Slider sustainSlider;
     juce::Label  sustainLabel;
-
+    // release
     juce::Slider releaseSlider;
     juce::Label  releaseLabel;
 private:
@@ -27,7 +29,6 @@ private:
     // ADSR Sliders and labels for Parameter control
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     void setSliderParams(juce::Slider& slider,juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<Attachment>& attachment);
-
     // attachments for ADSR parameters
     std::unique_ptr<Attachment> attackAttachment;
     std::unique_ptr<Attachment> decayAttachment;

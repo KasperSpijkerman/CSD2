@@ -24,12 +24,14 @@ OscComponent::OscComponent(juce::AudioProcessorValueTreeState& apvts, juce::Stri
 // destructor
 OscComponent::~OscComponent()
 {
+    // protection
     setLookAndFeel (nullptr);
 }
 void OscComponent::paint(juce::Graphics& g)
 {
+    // background
     g.drawImageAt(background,0,0);
-//    g.fillAll(Colours::purple);
+    // Title
     g.setColour (juce::Colours::deeppink);
     g.setFont (30.0f);
     g.drawFittedText ("State", getLocalBounds(), juce::Justification::topLeft, 1);

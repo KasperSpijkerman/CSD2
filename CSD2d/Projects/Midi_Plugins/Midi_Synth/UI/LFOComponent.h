@@ -17,13 +17,13 @@ public:
     juce::Slider LFOFreqSlider;
     juce::Slider LFODepthSlider;
 private:
-
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    // labels
     juce::Label LFOFreqlabel {"LFOFreq", "Speed"};
     juce::Label LFODepthlabel {"LFODepth", "Intensity"};
     std::unique_ptr<Attachment> LFOFreqAttachment;
     std::unique_ptr<Attachment> LFODepthAttachment;
-
+    // background
     Image background;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LFOComponent)
 };

@@ -3,7 +3,7 @@
 #include "Synth_Sound.h"
 #include "Data/AdsrData.h"
 #include "Data/OscData.h"
-
+// A lot of this is from this tutorial and JUCE reference : https://www.youtube.com/watch?v=ADG6Rsd3ekg&list=PLLgJJsrdwhPwJimt5vtHtNmu63OucmPck
 class Synth_Voice : public juce::SynthesiserVoice
 {
 public:
@@ -19,9 +19,6 @@ public:
     void updateParameters(const float attack, const float decay, const float sustain, const float release);
     // returning oscillator object
     OscData& getOscillator() { return osc; }
-
-
-
 private:
     // ADSR object
     AdsrData adsr;

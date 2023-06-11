@@ -16,6 +16,7 @@ ControlComponent::ControlComponent(juce::AudioProcessorValueTreeState& apvts,
                                    juce::String ShortId,
                                    juce::String LongId)
 {
+    // style of buttons
     setLookAndFeel(&buttonStyle);
     // making buttons, linking labels, setting text and colour in a function
     createButton(LightTextButton,apvts,LightId);
@@ -43,48 +44,55 @@ ControlComponent::~ControlComponent()
 }
 void ControlComponent::paint(juce::Graphics& g)
 {
+    // background
     g.drawImageAt(background,0,0);
     g.setColour (juce::Colours::deeppink);
+    // title
     g.setFont (43.0f);
     g.drawFittedText ("The TeleSynth", getLocalBounds(), juce::Justification::centredTop, 1);
     g.setColour (juce::Colours::powderblue);
     g.setFont (45.0f);
     g.drawFittedText ("The TeleSynth", getLocalBounds(), juce::Justification::centredTop, 1);
-    // colours per button
+    // colours per button first the background and 2nd the Text
+    // 1st set
     buttonStyle.drawButtonBackground(g,LightTextButton,juce::Colours::white,LightTextButton.buttonNormal,LightTextButton.buttonDown);
     LightTextButton.setColour(TextButton::textColourOffId, Colours::darkgrey);
     buttonStyle.drawButtonBackground(g,DarkTextButton,juce::Colours::black,DarkTextButton.buttonNormal,DarkTextButton.buttonDown);
     DarkTextButton.setColour(TextButton::textColourOffId, Colours::lightgrey);
+    // 2nd set
     buttonStyle.drawButtonBackground(g,condensedTextButton,juce::Colours::blue,condensedTextButton.buttonNormal,condensedTextButton.buttonDown);
     condensedTextButton.setColour(TextButton::textColourOffId, Colours::lightsalmon);
     buttonStyle.drawButtonBackground(g,spaciousTextButton,juce::Colours::deeppink,spaciousTextButton.buttonNormal,spaciousTextButton.buttonDown);
     spaciousTextButton.setColour(TextButton::textColourOffId, Colours::greenyellow);
-    // names got changed to earthlier and weirder
+    // 3rd set names got changed to earthlier and weirder
     buttonStyle.drawButtonBackground(g,predictableTextButton,juce::Colours::lightgreen,predictableTextButton.buttonNormal,predictableTextButton.buttonDown);
     predictableTextButton.setColour(TextButton::textColourOffId, Colours::lightsalmon);
     buttonStyle.drawButtonBackground(g,experimentalTextButton,juce::Colours::yellow,experimentalTextButton.buttonNormal,experimentalTextButton.buttonDown);
     experimentalTextButton.setColour(TextButton::textColourOffId, Colours::green);
+    // 4th set
     buttonStyle.drawButtonBackground(g,fastTextButton,juce::Colours::green,fastTextButton.buttonNormal,fastTextButton.buttonDown);
     fastTextButton.setColour(TextButton::textColourOffId, Colours::yellow);
     buttonStyle.drawButtonBackground(g,slowTextButton,juce::Colours::lightgoldenrodyellow,slowTextButton.buttonNormal,slowTextButton.buttonDown);
     slowTextButton.setColour(TextButton::textColourOffId, Colours::black);
+    // 5th set
     buttonStyle.drawButtonBackground(g,roughTextButton,juce::Colours::blue,roughTextButton.buttonNormal,roughTextButton.buttonDown);
     roughTextButton.setColour(TextButton::textColourOffId, Colours::red);
     buttonStyle.drawButtonBackground(g,smoothTextButton,juce::Colours::orange,smoothTextButton.buttonNormal,smoothTextButton.buttonDown);
     smoothTextButton.setColour(TextButton::textColourOffId, Colours::lightcyan);
+    // 6th set
     buttonStyle.drawButtonBackground(g,shortTextButton,juce::Colours::lightsteelblue,shortTextButton.buttonNormal,shortTextButton.buttonDown);
     shortTextButton.setColour(TextButton::textColourOffId, Colours::lightsalmon);
     buttonStyle.drawButtonBackground(g,longTextButton,juce::Colours::grey,longTextButton.buttonNormal,longTextButton.buttonDown);
     longTextButton.setColour(TextButton::textColourOffId, Colours::white);
 }
 // layout button positions
-void ControlComponent::resized() {
+void ControlComponent::resized()
+{
     // creating variables to make it easier to read and adjust everything all at once.
+    // with some offsets
     const auto buttonPosY = 55;
     const auto buttonWidth = 150;
     const auto buttonHeigth = 45;
-
-
     DarkTextButton.setBounds(0, buttonPosY, buttonWidth, buttonHeigth);
     LightTextButton.setBounds(DarkTextButton.getRight(), buttonPosY, buttonWidth, buttonHeigth);
     condensedTextButton.setBounds(0, buttonPosY + 60, buttonWidth, buttonHeigth);
@@ -97,7 +105,6 @@ void ControlComponent::resized() {
     roughTextButton.setBounds(smoothTextButton.getRight(), buttonPosY + 240, buttonWidth, buttonHeigth);
     shortTextButton.setBounds(0, buttonPosY + 300, buttonWidth, buttonHeigth);
     longTextButton.setBounds(shortTextButton.getRight(), buttonPosY + 300, buttonWidth, buttonHeigth);
-
 }
 
 void ControlComponent::createButton (juce::TextButton& textButton, juce::AudioProcessorValueTreeState& apvts, juce::String paramID)
@@ -107,7 +114,7 @@ void ControlComponent::createButton (juce::TextButton& textButton, juce::AudioPr
     textButton.setButtonText(paramID);
     addAndMakeVisible(textButton);
 }
-
+// function for protecting range to making sure slider doesn't get stuck
 void ControlComponent::protectRange(float min, float max, std::atomic<float> &value)
 {
     if (value >= max)
@@ -119,9 +126,10 @@ void ControlComponent::protectRange(float min, float max, std::atomic<float> &va
         value = min;
     }
 }
-
+// Changing Filter Frequency, filterttype and waveformtype.
 void ControlComponent::changeFilter(juce::AudioProcessorValueTreeState& apvts, juce::Slider& slider,juce::ComboBox& combobox,juce::ComboBox& combobox2)
 {
+    // 3 variables being affected by these buttons. Loaded from APVTS.
     auto& filterCutoffnew = *apvts.getRawParameterValue("filtercutoff");
     auto& filterTypeNew = *apvts.getRawParameterValue("filtertype");
     auto& oscwaveTypeNew =*apvts.getRawParameterValue("oscwavetype1");
@@ -144,11 +152,13 @@ void ControlComponent::changeFilter(juce::AudioProcessorValueTreeState& apvts, j
 
                 // setting cutoff based on counter position and stepsize.
                 filterCutoffnew = filterCutoffnew + stepLight*counterLight;
+                // switching to different filtertype
                 if (filterCutoffnew > 20000 && filterTypeNew != 2 && oscwaveTypeNew == 2)
                 {
                     filterTypeNew = 2;
                     filterCutoffnew = 100;
                 }
+                // switching to different waveform type
                 if (oscwaveTypeNew == 0 &&filterCutoffnew > 20000 && filterTypeNew == 0 )
                 {
                     oscwaveTypeNew = 1;
@@ -174,7 +184,6 @@ void ControlComponent::changeFilter(juce::AudioProcessorValueTreeState& apvts, j
 
     DarkTextButton.onClick = [&]()
             {
-
                 counterLight -=2;
                 stepDark += 50;
                 // decreasing light counter
@@ -194,7 +203,6 @@ void ControlComponent::changeFilter(juce::AudioProcessorValueTreeState& apvts, j
                     filterTypeNew = 0;
                     filterCutoffnew = 19000;
                 }
-
                 // setting cutoff based on counter position and stepsize.
                 filterCutoffnew = filterCutoffnew - stepDark*counterDark;
                 if (oscwaveTypeNew == 2 &&filterCutoffnew <= 20 && filterTypeNew == 0 )
@@ -213,7 +221,7 @@ void ControlComponent::changeFilter(juce::AudioProcessorValueTreeState& apvts, j
                 combobox2.setSelectedItemIndex(static_cast<int>(oscwaveTypeNew));
             };
 }
-
+// changing Dry Wet of the Delay
 void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
                                    juce::Slider& slider1,
                                    juce::Slider& slider2,
@@ -223,9 +231,6 @@ void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
     auto& drywetLnew = *apvts.getRawParameterValue("drywetL");
     auto& drywetRnew = *apvts.getRawParameterValue("drywetR");
     auto& drywetCnew = *apvts.getRawParameterValue("drywetC");
-
-    // making sure parameters don't go out of range.
-
 
     condensedTextButton.onClick = [&]()
             {
@@ -241,8 +246,6 @@ void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
                 slider1.setValue(drywetLnew);
                 slider2.setValue(drywetRnew);
                 slider3.setValue(drywetCnew);
-
-
             };
     spaciousTextButton.onClick = [&]()
             {
@@ -259,8 +262,6 @@ void ControlComponent::changeSpace(juce::AudioProcessorValueTreeState& apvts,
                 slider1.setValue(drywetLnew);
                 slider2.setValue(drywetRnew);
                 slider3.setValue(drywetCnew);
-
-
             };
 }
 // Algorithm for changing the predictablity
@@ -473,15 +474,15 @@ void ControlComponent::changeLength(juce::AudioProcessorValueTreeState& apvts,
         feedbackCNew = static_cast<float>(feedbackCNew - stepShortFb * 0.74587934567);
         stepShortFb += static_cast<float>(0.0005);
         stepShortR +=0.005f;
-
         // adjusting delay time
         delaytimeLnew = static_cast<float>(delaytimeLnew - counterShort * 10.92385637);
         delaytimeRnew = static_cast<float>(delaytimeRnew - counterShort * 10.890567985);
         delaytimeCnew = static_cast<float>(delaytimeCnew - counterShort * 10.32572946);
-
+        //protecting ranges
         protectRange(0,3000,delaytimeLnew);
         protectRange(0,3000,delaytimeCnew);
         protectRange(0,3000,delaytimeRnew);
+        // setting sliders
         slider1.setValue(releaseNew);
         slider2.setValue(feedbackLNew);
         slider3.setValue(feedbackRNew);
@@ -501,7 +502,6 @@ void ControlComponent::changeLength(juce::AudioProcessorValueTreeState& apvts,
         feedbackLNew = static_cast<float>(feedbackLNew + stepLongFb * 0.987673342);
         feedbackRNew = static_cast<float>(feedbackRNew + stepLongFb * 0.789834);
         feedbackCNew = static_cast<float>(feedbackCNew + stepLongFb * 0.674634596);
-
         if (counterLong <= 20)
         {
             protectRange(0, static_cast<float>(0.60), feedbackLNew);
@@ -514,18 +514,17 @@ void ControlComponent::changeLength(juce::AudioProcessorValueTreeState& apvts,
             protectRange(0,1,feedbackRNew);
             protectRange(0,1,feedbackCNew);
         }
-
-
         // adjusting delay time
         delaytimeLnew = static_cast<float>(delaytimeLnew + counterLong * 5.92385637);
         delaytimeRnew = static_cast<float>(delaytimeRnew + counterLong * 5.890567985);
         delaytimeCnew = static_cast<float>(delaytimeCnew + counterLong * 5.32572946);
-
+        // protecting ranges
         protectRange(0,3000,delaytimeLnew);
         protectRange(0,3000,delaytimeCnew);
         protectRange(0,3000,delaytimeRnew);
         stepLongFb += static_cast<float>(0.005);
         stepLongR += 0.005f;
+        // setting sliders
         slider1.setValue(releaseNew);
         slider2.setValue(feedbackLNew);
         slider3.setValue(feedbackRNew);

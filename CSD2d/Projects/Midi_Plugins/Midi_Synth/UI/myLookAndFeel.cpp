@@ -4,6 +4,7 @@
 //==============================================================================
 knobsLookAndFeel::knobsLookAndFeel(juce::String colour)
 {
+    // loading image
     File customDirectory("/Volumes/SSD Kasper 1/HKU/Jaar_2/CSD2/Juce_Projects/Projects/Midi_Synth/UI/knobs");
     File knobImageFile2 = customDirectory.getChildFile(colour);
     img1 = ImageCache::getFromFile(knobImageFile2);
@@ -14,14 +15,14 @@ void knobsLookAndFeel::drawRotarySlider(Graphics& g,
     int x, int y, int width, int height, float sliderPos,
     float rotaryStartAngle, float rotaryEndAngle, Slider& slider)
 {
-
+    // checking if image is loaded
     if (img1.isValid())
     {
         const double rotation = (slider.getValue()
             - slider.getMinimum())
             / (slider.getMaximum()
                 - slider.getMinimum());
-
+        // specifying rotation
         const int frames = img1.getHeight() / img1.getWidth();
         const int frameId = (int)ceil(rotation * ((double)frames - 1.0));
         const float radius = jmin(width / 2.0f, height / 2.0f);
@@ -29,7 +30,7 @@ void knobsLookAndFeel::drawRotarySlider(Graphics& g,
         const float centerY = y + height * 0.5f;
         const float rx = centerX - radius - 1.0f;
         const float ry = centerY - radius;
-
+        // actually drawing the knob
         g.drawImage(img1,
             (int)rx,
             (int)ry,
@@ -41,6 +42,7 @@ void knobsLookAndFeel::drawRotarySlider(Graphics& g,
             img1.getWidth());
     }
     else
+    // debug if files are not there
     {
         static const float textPpercent = 0.35f;
         Rectangle<float> text_bounds(1.0f + width * (1.0f - textPpercent) / 2.0f,
@@ -66,23 +68,21 @@ void buttonsLookAndFeel::drawButtonBackground (juce::Graphics& g, juce::Button& 
 {
     auto buttonArea = button.getBounds();
     auto edge = 6;
-
+    // moving the other background a slight bit
     buttonArea.removeFromLeft (edge);
     buttonArea.removeFromTop (edge);
-
     // shadow
     g.setColour (backgroundColour.withAlpha(0.25f) );
     g.fillRect (buttonArea);
-
     auto offset = isButtonDown ? -edge / 2 : -edge;
     buttonArea.translate (offset, offset);
-
+    // making rectangles with different opacity
     g.setColour (backgroundColour);
     g.setOpacity(0.8f);
     g.fillRect (buttonArea);
     g.fillRect(buttonArea);
+    // draw button background
     g.drawImageAt(buttonBackground,button.getX(),button.getY());
-
 }
 void buttonsLookAndFeel::drawButtonText (juce::Graphics& g, juce::TextButton& button, bool isMouseOverButton, bool isButtonDown)
 {
@@ -95,9 +95,9 @@ void buttonsLookAndFeel::drawButtonText (juce::Graphics& g, juce::TextButton& bu
                                                             : juce::TextButton::textColourOffId)
                          .withMultipliedAlpha (button.isEnabled() ? 1.0f : 0.5f));
 
+    // getting the button specs and
     auto yIndent = juce::jmin (4, button.proportionOfHeight (0.3f));
     auto cornerSize = juce::jmin (button.getHeight(), button.getWidth()) / 2;
-
     auto fontHeight = juce::roundToInt (font.getHeight() * 0.6f);
     auto leftIndent  = juce::jmin (fontHeight, 2 + cornerSize / (button.isConnectedOnLeft()  ? 4 : 2));
     auto rightIndent = juce::jmin (fontHeight, 2 + cornerSize / (button.isConnectedOnRight() ? 4 : 2));
@@ -105,7 +105,7 @@ void buttonsLookAndFeel::drawButtonText (juce::Graphics& g, juce::TextButton& bu
 
     auto edge = 4;
     auto offset = isButtonDown ? edge / 2 : 0;
-
+    // offsetting the button when pressed
     if (textWidth > 0)
         g.drawFittedText (button.getButtonText(),
                           leftIndent + offset, yIndent + offset, textWidth, button.getHeight() - yIndent * 2 - edge,

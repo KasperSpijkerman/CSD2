@@ -15,7 +15,7 @@ DelayComponent::DelayComponent(juce::AudioProcessorValueTreeState& apvts,
         delayknobsFB("knoblightpurple.png"),
         delayknobsDT("knobpurple.png")
 {
-    // setting custom knobs
+    // Setting custom knobs
     // DryWet
     drywetLSlider.setLookAndFeel(&delayknobsDW);
     drywetRSlider.setLookAndFeel(&delayknobsDW);
@@ -40,9 +40,6 @@ DelayComponent::DelayComponent(juce::AudioProcessorValueTreeState& apvts,
     setSliderWithLabel(delayTimeLSlider,delayTimeLLabel,apvts,dtLid,delayTimeLSliderAttachment);
     setSliderWithLabel(delayTimeRSlider,delayTimeRLabel,apvts,dtRid,delayTimeRSliderAttachment);
     setSliderWithLabel(delayTimeCSlider,delayTimeCLabel,apvts,dtCid,delayTimeCSliderAttachment);
-
-
-
     // background panel
     File customDirectory("/Volumes/SSD Kasper 1/HKU/Jaar_2/CSD2/Juce_Projects/Projects/Midi_Synth/UI/backgrounds");
     File backgroundimage = customDirectory.getChildFile("backgroundpanelbig.png");
@@ -67,13 +64,11 @@ void DelayComponent::paint(juce::Graphics& g)
 void DelayComponent::resized()
 {
     // creating variables to make it easier to read and adjust everything all at once.
-    // creating variables to make it easier to read and adjust everything all at once.
     const auto sliderPosY = 55;
     const auto sliderWidth = 90;
     const auto sliderHeigth = 80;
     const auto labelYOffset = 20;
     const auto labelHeight = 15;
-
     // dry wet setting position
     drywetLSlider.setBounds(0,sliderPosY,sliderWidth,sliderHeigth);
     drywetLLabel.setBounds(drywetLSlider.getX(),drywetLSlider.getY()- labelYOffset,drywetLSlider.getWidth(),labelHeight);
@@ -81,7 +76,6 @@ void DelayComponent::resized()
     drywetRLabel.setBounds(drywetRSlider.getX(),drywetRSlider.getY()- labelYOffset,drywetRSlider.getWidth(),labelHeight);
     drywetCSlider.setBounds(100,sliderPosY,sliderWidth,sliderHeigth);
     drywetCLabel.setBounds(drywetCSlider.getX(),drywetCSlider.getY()- labelYOffset,drywetCSlider.getWidth(),labelHeight);
-
     // feedback setting position
     feedbackLSlider.setBounds(0,sliderPosY + 120,sliderWidth,sliderHeigth);
     feedbackLLabel.setBounds(feedbackLSlider.getX(),feedbackLSlider.getY()- labelYOffset,feedbackLSlider.getWidth(),labelHeight);

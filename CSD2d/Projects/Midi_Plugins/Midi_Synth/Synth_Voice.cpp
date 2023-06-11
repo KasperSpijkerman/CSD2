@@ -11,14 +11,12 @@ void Synth_Voice::startNote (int midiNoteNumber, float velocity, SynthesiserSoun
     // pass the midinote and activate note on from the ADSR
     osc.setWaveFrequency(midiNoteNumber,1);
     adsr.noteOn();
-
-
 }
 void Synth_Voice::stopNote (float velocity, bool allowTailOff)
 {
+    // note off message
     ignoreUnused(velocity);
     adsr.noteOff();
-
     if (! allowTailOff || ! adsr.isActive())
     {
         clearCurrentNote();
@@ -39,13 +37,14 @@ void Synth_Voice::pitchWheelMoved (int newPitchWheelValue)
 
 void Synth_Voice::updateParameters(const float attack, const float decay, const float sustain, const float release)
 {
+    // updating params
     adsr.updateADSR(attack,decay, sustain, release);
 }
 
 void Synth_Voice::prepareToPlay(double sampleRate, int samplesPerBlock, int outputChannels)
 {
+    // Prepare to Play giving everything samplerate
     adsr.setSampleRate(sampleRate);
-
     juce::dsp::ProcessSpec spec;
     spec.maximumBlockSize = static_cast<uint32>(samplesPerBlock);
     spec.sampleRate = sampleRate;
@@ -53,8 +52,6 @@ void Synth_Voice::prepareToPlay(double sampleRate, int samplesPerBlock, int outp
     osc.prepareToPlay(spec);
     gain.prepare (spec);
     gain.setGainLinear (0.05f);
-
-
     isPrepared = true;
 }
 
@@ -68,21 +65,21 @@ void Synth_Voice::renderNextBlock (AudioBuffer< float > &outputBuffer, int start
     {
         return;
     }
-
+    // setting size of the buffer
     synthBuffer.setSize(outputBuffer.getNumChannels(),numSamples,false,false,true);
     synthBuffer.clear();
-
+    // generating sound for audioblock
     juce::dsp::AudioBlock<float> audioBlock { synthBuffer };
     osc.getNextAudioBlock(audioBlock);
-
+    // applying volume
     gain.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));
-
+    // applying ADSR
     adsr.applyEnvelopeToBuffer(synthBuffer,0,synthBuffer.getNumSamples());
 
     for (int channel = 0; channel < outputBuffer.getNumChannels(); channel ++)
     {
         outputBuffer.addFrom(channel,startSample,synthBuffer,channel, 0, numSamples);
-
+    //trigering new ADSR
         if (! adsr.isActive())
         {
             clearCurrentNote();

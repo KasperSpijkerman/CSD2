@@ -17,7 +17,6 @@ void WaveShaper::prepareToPlay(double samplerate)
 {
     // clearing buffer
     memset(buffer, 0, sizeof(buffer));
-
 }
 
 float WaveShaper::output(float input)

@@ -1,6 +1,6 @@
 #pragma once
 #include <JuceHeader.h>
-
+// works together with Synth voice and just exists
 class Synth_Sound : public juce::SynthesiserSound
 {
 public:

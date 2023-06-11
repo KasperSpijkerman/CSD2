@@ -64,7 +64,7 @@ public:
     juce::Label  delayTimeCLabel{"delaytimeC", "Time C"};
     std::unique_ptr<Attachment> delayTimeCSliderAttachment;
 private:
-
+    // background
     Image background;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DelayComponent)
 };

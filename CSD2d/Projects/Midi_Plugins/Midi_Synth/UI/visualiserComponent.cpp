@@ -1,5 +1,4 @@
 #include "visualiserComponent.h"
-
 visualiserComponent::visualiserComponent(AudioPluginAudioProcessor* processor)
         : pAmp(processor)
 {
@@ -56,7 +55,7 @@ void visualiserComponent::paint(juce::Graphics& g) {
 }
 void visualiserComponent::resized()
 {
-
+    // can be practical if there come more components
 }
 
 void visualiserComponent::timerCallback()

@@ -30,7 +30,6 @@ void LFOComponent::paint(juce::Graphics& g)
     g.setColour (juce::Colours::powderblue);
     g.setFont (32.0f);
     g.drawFittedText ("Movement", getLocalBounds(), juce::Justification::topLeft, 1);
-
 }
 // layout slider positions
 void LFOComponent::resized()
@@ -41,11 +40,9 @@ void LFOComponent::resized()
     const auto sliderHeigth = 110;
     const auto labelYOffset = 20;
     const auto labelHeight = 20;
-
     LFOFreqSlider.setBounds(30,sliderPosY,sliderWidth,sliderHeigth);
     LFOFreqlabel.setBounds(LFOFreqSlider.getX(),LFOFreqSlider.getY()- labelYOffset,LFOFreqSlider.getWidth(),labelHeight);
 
     LFODepthSlider.setBounds(LFOFreqSlider.getRight()+60,sliderPosY,sliderWidth,sliderHeigth);
     LFODepthlabel.setBounds(LFODepthSlider.getX(),LFODepthSlider.getY()-labelYOffset,LFODepthSlider.getWidth(),labelHeight);
-
 }

@@ -1,5 +1,4 @@
 #include "lcrDelay.h"
-
 //constructor
 LcrDelay::LcrDelay()
 {
@@ -22,18 +21,17 @@ void LcrDelay::lcrDelayPrepareToPlay(double samplerate)
 
 }
 
-float LcrDelay::lcrDelayOutput(float input, uint ch){
-//variables for all the delaylines
+float LcrDelay::lcrDelayOutput(float input, uint ch)
+{
+    // Variables for all the delaylines
     float LorRoutput;
     float cOutput;
-//calculating all the values ch 0 = L, 1 = R and 2 = C
+    // Calculating all the values ch 0 = L, 1 = R and 2 = C
     LorRoutput = DelayArrP[ch].output(input);
-//getting the output for the C delayline but not increment it, the increment happens in the main.cpp
+    // Getting the output for the C delayline but not increment it, the increment happens in the main.cpp
     cOutput = onepole.output(DelayArrP[2].outputNoIncrement(input));
     return LorRoutput + cOutput;
 }
-
-
 void LcrDelay::changeDelayLine(const int ch, const float delaytime, const float feedback, const float drywet)
 {
     distChange = true;
@@ -47,8 +45,6 @@ void LcrDelay::changeDelayLine(const int ch, const float delaytime, const float 
         feedbackLCR[ch] = feedback;
         DelayArrP[ch].setFeedback(feedback);
     }
-
-
     drywetLCR[ch] = drywet;
     DelayArrP[ch].setDryWet(drywet);
 }

@@ -54,14 +54,12 @@ void ShaperComponent::setSliderWithLabel (juce::Slider& slider, juce::Label& lab
     // Slider style, textbox and making visible
     slider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     slider.setTextBoxStyle(juce::Slider::TextBoxBelow, true,50,25);
+    // making visible
     addAndMakeVisible(slider);
-
     attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts,paramID,slider);
-
     // creating the label, textfont, and colour.
     label.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
     label.setFont(15.0f);
     label.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(label);
-
 }

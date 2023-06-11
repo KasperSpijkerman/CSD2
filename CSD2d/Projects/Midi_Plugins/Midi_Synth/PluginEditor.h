@@ -47,9 +47,8 @@ private:
     DelayComponent delay;
     // Visualiser UI
     visualiserComponent visualiser;
+    //Background
     Image background;
-
     void timerCallback() override;
-
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };

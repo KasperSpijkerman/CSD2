@@ -2,6 +2,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
+// initialising different components
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
     : AudioProcessorEditor (&p),
     audioProcessor (p) ,
@@ -16,7 +17,9 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 
 
 {
+    // setting canvas size
     setSize (1000, 800);
+    // making objects visible
     addAndMakeVisible(adsr);
     addAndMakeVisible(osc);
     addAndMakeVisible(filter);
@@ -25,7 +28,9 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     addAndMakeVisible(control);
     addAndMakeVisible(visualiser);
     addAndMakeVisible(delay);
+    // starting timer ms
     startTimer(1);
+    // backgrounds
     File customDirectory("/Volumes/SSD Kasper 1/HKU/Jaar_2/CSD2/Juce_Projects/Projects/Midi_Synth/UI/backgrounds");
     File backgroundimage = customDirectory.getChildFile("Backgroundmain.png");
     background = ImageCache::getFromFile(backgroundimage);
@@ -108,7 +113,7 @@ void AudioPluginAudioProcessorEditor::updateControlData()
                          delay.delayTimeRSlider,
                          delay.delayTimeCSlider);
 }
-
+// updating parameter sliders with timer
 void AudioPluginAudioProcessorEditor::timerCallback()
 {
     updateControlData();

@@ -11,7 +11,7 @@ public:
     void drawRotarySlider(Graphics& g, int x, int y, int width, int height, float sliderPos,
         float rotaryStartAngle, float rotaryEndAngle, Slider& slider) override;
 private:
-    // knob png file
+    // knob image file
     Image img1;
 };
 
@@ -19,9 +19,11 @@ class buttonsLookAndFeel : public LookAndFeel_V4
 {
 public:
     buttonsLookAndFeel();
-    void drawButtonBackground (juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour,
+    void drawButtonBackground (juce::Graphics& g, juce::Button& button,
+                               const juce::Colour& backgroundColour,
                                bool, bool isButtonDown) override;
     void drawButtonText (juce::Graphics& g, juce::TextButton& button, bool isMouseOverButton, bool isButtonDown) override;
+    // background button image file
     Image buttonBackground;
 
 };
