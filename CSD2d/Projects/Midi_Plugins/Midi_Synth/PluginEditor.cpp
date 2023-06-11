@@ -11,7 +11,9 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     LFO(audioProcessor.apvts,"lfofreq","lfodepth"),
     shaper(audioProcessor.apvts,"drive","trim"),
     control(audioProcessor.apvts,"Lighter","Darker","Closer","Spacier","Earthlier","Weirder","Faster","Slower","Rougher","Smoother","Shorter", "Longer"),
+    visualiser(&audioProcessor),
     delay(audioProcessor.apvts,"drywetL","drywetR","drywetC","feedbackL","feedbackR","feedbackC","delaytimeL","delaytimeR","delaytimeC")
+
 
 {
     setSize (1000, 800);
@@ -21,6 +23,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     addAndMakeVisible(LFO);
     addAndMakeVisible(shaper);
     addAndMakeVisible(control);
+    addAndMakeVisible(visualiser);
     addAndMakeVisible(delay);
     startTimer(1);
     File customDirectory("/Volumes/SSD Kasper 1/HKU/Jaar_2/CSD2/Juce_Projects/Projects/Midi_Synth/UI/backgrounds");
@@ -60,11 +63,12 @@ void AudioPluginAudioProcessorEditor::resized()
     // placing objects on screen
     osc.setBounds(paddingX,paddingY,objectWidth,objectHeight);
     adsr.setBounds(osc.getRight()+moveRight,paddingY,objectWidth, objectHeight);
-    filter.setBounds(paddingX,paddingY2,objectWidth,objectHeight);
+    filter.setBounds(paddingX,paddingY2,objectWidth,objectHeight-20);
     LFO.setBounds(osc.getRight()+moveRight,paddingY2,objectWidth,objectHeight);
     shaper.setBounds(osc.getRight()+moveRight,paddingY3,objectWidth,objectHeight+250);
     control.setBounds(static_cast<int>(getWidth() / 3), getHeight() / 700, objectWidthControl, objectHeightBig);
     delay.setBounds(getWidth()/3,getHeight()/2,objectWidthBig,objectHeightBig);
+    visualiser.setBounds(paddingX,paddingY3,objectWidthBig+33,objectHeight);
 }
 // updating the data based on buttons
 void AudioPluginAudioProcessorEditor::updateControlData()

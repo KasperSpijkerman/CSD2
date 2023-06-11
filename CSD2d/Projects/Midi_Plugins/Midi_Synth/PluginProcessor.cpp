@@ -10,6 +10,12 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor() :
     ),
         apvts(*this, nullptr,"Parameters", createParameters())
 {
+    // filling the history array with zeroes to clean it
+    historyLength = 400;
+    for(int i = 0; i <historyLength; i++)
+    {
+        history.add(0);
+    }
     // adding a sound and a voice
      synth.addSound(new Synth_Sound());
      synth.addVoice(new Synth_Voice());
@@ -253,11 +259,24 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
             auto* channelData = buffer.getWritePointer (channel);
             channelData[sample] = delay.lcrDelayOutput(buffer.getSample(channel, sample), static_cast<uint>(channel));
             channelData[sample] = tremolos[static_cast<unsigned long>(channel)].output(waveshapers[static_cast<unsigned long>(channel)].output(buffer.getSample(channel, sample)));
+            if (sample % 10 == 0)
+            {
+                float samplo = buffer.getSample(0, sample) / 2 + buffer.getSample(1, sample) / 2;
+
+                history.add(samplo);
+            }
+            if (history.size() > historyLength)
+            {
+                history.remove(0);
+            }
         }
         delay.lcrIncrementC();
+        // storing the samples of the buffer in the history array for visualization
+
     }
 
 }
+
 
 //==============================================================================
 bool AudioPluginAudioProcessor::hasEditor() const

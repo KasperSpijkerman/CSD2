@@ -40,13 +40,13 @@ void FilterComponent::paint(juce::Graphics& g)
 // layout slider positions
 void FilterComponent::resized() {
     // creating variables to make it easier to read and adjust everything all at once.
-    const auto sliderPosY = 90;
+    const auto sliderPosY = 70;
     const auto sliderWidth = 130;
     const auto sliderHeigth = 110;
     const auto labelYOffset = 20;
     const auto labelHeight = 20;
     // setting positions of sliders and labels
-    filterTypeSelector.setBounds(getWidth()/3-10, 50, 90, 20);
+    filterTypeSelector.setBounds(getWidth()/3-10, 30, 90, 20);
 
     filterCutoffSlider.setBounds(30, sliderPosY, sliderWidth, sliderHeigth);
     filterCutofflabel.setBounds(filterCutoffSlider.getX(), filterCutoffSlider.getY() - labelYOffset,

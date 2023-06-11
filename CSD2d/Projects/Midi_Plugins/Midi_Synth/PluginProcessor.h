@@ -52,9 +52,16 @@ public:
     juce::AudioProcessorValueTreeState apvts;
     // creating the parameters in seperate function
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
-
+    // returning history for Audioeditor
+    Array<float> getHistory()
+    {
+        return history;
+    }
 
 private:
+    //Storing waveform for oscilloscope
+    Array<float> history;
+    int historyLength;
     // synth object
     juce::Synthesiser synth;
     // filter object

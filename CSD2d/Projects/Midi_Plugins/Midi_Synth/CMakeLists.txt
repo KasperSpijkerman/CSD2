@@ -83,6 +83,7 @@ target_sources(TeleSynth
         UI/ControlComponent.cpp
         UI/DelayComponent.cpp
         UI/myLookAndFeel.cpp
+        UI/visualiserComponent.cpp
         Data/AdsrData.cpp
         Data/OscData.cpp
         Data/FilterData.cpp

@@ -8,6 +8,7 @@
 #include "UI/ShaperComponent.h"
 #include "UI/ControlComponent.h"
 #include "UI/DelayComponent.h"
+#include "UI/visualiserComponent.h"
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor,
@@ -44,6 +45,8 @@ private:
     ControlComponent control;
     // Delay UI
     DelayComponent delay;
+    // Visualiser UI
+    visualiserComponent visualiser;
     Image background;
 
     void timerCallback() override;
