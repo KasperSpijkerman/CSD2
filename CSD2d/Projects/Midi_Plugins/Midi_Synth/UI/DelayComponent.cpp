@@ -11,9 +11,23 @@ DelayComponent::DelayComponent(juce::AudioProcessorValueTreeState& apvts,
                                juce::String dtLid,
                                juce::String dtRid,
                                juce::String dtCid):
-        delayknobs("knobgrey.png"),
+        delayknobsDW("knobbrightpurple.png"),
+        delayknobsFB("knoblightpurple.png"),
         delayknobsDT("knobpurple.png")
 {
+    // setting custom knobs
+    // DryWet
+    drywetLSlider.setLookAndFeel(&delayknobsDW);
+    drywetRSlider.setLookAndFeel(&delayknobsDW);
+    drywetCSlider.setLookAndFeel(&delayknobsDW);
+    // Feedback LCR
+    delayTimeLSlider.setLookAndFeel(&delayknobsDT);
+    delayTimeRSlider.setLookAndFeel(&delayknobsDT);
+    delayTimeCSlider.setLookAndFeel(&delayknobsDT);
+    // Delaytime LRC
+    feedbackLSlider.setLookAndFeel(&delayknobsFB);
+    feedbackRSlider.setLookAndFeel(&delayknobsFB);
+    feedbackCSlider.setLookAndFeel(&delayknobsFB);
     // DryWet
     setSliderWithLabel(drywetLSlider,drywetLLabel,apvts,dWLid,drywetLSliderAttachment);
     setSliderWithLabel(drywetRSlider,drywetRLabel,apvts,dWRid,drywetRSliderAttachment);
@@ -27,29 +41,27 @@ DelayComponent::DelayComponent(juce::AudioProcessorValueTreeState& apvts,
     setSliderWithLabel(delayTimeRSlider,delayTimeRLabel,apvts,dtRid,delayTimeRSliderAttachment);
     setSliderWithLabel(delayTimeCSlider,delayTimeCLabel,apvts,dtCid,delayTimeCSliderAttachment);
 
-    drywetLSlider.setLookAndFeel(&delayknobs);
-    drywetRSlider.setLookAndFeel(&delayknobs);
-    drywetCSlider.setLookAndFeel(&delayknobs);
 
-    delayTimeLSlider.setLookAndFeel(&delayknobsDT);
-    delayTimeRSlider.setLookAndFeel(&delayknobsDT);
-    delayTimeCSlider.setLookAndFeel(&delayknobsDT);
 
-    feedbackLSlider.setLookAndFeel(&delayknobs);
-    feedbackRSlider.setLookAndFeel(&delayknobs);
-    feedbackCSlider.setLookAndFeel(&delayknobs);
+    // background panel
+    File customDirectory("/Volumes/SSD Kasper 1/HKU/Jaar_2/CSD2/Juce_Projects/Projects/Midi_Synth/UI/backgrounds");
+    File backgroundimage = customDirectory.getChildFile("backgroundpanelbig.png");
+    background = ImageCache::getFromFile(backgroundimage);
 }
 // destructor
 DelayComponent::~DelayComponent()
 {
-
+    setLookAndFeel (nullptr);
 }
 void DelayComponent::paint(juce::Graphics& g)
 {
-    g.fillAll(juce::Colours::purple);
-    g.setColour (juce::Colours::white);
-    g.setFont (30.0f);
-    g.drawFittedText ("Delay", getLocalBounds(), juce::Justification::centredTop, 1);
+    g.drawImageAt(background,0,0);
+    g.setColour (juce::Colours::deeppink);
+    g.setFont (32.0f);
+    g.drawFittedText ("Space", getLocalBounds(), juce::Justification::centredTop, 1);
+    g.setColour (juce::Colours::powderblue);
+    g.setFont (34.0f);
+    g.drawFittedText ("Space", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 // layout slider positions
 void DelayComponent::resized()

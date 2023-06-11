@@ -302,8 +302,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
     // FM parameters
 
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"fmfreq",1}, "FM Freq", juce::NormalisableRange<float>{0.0f, 1000.0f,0.01f,0.3f},5.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"fmdepth",2}, "FM Depth", juce::NormalisableRange<float>{0.0f, 1000.0f,0.01f,0.3f},3.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"fmfreq",1}, "Mod Speed", juce::NormalisableRange<float>{0.0f, 100.0f,0.01f,0.3f},5.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"fmdepth",2}, "Mod Range", juce::NormalisableRange<float>{0.0f, 100.0f,0.01f,0.3f},3.0f));
 
     // ADSR Parameters
 
@@ -314,7 +314,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
 
     // parameter choice for choosing different oscillators
 
-    params.push_back (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID {"oscwavetype1",7}, "Oscillator Wave Type", juce::StringArray { "Sine", "Saw", "Square"}, 1));
+    params.push_back (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID {"oscwavetype1",7}, "Oscillator Wave Type", juce::StringArray { "Sine","Square" ,"Saw" }, 2));
 
     // Filter
 
@@ -323,25 +323,25 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"filterresonance",10}, "Resonance", juce::NormalisableRange<float>{1.0f, 10.0f,0.1f},0.0f));
 
     // LFO (Tremolo)
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"lfofreq",10}, "LFO Freq", juce::NormalisableRange<float>{0.0f, 60.0f,0.1f,0.6f},0.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"lfodepth",11}, "LFO depth", juce::NormalisableRange<float>{0.0f, 1.0f,0.1f},0.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"lfofreq",10}, "LFO Freq", juce::NormalisableRange<float>{0.1f, 30.0f,0.1f,0.6f},0.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"lfodepth",11}, "LFO depth", juce::NormalisableRange<float>{0.0f, 1.0f,0.025f},0.0f));
 
     // Shaper
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"drive",12}, "Drive", juce::NormalisableRange<float>{1.0f, 100.0f,1.0f,0.6f},0.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"trim",13}, "Trim", juce::NormalisableRange<float>{
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"trim",13}, "Level", juce::NormalisableRange<float>{
             static_cast<float>(0.000001), 1.0f, 0.001f}, 1.0f));
 
 
     // Delay
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "drywetL", 14 }, "Dry-Wet-L", 0.0f, 1.0f,0.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "drywetR", 15 }, "Dry-Wet-R", 0.0f, 1.0f,0.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "drywetC", 16 }, "Dry-Wet-C", 0.0f, 1.0f,0.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"feedbackL",17}, "Feedback-L", 0.0f, 0.99f,0.5f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"feedbackR",18}, "Feedback-R", 0.0f, 0.99f,0.5f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"feedbackC",19}, "Feedback-C", 0.0f, 0.99f,0.5f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"delaytimeL",20}, "Delaytime-L", 0.0f, 3000.0f,100.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"delaytimeR",21}, "Delaytime-R", 0.0f, 3000.0f,100.0f));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"delaytimeC",22}, "Delaytime-C", 0.0f, 3000.0f,100.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "drywetL", 14 }, "Mix L", 0.0f, 1.0f,0.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "drywetR", 15 }, "Mix R", 0.0f, 1.0f,0.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "drywetC", 16 }, "Mix C", 0.0f, 1.0f,0.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"feedbackL",17}, "FB-L", 0.0f, 0.99f,0.5f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"feedbackR",18}, "FB-R", 0.0f, 0.99f,0.5f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"feedbackC",19}, "FB-C", 0.0f, 0.99f,0.5f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"delaytimeL",20}, "Time-L", 0.0f, 3000.0f,102.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"delaytimeR",21}, "Time-R", 0.0f, 3000.0f,103.0f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"delaytimeC",22}, "Time-C", 0.0f, 3000.0f,105.0f));
 
 
     return {params.begin(), params.end()};

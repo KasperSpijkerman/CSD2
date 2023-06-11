@@ -1,8 +1,8 @@
-// This code belongs to Stefan Remberg I used it to experiment with custom knobs
+// This code belongs to Stefan Remberg I used it to experiment with custom knobs -> Will later make my own knobs
 #include "myLookAndFeel.h"
 
 //==============================================================================
-myLookAndFeelV1::myLookAndFeelV1(juce::String colour)
+knobsLookAndFeel::knobsLookAndFeel(juce::String colour)
 {
     File customDirectory("/Volumes/SSD Kasper 1/HKU/Jaar_2/CSD2/Juce_Projects/Projects/Midi_Synth/UI/knobs");
     File knobImageFile2 = customDirectory.getChildFile(colour);
@@ -10,7 +10,7 @@ myLookAndFeelV1::myLookAndFeelV1(juce::String colour)
 }
 
 //==============================================================================
-void myLookAndFeelV1::drawRotarySlider(Graphics& g,
+void knobsLookAndFeel::drawRotarySlider(Graphics& g,
     int x, int y, int width, int height, float sliderPos,
     float rotaryStartAngle, float rotaryEndAngle, Slider& slider)
 {
@@ -53,3 +53,62 @@ void myLookAndFeelV1::drawRotarySlider(Graphics& g,
     }
 }
 
+buttonsLookAndFeel::buttonsLookAndFeel()
+{
+    File customDirectory("/Volumes/SSD Kasper 1/HKU/Jaar_2/CSD2/Juce_Projects/Projects/Midi_Synth/UI/knobs");
+    File buttonBackgroundFile = customDirectory.getChildFile("backgroundpanel.png");
+    buttonBackground = ImageCache::getFromFile(buttonBackgroundFile);
+}
+
+void buttonsLookAndFeel::drawButtonBackground (juce::Graphics& g, juce::Button& button,
+                           const juce::Colour& backgroundColour,
+                           bool, bool isButtonDown)
+{
+    auto buttonArea = button.getBounds();
+    auto edge = 6;
+
+    buttonArea.removeFromLeft (edge);
+    buttonArea.removeFromTop (edge);
+
+    // shadow
+    g.setColour (backgroundColour.withAlpha(0.25f) );
+    g.fillRect (buttonArea);
+
+    auto offset = isButtonDown ? -edge / 2 : -edge;
+    buttonArea.translate (offset, offset);
+
+    g.setColour (backgroundColour);
+    g.setOpacity(0.8f);
+    g.fillRect (buttonArea);
+    g.fillRect(buttonArea);
+    g.drawImageAt(buttonBackground,button.getX(),button.getY());
+
+}
+void buttonsLookAndFeel::drawButtonText (juce::Graphics& g, juce::TextButton& button, bool isMouseOverButton, bool isButtonDown)
+{
+    // Took the standard template from JUCE reference site and added extra things
+    auto font = getTextButtonFont (button, button.getHeight());
+    g.setFont (font);
+    juce::Font newFont("Elephant", 22.0f, juce::Font::plain);
+    g.setFont(newFont);
+    g.setColour (button.findColour (button.getToggleState() ? juce::TextButton::textColourOnId
+                                                            : juce::TextButton::textColourOffId)
+                         .withMultipliedAlpha (button.isEnabled() ? 1.0f : 0.5f));
+
+    auto yIndent = juce::jmin (4, button.proportionOfHeight (0.3f));
+    auto cornerSize = juce::jmin (button.getHeight(), button.getWidth()) / 2;
+
+    auto fontHeight = juce::roundToInt (font.getHeight() * 0.6f);
+    auto leftIndent  = juce::jmin (fontHeight, 2 + cornerSize / (button.isConnectedOnLeft()  ? 4 : 2));
+    auto rightIndent = juce::jmin (fontHeight, 2 + cornerSize / (button.isConnectedOnRight() ? 4 : 2));
+    auto textWidth = button.getWidth() - leftIndent - rightIndent;
+
+    auto edge = 4;
+    auto offset = isButtonDown ? edge / 2 : 0;
+
+    if (textWidth > 0)
+        g.drawFittedText (button.getButtonText(),
+                          leftIndent + offset, yIndent + offset, textWidth, button.getHeight() - yIndent * 2 - edge,
+                          juce::Justification::centred, 2);
+    g.setOpacity(0.8f); // Set the opacity to 50%
+}

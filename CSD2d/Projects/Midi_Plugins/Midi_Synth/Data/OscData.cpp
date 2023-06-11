@@ -20,13 +20,13 @@ void OscData::setWaveType(const int choice)
             break;
 
         case 1:
-            // saw
-            initialise([](float x) {return  x / MathConstants<float>::pi;});
+            // square
+            initialise([](float x) {return x < 0.0f ? -1.0f : 1.0f; });
             break;
 
         case 2:
-            // square
-            initialise([](float x) {return x < 0.0f ? -1.0f : 1.0f; });
+            // saw
+            initialise([](float x) {return  x / MathConstants<float>::pi;});
             break;
 
         default:

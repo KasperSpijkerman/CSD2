@@ -23,6 +23,9 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     addAndMakeVisible(control);
     addAndMakeVisible(delay);
     startTimer(1);
+    File customDirectory("/Volumes/SSD Kasper 1/HKU/Jaar_2/CSD2/Juce_Projects/Projects/Midi_Synth/UI/backgrounds");
+    File backgroundimage = customDirectory.getChildFile("Backgroundmain.png");
+    background = ImageCache::getFromFile(backgroundimage);
 
 }
 
@@ -33,32 +36,34 @@ AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 //==============================================================================
 void AudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    g.fillAll(juce::Colours::purple);
+
+    g.drawImageAt(background,0,0);
+    //g.fillAll(juce::Colours::purple);
     g.setColour(juce::Colours::green);
     g.setFont (30.0f);
 }
 
 void AudioPluginAudioProcessorEditor::resized()
 {
-    const auto paddingX = 5;
-    const auto paddingY = 35;
+    const auto paddingX = 0;
+    const auto paddingY = 0;
     const auto paddingY2 = 400;
-    const auto paddingY3 = 550;
+    const auto paddingY3 = 600;
     // standard formats
-    const auto objectWidth = 300;
-    const auto objectHeight = 200;
+    const auto objectWidth = 400;
+    const auto objectHeight = 235;
     // bigger format
     const auto objectWidthBig = 300;
     const auto objectWidthControl = 300;
-    const auto objectHeightBig = 600;
-    const auto moveRight = 400;
+    const auto objectHeightBig = 650;
+    const auto moveRight = 233;
     // placing objects on screen
     osc.setBounds(paddingX,paddingY,objectWidth,objectHeight);
     adsr.setBounds(osc.getRight()+moveRight,paddingY,objectWidth, objectHeight);
     filter.setBounds(paddingX,paddingY2,objectWidth,objectHeight);
     LFO.setBounds(osc.getRight()+moveRight,paddingY2,objectWidth,objectHeight);
-    shaper.setBounds(osc.getRight()+moveRight,paddingY3,objectWidth,objectHeight);
-    control.setBounds(static_cast<int>(getWidth() / 3), getHeight() / 500, objectWidthControl, objectHeightBig);
+    shaper.setBounds(osc.getRight()+moveRight,paddingY3,objectWidth,objectHeight+250);
+    control.setBounds(static_cast<int>(getWidth() / 3), getHeight() / 700, objectWidthControl, objectHeightBig);
     delay.setBounds(getWidth()/3,getHeight()/2,objectWidthBig,objectHeightBig);
 }
 // updating the data based on buttons
@@ -67,7 +72,9 @@ void AudioPluginAudioProcessorEditor::updateControlData()
     // passing audio parameters and the right sliders to adjust
     // changing cutoff frequency
     control.changeFilter(audioProcessor.apvts,
-                         filter.filterCutoffSlider);
+                         filter.filterCutoffSlider,
+                         filter.filterTypeSelector,
+                         osc.oscWaveSelector);
     // changing Delay dry wet and delay times
     control.changeSpace(audioProcessor.apvts,
                         delay.drywetLSlider,

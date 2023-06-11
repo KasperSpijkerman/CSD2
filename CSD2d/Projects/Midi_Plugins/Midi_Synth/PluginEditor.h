@@ -44,6 +44,7 @@ private:
     ControlComponent control;
     // Delay UI
     DelayComponent delay;
+    Image background;
 
     void timerCallback() override;
 

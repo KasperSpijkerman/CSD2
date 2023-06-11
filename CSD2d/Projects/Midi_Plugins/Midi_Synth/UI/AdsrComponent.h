@@ -33,6 +33,7 @@ private:
     std::unique_ptr<Attachment> decayAttachment;
     std::unique_ptr<Attachment> sustainAttachment;
     std::unique_ptr<Attachment> releaseAttachment;
+    Image background;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AdsrComponent)
 };
 

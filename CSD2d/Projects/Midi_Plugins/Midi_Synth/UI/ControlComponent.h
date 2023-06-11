@@ -1,7 +1,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-
+#include "myLookAndFeel.h"
 class ControlComponent : public juce::Component
 {
 public:
@@ -24,7 +24,10 @@ public:
     void resized() override;
     void protectRange(float min, float max, std::atomic<float> &value);
     // functions for changing the sliders
-    void changeFilter(juce::AudioProcessorValueTreeState& apvts,juce::Slider& slider);
+    void changeFilter(juce::AudioProcessorValueTreeState& apvts,
+                      juce::Slider& slider,
+                      juce::ComboBox& combobox,
+                      juce::ComboBox& combobox2);
     void changeSpace(juce::AudioProcessorValueTreeState& apvts,
                      juce::Slider& slider1,
                      juce::Slider& slider2,
@@ -50,6 +53,7 @@ public:
                        juce::Slider& slider6,
                        juce::Slider& slider7);
 private:
+    buttonsLookAndFeel buttonStyle;
     // buttons for different opposites
     juce::TextButton LightTextButton;
     juce::TextButton DarkTextButton;
@@ -98,9 +102,9 @@ private:
     float stepRes {static_cast<float>(0.1)};
     // AM amount
     float stepFastAmf {0.5f};
-    float stepFastAmd {0.1f};
+    float stepExpAmd {0.1f};
     float stepSlowAmf {0.5};
-    float stepSlowAmd {static_cast<float>(0.1)};
+    float steppPredAmd {static_cast<float>(0.1)};
     float stepFastAtt {0.1f};
     float stepSlowAtt {static_cast<float>(0.1)};
     // Gain/trim amount
@@ -114,7 +118,7 @@ private:
     float stepLongR {static_cast<float>(0.05)};
     float stepLongFb {static_cast<float>(0.05)};
     float stepPredamDepth{static_cast<float>(0.1)};
-
+    Image background;
 
     void createButton (juce::TextButton& button, juce::AudioProcessorValueTreeState& apvts, juce::String paramID);
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ControlComponent)

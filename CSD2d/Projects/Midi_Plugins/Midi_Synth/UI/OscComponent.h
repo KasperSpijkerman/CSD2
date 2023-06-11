@@ -11,18 +11,20 @@ public:
 
     void paint(juce::Graphics&) override;
     void resized() override;
+    knobsLookAndFeel fmknobs;
     juce::Slider fmFreqSlider;
     juce::Slider fmDepthSlider;
-private:
     juce::ComboBox oscWaveSelector;
+private:
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-    juce::Label fmFreqlabel {"fmfreq", "FM Freq"};
-    juce::Label fmDepthlabel {"fmdepth", "FM Depth"};
+    juce::Label fmFreqlabel {"fmfreq", "Mod Speed"};
+    juce::Label fmDepthlabel {"fmdepth", "Mod Depth"};
     std::unique_ptr<Attachment> fmFreqAttachment;
     std::unique_ptr<Attachment> fmdepthAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> oscWaveSelectorAttachment;
 
-    myLookAndFeelV1 fmknobs;
+
+    Image background;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OscComponent)
 };
 
