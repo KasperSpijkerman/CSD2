@@ -5,9 +5,8 @@ visualiserComponent::visualiserComponent(AudioPluginAudioProcessor* processor)
     // starting timer for drawing
     startTimer(1);
     // loading background image
-    File customDirectory("/Volumes/SSD Kasper 1/HKU/Jaar_2/CSD2/Juce_Projects/Projects/Midi_Synth/UI/backgrounds");
-    File backgroundimage = customDirectory.getChildFile("backgroundpanel.png");
-    background = ImageCache::getFromFile(backgroundimage);
+    background = ImageFileFormat::loadFrom(BinaryData::backgroundpanel_png, BinaryData::backgroundpanel_pngSize);
+
 }
 
 void visualiserComponent::paint(juce::Graphics& g) {

@@ -9,7 +9,7 @@
 #include "UI/ControlComponent.h"
 #include "UI/DelayComponent.h"
 #include "UI/visualiserComponent.h"
-
+#include "BinaryData.h"
 //==============================================================================
 class AudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor,
                                          public AudioPluginAudioProcessor,

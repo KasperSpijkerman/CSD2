@@ -7,7 +7,7 @@
 class knobsLookAndFeel : public LookAndFeel_V4
 {
 public:
-    knobsLookAndFeel(juce::String colour);
+    knobsLookAndFeel(juce::String colouro);
     void drawRotarySlider(Graphics& g, int x, int y, int width, int height, float sliderPos,
         float rotaryStartAngle, float rotaryEndAngle, Slider& slider) override;
 private:

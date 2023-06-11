@@ -32,9 +32,7 @@ ControlComponent::ControlComponent(juce::AudioProcessorValueTreeState& apvts,
     createButton(shortTextButton,apvts,ShortId);
     createButton(longTextButton,apvts,LongId);
     // background panel
-    File customDirectory("/Volumes/SSD Kasper 1/HKU/Jaar_2/CSD2/Juce_Projects/Projects/Midi_Synth/UI/backgrounds");
-    File backgroundimage = customDirectory.getChildFile("backgroundpanelbig.png");
-    background = ImageCache::getFromFile(backgroundimage);
+    background = ImageFileFormat::loadFrom(BinaryData::backgroundpanelbig_png, BinaryData::backgroundpanelbig_pngSize);
 
 }
 // destructor

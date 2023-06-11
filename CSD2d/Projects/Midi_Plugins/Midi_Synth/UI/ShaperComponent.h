@@ -2,6 +2,7 @@
 
 #include <JuceHeader.h>
 #include "myLookAndFeel.h"
+#include "BinaryData.h"
 class ShaperComponent : public juce::Component
 {
 public:

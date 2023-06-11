@@ -9,9 +9,8 @@ AdsrComponent::AdsrComponent(juce::AudioProcessorValueTreeState& apvts)
     setSliderParams(sustainSlider,apvts,"sustain",sustainAttachment);
     setSliderParams(releaseSlider,apvts,"release",releaseAttachment);
     // background panel
-    File customDirectory("/Volumes/SSD Kasper 1/HKU/Jaar_2/CSD2/Juce_Projects/Projects/Midi_Synth/UI/backgrounds");
-    File backgroundimage = customDirectory.getChildFile("backgroundpanel.png");
-    background = ImageCache::getFromFile(backgroundimage);
+    background = ImageFileFormat::loadFrom(BinaryData::backgroundpanel_png, BinaryData::backgroundpanel_pngSize);;
+
 }
 // destructor
 AdsrComponent::~AdsrComponent()

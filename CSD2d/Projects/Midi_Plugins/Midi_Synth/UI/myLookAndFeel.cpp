@@ -7,7 +7,39 @@ knobsLookAndFeel::knobsLookAndFeel(juce::String colour)
     // loading image
     File customDirectory("/Volumes/SSD Kasper 1/HKU/Jaar_2/CSD2/Juce_Projects/Projects/Midi_Synth/UI/knobs");
     File knobImageFile2 = customDirectory.getChildFile(colour);
-    img1 = ImageCache::getFromFile(knobImageFile2);
+    if(colour == "knobblue.png")
+    {
+        img1 = ImageFileFormat::loadFrom(BinaryData::knobblue_png, BinaryData::knobblue_pngSize);
+    }
+    else if(colour == "knobgreenorange.png")
+    {
+        img1 = ImageFileFormat::loadFrom(BinaryData::knobgreenorange_png, BinaryData::knobgreenorange_pngSize);
+    }
+    else if(colour == "knobpink.png")
+    {
+        img1 = ImageFileFormat::loadFrom(BinaryData::knobpink_png, BinaryData::knobpink_pngSize);
+    }
+    else if(colour == "knobbgrey.png")
+    {
+        img1 = ImageFileFormat::loadFrom(BinaryData::knobgrey_png, BinaryData::knobgrey_pngSize);
+    }
+    else if(colour == "knobpurple.png")
+    {
+        img1 = ImageFileFormat::loadFrom(BinaryData::knobpurple_png, BinaryData::knobpurple_pngSize);
+    }
+    else if(colour == "knoblightpurple.png")
+    {
+        img1 = ImageFileFormat::loadFrom(BinaryData::knoblightpurple_png, BinaryData::knoblightpurple_pngSize);
+    }
+    else if(colour == "knobbrightpurple.png")
+    {
+        img1 = ImageFileFormat::loadFrom(BinaryData::knobbrightpurple_png, BinaryData::knobbrightpurple_pngSize);
+    }
+    else if(colour == "knobred.png")
+    {
+        img1 = ImageFileFormat::loadFrom(BinaryData::knobred_png, BinaryData::knobred_pngSize);
+    }
+
 }
 
 //==============================================================================

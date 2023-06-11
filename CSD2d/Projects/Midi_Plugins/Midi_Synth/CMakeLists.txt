@@ -119,7 +119,21 @@ target_compile_definitions(TeleSynth
 # static library. These source files can be of any kind (wav data, images, fonts, icons etc.).
 # Conversion to binary-data will happen when your target is built.
 
-#juce_add_binary_data(AudioPluginData SOURCES UI)
+#attachting images
+juce_add_binary_data(AudioPluginData
+        SOURCES
+            UI/backgrounds/backgroundmain.png
+            UI/backgrounds/backgroundpanel.png
+            UI/backgrounds/backgroundpanelbig.png
+            UI/knobs/knobblue.png
+            UI/knobs/knobgreenorange.png
+            UI/knobs/knobbrightpurple.png
+            UI/knobs/knoblightpurple.png
+            UI/knobs/knobpurple.png
+            UI/knobs/knobpink.png
+            UI/knobs/knobgrey.png
+            UI/knobs/knobred.png
+        )
 
 # `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
 # we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module
@@ -129,7 +143,7 @@ target_compile_definitions(TeleSynth
 
 target_link_libraries(TeleSynth
     PRIVATE
-        # AudioPluginData           # If we'd created a binary data target, we'd link to it here
+        AudioPluginData           # If we'd created a binary data target, we'd link to it here
         juce::juce_audio_utils
         juce::juce_osc
         juce::juce_audio_basics
