@@ -7,13 +7,44 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     : AudioProcessorEditor (&p),
     audioProcessor (p) ,
     adsr (audioProcessor.apvts),
-    osc(audioProcessor.apvts,"oscwavetype1","fmfreq","fmdepth"),
-    filter(audioProcessor.apvts, "filtertype", "filtercutoff", "filterresonance"),
-    LFO(audioProcessor.apvts,"lfofreq","lfodepth"),
-    shaper(audioProcessor.apvts,"drive","trim"),
-    control(audioProcessor.apvts,"Lighter","Darker","Closer","Spacier","Earthlier","Weirder","Faster","Slower","Rougher","Smoother","Shorter", "Longer"),
+    osc(audioProcessor.apvts,
+        "oscwavetype1",
+        "fmfreq",
+        "fmdepth"),
+    filter(audioProcessor.apvts,
+           "filtertype",
+           "filtercutoff",
+           "filterresonance"),
+    LFO(audioProcessor.apvts,
+        "lfofreq",
+        "lfodepth"),
+    shaper(audioProcessor.apvts,
+           "drive",
+           "trim"),
+    control(audioProcessor.apvts,
+            "Lighter",
+            "Darker",
+            "Closer",
+            "Spacier",
+            "Earthlier",
+            "Weirder",
+            "Faster",
+            "Slower",
+            "Rougher",
+            "Smoother",
+            "Shorter",
+            "Longer"),
     visualiser(&audioProcessor),
-    delay(audioProcessor.apvts,"drywetL","drywetR","drywetC","feedbackL","feedbackR","feedbackC","delaytimeL","delaytimeR","delaytimeC")
+    delay(audioProcessor.apvts,
+          "drywetL",
+          "drywetR",
+          "drywetC",
+          "feedbackL",
+          "feedbackR",
+          "feedbackC",
+          "delaytimeL",
+          "delaytimeR",
+          "delaytimeC")
 
 
 {
@@ -30,10 +61,8 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     addAndMakeVisible(delay);
     // starting timer ms
     startTimer(1);
-    // backgrounds
-    File customDirectory("/Volumes/SSD Kasper 1/HKU/Jaar_2/CSD2/Juce_Projects/Projects/Midi_Synth/UI/backgrounds");
-    File backgroundimage = customDirectory.getChildFile("Backgroundmain.png");
-    background = ImageCache::getFromFile(backgroundimage);
+    // background
+    background = ImageFileFormat::loadFrom(BinaryData::backgroundmain_png, BinaryData::backgroundmain_pngSize);
 
 }
 
