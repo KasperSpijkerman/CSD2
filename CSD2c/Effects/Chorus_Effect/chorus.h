@@ -2,6 +2,7 @@
 #include "effect.h"
 #include "delay.h"
 #include "sine.h"
+#include "triangle.h"
 
 class Chorus : public Effect
 {
@@ -11,29 +12,26 @@ class Chorus : public Effect
         ~Chorus();
 
         void prepareToPlay(double sampleRate) override;
-        float output(float input) override;
-        void tick(uint channel);
-        // calculate delay
-        float calculateDelay();
-
+        float output(float input,uint channel = 0) ;
         // setters
         void setDepth(float depth);
         void setSpeed(float speed);
+        // function for ticking sine and calculating the modulation
+        void calcMod(uint channel);
     private:
-        // creating delay for chorus
-        Delay delay;
-        // creating sine oscillator to modulate the delay
-        Sine oscillator;
         // depth for modulation determines the minDelay and maxDelay
-        float depth { 0 };
-        // minDelay time for interval of the chorus
-        float mindelayTime { 5.0f };
-        // delaycenter
-        float delayCenter{};
-        // speed for modulation
-        float speed {0.5};
-        // samplerate will be overwritten
-        float sampleRateFX;
+        float depth { 4.0f  };
+        // delaycenter in ms, will be converted
+        float delayCenter{ 15 };
+        float delayCenter2 { 25 };
+        // speeds for modulation
+        float speed { 4 };
+        float speed2 { 0.5 };
+        // creating delays for stereo chorus
+        Delay delays[2] = {Delay(),Delay()};
+        // creating sine oscillators to modulate the delay with different speed
+        Sine oscillators[2] = {Sine(speed,0.5f),Sine(speed2,0.5f)};
+
 };
 
 

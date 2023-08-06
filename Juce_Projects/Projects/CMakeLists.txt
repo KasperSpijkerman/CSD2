@@ -1,4 +1,0 @@
-add_subdirectory(Test_Plugin)
-add_subdirectory(LowHighPassFilter)
-add_subdirectory(SimpleGainSlider)
-add_subdirectory(Tremolo)

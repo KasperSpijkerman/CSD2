@@ -9,26 +9,35 @@ Chorus::~Chorus()
 
 void Chorus::prepareToPlay(double sampleRate)
 {
-        delay.prepareToPlay(sampleRate);
-        delay.setDelayTime(delayTime);
-        oscillator.setSamplerate(sampleRate);
+        for (Delay& delay : delays)
+        {
+            delay.prepareToPlay(sampleRate);
+
+        }
+        delays[0].setDelayTime(delayCenter);
+        delays[1].setDelayTime(delayCenter2);
+        for(Sine& oscillator : oscillators)
+        {
+            oscillator.setSamplerate(sampleRate);
+
+        }
+//        oscillators[0].setFrequency(speed);
+//        oscillators[1].setFrequency(speed2);
+//        oscillators[1].setPhase(180);
+
+        setDryWet(0.7);
 }
 
 
-void Chorus::tick(uint channel)
+void Chorus::calcMod(uint channel)
 {
-    oscillator[channel].tick();
-    float modulation = delayTime + depth * oscillator[channel].getSample();
-    delay[channel].setDelayTime(modulation);
+    oscillators[channel].tick();
+    float modulation = depth * oscillators[channel].getSample();
+    delays[channel].setDelayTime(delayCenter+modulation);
 }
 
-float Chorus::output(float input)
+float Chorus::output(float input, uint channel)
 {
-    tick(channel);
+    calcMod(channel);
     return input * dry + delays[channel].output(input) * wet;
-}
-
-float Chorus::calculateDelay()
-{
-
 }

@@ -8,7 +8,7 @@ public:
   ~Oscillator();
 
   // allow to set samplerate after initialization
-  void setSamplerate(float samplerate);
+  void setSamplerate(double samplerate);
   // return the current sample
   float getSample();
 
@@ -18,6 +18,7 @@ public:
   // go to next sample
   void tick();
   virtual void calculate() = 0;
+  void setPhase(float phase);
 
 protected:
   // abstract method calculate - needs to be overriden by subclasses

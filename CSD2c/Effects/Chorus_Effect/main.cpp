@@ -12,7 +12,10 @@ public:
     void prepare (int sampleRate) override 
     {
         for (Chorus& chorus : choruses)
-            delay.prepareToPlay(sampleRate);
+            chorus.prepareToPlay(sampleRate);
+
+        for (Sine& sine : sines)
+            sine.setFrequency(440);
     }
 
     void process (AudioBuffer buffer) override {
@@ -21,13 +24,16 @@ public:
         for (int channel = 0u; channel < numOutputChannels; ++channel) {
             for (int sample = 0u; sample < numFrames; ++sample) 
             {
-                outputChannels[channel][sample] = choruses[channel].output(inputChannels[0][sample]);
+//                sines[channel].tick();
+                outputChannels[channel][sample] = choruses[channel].output(inputChannels[0][sample],channel);
+
             }
         }
     }
 
 private:
     std::array<Chorus, 2> choruses;
+    std::array<Sine, 2> sines;
 };
 
 

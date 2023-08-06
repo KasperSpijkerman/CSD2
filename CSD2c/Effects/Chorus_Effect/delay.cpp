@@ -14,13 +14,13 @@ void Delay::prepareToPlay(double samplerate)
 	// setting the effect samplerate equal to given samplerate
 	samplerateFX = samplerate;
 	// create delaybuffer with a size 
-	delayBuffer = new Interpolated_CircBuffer_(44100*20);
+	delayBuffer = new CircBuffer(44100*20);
 	// set delay time
 	setDelayTime(500);
 	// set dry wet (input wet amount)
-	setDryWet(0.4);
+	setDryWet(1);
 	// set feedback (between 0.1 and 0.99)
-	setFeedback(0.5);
+	setFeedback(0);
 }
 
 float Delay::output(float input)
@@ -45,10 +45,10 @@ void Delay::setDelayTime(float delayMs) {
 }
 
 
-int Delay::msToSamp(float ms, double samplerate) 
+float Delay::msToSamp(float ms, double samplerateFX)
 {
 	// amount of samples calculated based on miliseconds and samplerate
-	int samples = ms * samplerateFX/1000;
+	float samples = ms * samplerateFX/1000;
 	return samples;
 }
 
@@ -67,11 +67,6 @@ void Delay::setFeedback(float feedback)
 	{
 		delayFeedback = feedback;
 	}
-}
-
-void Delay::setMaxDelay(int maxDelay)
-{
-    delayBuffer.setSize(msToSamps(maxDelay));
 }
 
 
