@@ -3,7 +3,7 @@
 #include <JuceHeader.h>
 #include "GeneralComponent.h"
 #include "myLookAndFeel.h"
-class DelayComponent : public GeneralComponent
+class DelayComponent : public GeneralComponent, public juce::Button::Listener
 {
 public:
     DelayComponent(juce::AudioProcessorValueTreeState& apvts,
@@ -27,6 +27,7 @@ public:
     void paint(juce::Graphics&) override;
     void resized() override;
     void updateUI();
+    void buttonClicked(juce::Button* button);
     typedef juce::AudioProcessorValueTreeState::SliderAttachment Attachment;
 
     // custom knobs

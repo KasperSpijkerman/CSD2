@@ -30,7 +30,14 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor() :
      decay = apvts.getRawParameterValue("decay");
      sustain = apvts.getRawParameterValue("sustain");
      release = apvts.getRawParameterValue("release");
-     oscWave = apvts.getRawParameterValue("oscwavetype1");
+     oscWaveType1 = apvts.getRawParameterValue("oscwavetype1");
+     oscWaveType2 = apvts.getRawParameterValue("oscwavetype2");
+     oscWaveType3 = apvts.getRawParameterValue("oscwavetype3");
+     oscVolume1 = apvts.getRawParameterValue("osc1volume");
+     oscVolume2 = apvts.getRawParameterValue("osc2volume");
+     oscVolume3 = apvts.getRawParameterValue("osc3volume");
+     oscWaveType2 = apvts.getRawParameterValue("oscwavetype2");
+     oscWaveType3 = apvts.getRawParameterValue("oscwavetype3");
      FMDepth = apvts.getRawParameterValue("fmdepth");
      FMFrequency = apvts.getRawParameterValue("fmfreq");
      filterType = apvts.getRawParameterValue("filtertype");
@@ -58,7 +65,10 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor() :
      divisionC = apvts.getRawParameterValue("divisionC");
      // sync delay and LFO
      sync = apvts.getRawParameterValue("sync");
-
+     sync2 = apvts.getRawParameterValue("sync2");
+     osc1offset = apvts.getRawParameterValue("osc1offset");
+     osc2offset = apvts.getRawParameterValue("osc2offset");
+     osc3offset = apvts.getRawParameterValue("osc3offset");
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
@@ -209,14 +219,30 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
             auto sustainNew = *sustain*1.0f;
             auto releaseNew = *release*1.0f;
             // OSC wavetype
-            auto oscWaveNew = *oscWave*1.0f;
+            auto osc1WaveTypeNew = *oscWaveType1 * 1.0f;
+            auto osc2WaveTypeNew = *oscWaveType2 * 1.0f;
+            auto osc3WaveTypeNew = *oscWaveType3 * 1.0f;
+            // oscVolumes
+            auto oscVolume1New = *oscVolume1 * 1.0f;
+            auto oscVolume2New = *oscVolume2 * 1.0f;
+            auto oscVolume3New = *oscVolume3 * 1.0f;
             // FM parameters, depth and frequency
             auto FMDepthNew = *FMDepth*1.0f;
             auto FMFrequencyNew = *FMFrequency*1.0f;
+
+            auto oscoffset1New = *osc1offset*1.0f;
+            auto oscoffset2New = *osc2offset*1.0f;
+            auto oscoffset3New = *osc3offset*1.0f;
             // updating the parameters
-            voice->getOscillator().setWaveType(static_cast<int>(oscWaveNew));
-            voice->getOscillator().setFmParams(FMDepthNew,FMFrequencyNew);
+            voice->getOscillator1().setWaveType(static_cast<int>(osc1WaveTypeNew));
+            voice->getOscillator1().setFmParams(FMDepthNew,FMFrequencyNew);
+            voice->getOscillator2().setWaveType(static_cast<int>(osc2WaveTypeNew));
+//            voice->getOscillator2().setFmParams(FMDepthNew,FMFrequencyNew);
+            voice->getOscillator3().setWaveType(static_cast<int>(osc3WaveTypeNew));
+//            voice->getOscillator3().setFmParams(FMDepthNew,FMFrequencyNew);
+            voice->setOscillatorGains(oscVolume1New, oscVolume2New,oscVolume3New);
             voice->updateParameters(attackNew,decayNew,sustainNew,releaseNew);
+            voice->setOscillatorOffsets(oscoffset1New,oscoffset2New,oscoffset3New);
         }
     }
     // outputting the sound by rendering next block
@@ -233,9 +259,12 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     auto LFOfreqNew = *LFOfreq*1.0f;
     auto LFOdepthNew = *LFOdepth*1.0f;
 
+    // converting to float and int
+    auto bpmNew = *bpm*1.0f;
+    auto sync2New = *sync2*1.0f;
     for (Tremolo& tremolo : tremolos)
     {
-        tremolo.updateParameters(LFOfreqNew,LFOdepthNew);
+        tremolo.updateParameters(LFOfreqNew,LFOdepthNew,bpmNew,sync2New);
     }
     // Waveshaper Updating
     auto driveNew = *drive*1.0f;
@@ -257,8 +286,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     auto delayTimeRNew = *delayTimeR*1.0f;
     auto delayTimeCNew = *delayTimeC*1.0f;
 
-    // converting to float and int
-    auto bpmNew = *bpm*1.0f;
+
     auto divisionLNew = *divisionL*1;
     auto divisionRNew = *divisionR*1;
     auto divisionCNew = *divisionC*1;
@@ -345,7 +373,31 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"sustain",5}, "Sustain", juce::NormalisableRange<float>{0.0f, 1.0f,0.1f},1.0f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"release",6}, "Release", juce::NormalisableRange<float>{0.1f, 3.0f,0.2f},0.7));
     // parameter choice for choosing different oscillators
-    params.push_back (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID {"oscwavetype1",7}, "Oscillator Wave Type", juce::StringArray { "Sine","Square" ,"Saw" }, 2));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {"oscwavetype1", 7}, "Oscillator 1 Wave Type", juce::StringArray {"Sine", "Square", "Saw"}, 2));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {"oscwavetype2", 29}, "Oscillator 2 Wave Type", juce::StringArray {"Sine", "Square", "Saw"}, 2));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {"oscwavetype3", 30}, "Oscillator 3 Wave Type", juce::StringArray {"Sine", "Square", "Saw"}, 2));
+
+    // Oscillator volume parameters
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(
+            juce::ParameterID {"osc1volume", 31},        // parameter ID
+            "Oscillator 1 Volume",                       // parameter name
+            juce::NormalisableRange<float>{0.0f, 1.0f},  // range: 0 to 1
+            0.5f                                         // default value: 0.5 (half volume)
+    ));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(
+            juce::ParameterID {"osc2volume", 32},        // parameter ID
+            "Oscillator 2 Volume",                       // parameter name
+            juce::NormalisableRange<float>{0.0f, 1.0f},  // range: 0 to 1
+            0.5f                                         // default value: 0.5 (half volume)
+    ));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(
+            juce::ParameterID {"osc3volume", 33},        // parameter ID
+            "Oscillator 3 Volume",                       // parameter name
+            juce::NormalisableRange<float>{0.0f, 1.0f},  // range: 0 to 1
+            0.5f                                         // default value: 0.5 (half volume)
+    ));
     // Filter
     params.push_back (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID {"filtertype",8}, "Filtertype", juce::StringArray { "LowPass", "BandPass", "Highpass"}, 0));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"filtercutoff",9}, "Filter Cutoff", juce::NormalisableRange<float>{20.0f, 20000.0f,0.1f,0.6f},20000.0f));
@@ -374,7 +426,30 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"divisionR",25}, "Div-R", juce::NormalisableRange<float>{1.0f, 32.0f,1.0f,0.5,0},4.0f));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"divisionC",26}, "Div-C", juce::NormalisableRange<float>{1.0f, 32.0f,1.0f,0.5,0},4.0f));
     params.push_back (std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"sync",27}, "Sync", true));
+    params.push_back (std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"sync2",34}, "Sync 2", false));
     params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"drywetshaper",28}, "Blend", juce::NormalisableRange<float>{0.0f, 1.0f,0.05f,0.9f,0},0.5f));
+
+    // Note offset parameters for oscillators
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(
+            juce::ParameterID {"osc1offset", 35},      // parameter ID
+            "Oscillator 1 Note Offset",                    // parameter name
+            juce::NormalisableRange<float>{-24.0f, 24.0f,1.0f}, // range: -24 to 24 semitones (2 octaves)
+            0.0f                                           // default value: 0 (no offset)
+    ));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(
+            juce::ParameterID {"osc2offset", 36},      // parameter ID
+            "Oscillator 2 Note Offset",                    // parameter name
+            juce::NormalisableRange<float>{-24.0f, 24.0f,1.0f}, // range: -24 to 24 semitones
+            0.0f                                           // default value: 0
+    ));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(
+            juce::ParameterID {"osc3offset", 37},      // parameter ID
+            "Oscillator 3 Note Offset",                    // parameter name
+            juce::NormalisableRange<float>{-24.0f, 24.0f,1.0f}, // range: -24 to 24 semitones
+            0.0f                                           // default value: 0
+    ));
     // returning vector, gets used in constructor
     return {params.begin(), params.end()};
 }

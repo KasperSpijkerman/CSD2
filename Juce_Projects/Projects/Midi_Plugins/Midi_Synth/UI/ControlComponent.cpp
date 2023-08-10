@@ -49,16 +49,16 @@ void ControlComponent::paint(juce::Graphics& g) {
     // Draw shadow for the title
     g.setColour(juce::Colour::fromRGBA(0, 0, 0, 100)); // Shadow color and opacity
     g.setFont(45.0f);
-    g.drawFittedText("The TeleSynth", getLocalBounds().translated(3, 3), juce::Justification::centredTop, 1);
+    g.drawFittedText("The TeleSynth", getLocalBounds().translated(3, 6), juce::Justification::centredTop, 1);
 
-    // Draw the title with the main color
-    g.setColour(juce::Colours::powderblue);
+// Draw the title with the main color
+    g.setColour(juce::Colours::cyan);
     g.setFont(45.0f);
-    g.drawFittedText("The TeleSynth", getLocalBounds(), juce::Justification::centredTop, 1);
+    g.drawFittedText("The TeleSynth", getLocalBounds().translated(0, 3), juce::Justification::centredTop, 1); // Adjusted offset
 
-    // Draw the title with pink glow
+// Draw the title with pink glow
     g.setColour(juce::Colour::fromRGBA(255, 105, 180, 50)); // Pink glow color and opacity
-    g.drawFittedText("The TeleSynth", getLocalBounds().translated(-1, -1), juce::Justification::centredTop, 1);
+    g.drawFittedText("The TeleSynth", getLocalBounds().translated(-1, 2), juce::Justification::centredTop, 1); // Adjusted offset
     // Button styles and colors
     buttonStyle.drawButtonBackground(g, LightTextButton, juce::Colours::white, LightTextButton.buttonNormal,
                                      LightTextButton.buttonDown);

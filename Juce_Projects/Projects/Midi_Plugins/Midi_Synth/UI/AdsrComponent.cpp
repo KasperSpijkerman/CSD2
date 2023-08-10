@@ -27,7 +27,7 @@ void AdsrComponent::paint(juce::Graphics& g)
     g.drawFittedText("Shape", getLocalBounds().translated(4, 4), juce::Justification::centredTop, 1);
 
     // Draw the title with the adjusted light blue color
-    g.setColour(juce::Colour::fromRGBA(173, 216, 255, 255)); // Lighter blue color
+    g.setColour(juce::Colours::cyan); // Lighter blue color
     g.setFont(34.0f);
     g.drawFittedText("Shape", getLocalBounds(), juce::Justification::centredTop, 1);
 

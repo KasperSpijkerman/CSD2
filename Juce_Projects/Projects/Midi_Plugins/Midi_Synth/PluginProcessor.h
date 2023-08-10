@@ -78,7 +78,13 @@ private:
     std::atomic<float>* sustain = nullptr;
     std::atomic<float>* release = nullptr;
     // OSC wavetype
-    std::atomic<float>* oscWave = nullptr;
+    std::atomic<float>* oscWaveType1 = nullptr;
+    std::atomic<float>* oscWaveType2 = nullptr;
+    std::atomic<float>* oscWaveType3 = nullptr;
+    // OSC volumes
+    std::atomic<float>* oscVolume1 = nullptr;
+    std::atomic<float>* oscVolume2 = nullptr;
+    std::atomic<float>* oscVolume3 = nullptr;
     // FM parameters, depth and frequency
     std::atomic<float>* FMDepth = nullptr;
     std::atomic<float>* FMFrequency = nullptr;
@@ -109,6 +115,11 @@ private:
     std::atomic<float>* delayTimeC = nullptr;
     // syncing delay and LFO
     std::atomic<float>* sync = nullptr;
+    std::atomic<float>* sync2 = nullptr;
+    // offsets pitch
+    std::atomic<float>* osc1offset = nullptr;
+    std::atomic<float>* osc2offset = nullptr;
+    std::atomic<float>* osc3offset = nullptr;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
 };

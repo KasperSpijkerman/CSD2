@@ -13,6 +13,7 @@ public:
     void resized() override;
     knobsLookAndFeel lfofreqknob;
     knobsLookAndFeel lfodepthknob;
+    labelLookAndFeel labelLookAndFeel;
     // Freq & Depth
     juce::Slider LFOFreqSlider;
     juce::Slider LFODepthSlider;
@@ -27,6 +28,9 @@ private:
     std::unique_ptr<Attachment> LFOFreqAttachment;
     std::unique_ptr<Attachment> LFODepthAttachment;
     std::unique_ptr<Attachment> bpmAttachment;
+    // LFO Sync
+    juce::ToggleButton bpmSyncButton;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bpmSyncAttachment;
     // background
     Image background;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LFOComponent)

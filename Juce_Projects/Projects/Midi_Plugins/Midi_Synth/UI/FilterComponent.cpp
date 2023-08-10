@@ -6,7 +6,7 @@ FilterComponent::FilterComponent(juce::AudioProcessorValueTreeState& apvts,
                                  juce::String filterCutoffId,
                                  juce::String filterResonanceId)
 :
-knobsFilter("knobgreenorange.png")
+knobsFilter("knobbrightness.png")
 {
     juce::StringArray choices {"Lowpass","Bandpass", "Highpass"};
     filterTypeSelector.addItemList(choices,1);
@@ -15,6 +15,10 @@ knobsFilter("knobgreenorange.png")
     filterTypeSelectorAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts,filterTypeID,filterTypeSelector);
     filterCutoffSlider.setLookAndFeel(&knobsFilter);
     filterResonanceSlider.setLookAndFeel(&knobsFilter);
+    filterTypeSelector.setLookAndFeel(&boxLookAndFeel);
+
+    filterCutofflabel.setLookAndFeel(&labelLookAndFeel);
+    filterResonancelabel.setLookAndFeel(&labelLookAndFeel);
     // making sliders, linking labels, setting text and colour in a function
     setSliderWithLabel(filterCutoffSlider,filterCutofflabel,apvts,filterCutoffId,filterCutoffAttachment);
     setSliderWithLabel(filterResonanceSlider,filterResonancelabel,apvts,filterResonanceId,filterResonanceAttachment);
@@ -36,7 +40,7 @@ void FilterComponent::paint(juce::Graphics& g)
     g.drawFittedText("Brightness", getLocalBounds().translated(4, 4), juce::Justification::centredTop, 1);
 
     // Draw the title with the adjusted light blue color
-    g.setColour(juce::Colour::fromRGBA(173, 216, 255, 255)); // Lighter blue color
+    g.setColour(juce::Colours::cyan); // Lighter blue color
     g.setFont(34.0f);
     g.drawFittedText("Brightness", getLocalBounds(), juce::Justification::centredTop, 1);
 

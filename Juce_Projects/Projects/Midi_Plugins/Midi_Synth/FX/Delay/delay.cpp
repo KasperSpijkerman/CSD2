@@ -1,7 +1,7 @@
 #include "delay.h"
 
 
-Delay::Delay() 
+Delay::Delay() : targetDelaySamples(0), delayTimeChangeRate(0), isDelayTimeChanging(false)
 {
     // create delaybuffer with a size
     delayBuffer = new CircBuffer(static_cast<uint>(sampleRate * 60));
@@ -23,33 +23,36 @@ void Delay::prepareToPlay(double samplerate)
 
 float Delay::output(float input)
 {
-    // giving the input to writehead with feedback
-    delayBuffer->input(input +(outputDelay*delayFeedback));
-	// reading output and store in variable
-	outputDelay = delayBuffer->output();
-	// incrementing heads
-	delayBuffer->incrementHeads();
-	// return the input and output based on dry wet 
-	return (outputDelay*wet) + (input*dry);
+    // If delay time is changing, adjust the current delay samples
+    if (isDelayTimeChanging) {
+        delaySamples += delayTimeChangeRate;
+        if (abs(targetDelaySamples - delaySamples) < abs(delayTimeChangeRate)) {
+            delaySamples = targetDelaySamples;
+            isDelayTimeChanging = false; // Stop changing once we're close enough
+        }
+        delayBuffer->setDistance(delaySamples);
+    }
+
+    delayBuffer->input(input + (outputDelay * delayFeedback));
+    outputDelay = delayBuffer->output();
+    delayBuffer->incrementHeads();
+    return (outputDelay * wet) + (input * dry);
 }
 
 void Delay::setDelayTime(float delayMs,float bpm, float division, bool sync) {
-	// retreiving values
-    delayBpm = bpm/100;
+    delayBpm = bpm / 100;
     delayDivision = 1.0f / division;
-    // setting the variable to input with bpm and time division
-
-    //delaytime bpm synced
     float dtSyncInMs = (2400.0 / delayBpm) * delayDivision;
-    // delay time in custom ms
     delayTimeMs = delayMs;
-	// converting to samples
+
     if (sync)
-        delaySamples = msToSamp(dtSyncInMs,sampleRate);
+        targetDelaySamples = msToSamp(dtSyncInMs, sampleRate);
     else
-        delaySamples = msToSamp(delayTimeMs,sampleRate);
-	// using the samples to the distance for the readhead
-    delayBuffer->setDistance(delaySamples);
+        targetDelaySamples = msToSamp(delayTimeMs, sampleRate);
+
+    // Assuming you want to change the delay time over a period of 100ms
+    delayTimeChangeRate = (targetDelaySamples - delaySamples) / msToSamp(100.0f, sampleRate);
+    isDelayTimeChanging = true;
 }
 
 float Delay::outputNoIncrement(float input)

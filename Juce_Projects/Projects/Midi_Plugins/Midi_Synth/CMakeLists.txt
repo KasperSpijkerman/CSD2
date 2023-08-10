@@ -125,14 +125,12 @@ juce_add_binary_data(AudioPluginData
             UI/backgrounds/backgroundmain.png
             UI/backgrounds/backgroundpanel.png
             UI/backgrounds/backgroundpanelbig.png
-            UI/knobs/knobblue.png
-            UI/knobs/knobgreenorange.png
-            UI/knobs/knobbrightpurple.png
-            UI/knobs/knoblightpurple.png
-            UI/knobs/knobpurple.png
-            UI/knobs/knobpink.png
-            UI/knobs/knobgrey.png
-            UI/knobs/knobred.png
+            UI/knobs/knobbrightness.png
+            UI/knobs/knobdistortion.png
+            UI/knobs/knobduration.png
+            UI/knobs/knobmovement.png
+            UI/knobs/knobspace.png
+            UI/knobs/knobstate.png
         )
 
 # `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,

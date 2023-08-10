@@ -8,7 +8,7 @@ public:
     void setWaveType(const int choice);
     void prepareToPlay(juce::dsp::ProcessSpec& spec);
     void getNextAudioBlock(juce::dsp::AudioBlock<float>& block);
-    void setWaveFrequency(const int midiNoteNumber, const float detune);
+    void setWaveFrequency(const int midiNoteNumber, const float detune, const float offset);
     void setFmParams(const float depth, const float frequency);
 private:
     // FM Oscillator with frequency and depth

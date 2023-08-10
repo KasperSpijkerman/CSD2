@@ -11,6 +11,12 @@ class GeneralComponent : public juce::Component
                                  juce::AudioProcessorValueTreeState& apvts,
                                  juce::String paramID,
                                  std::unique_ptr<Attachment>& attachment);
+
+        void positionSliderAndLabel(juce::Slider& slider, juce::Label& label, int x, int y, int width, int height, int labelYOffset);
+    void positionSliderComboBoxAndLabel(Slider& slider, Label& label, ComboBox& comboBox,
+    int x, int y,
+    int sliderWidth, int sliderHeight,
+    int labelYOffset, int comboBoxSpacing);
     };
 
 

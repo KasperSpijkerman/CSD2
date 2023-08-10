@@ -16,10 +16,11 @@ DelayComponent::DelayComponent(juce::AudioProcessorValueTreeState& apvts,
                                juce::String divCid,
                                juce::String syncid):
                                //changed
-        delayknobsDW("knobbrightpurple.png"),
-        delayknobsFB("knoblightpurple.png"),
-        delayknobsDT("knobpurple.png")
+        delayknobsDW("knobspace.png"),
+        delayknobsFB("knobduration.png"),
+        delayknobsDT("knobduration.png")
 {
+    syncTogglebutton.addListener(this);
     // Setting custom knobs
     // DryWet
     drywetLSlider.setLookAndFeel(&delayknobsDW);
@@ -82,6 +83,7 @@ DelayComponent::DelayComponent(juce::AudioProcessorValueTreeState& apvts,
 DelayComponent::~DelayComponent()
 {
     setLookAndFeel (nullptr);
+    syncTogglebutton.removeListener(this);
 }
 void DelayComponent::paint(juce::Graphics& g)
 {
@@ -94,7 +96,7 @@ void DelayComponent::paint(juce::Graphics& g)
         g.drawFittedText("Space", getLocalBounds().translated(4, 4), juce::Justification::centredTop, 1);
 
         // Draw the title with the adjusted light blue color
-        g.setColour(juce::Colour::fromRGBA(173, 216, 255, 255)); // Lighter blue color
+        g.setColour(juce::Colours::cyan); // Lighter blue color
         g.setFont(34.0f);
         g.drawFittedText("Space", getLocalBounds(), juce::Justification::centredTop, 1);
 
@@ -106,47 +108,43 @@ void DelayComponent::paint(juce::Graphics& g)
         }
 }
 // layout slider positions
-void DelayComponent::resized()
-{
-    // creating variables to make it easier to read and adjust everything all at once.
-    const auto sliderPosY = 55;
-    const auto sliderWidth = 90;
-    const auto sliderHeigth = 80;
-    const auto sliderWidthsmall = 70;
-    const auto sliderHeigthsmall = 60;
-    const auto labelYOffset = 20;
-    const auto labelHeight = 15;
-    const auto labelHeightsmall = 12;
-    // dry wet setting position
-    drywetLSlider.setBounds(0+20,sliderPosY,sliderWidth,sliderHeigth);
-    drywetLLabel.setBounds(drywetLSlider.getX()+20,drywetLSlider.getY()- labelYOffset,drywetLSlider.getWidth(),labelHeight);
-    drywetRSlider.setBounds(200+20,sliderPosY,sliderWidth,sliderHeigth);
-    drywetRLabel.setBounds(drywetRSlider.getX()+20,drywetRSlider.getY()- labelYOffset,drywetRSlider.getWidth(),labelHeight);
-    drywetCSlider.setBounds(100+20,sliderPosY,sliderWidth,sliderHeigth);
-    drywetCLabel.setBounds(drywetCSlider.getX(),drywetCSlider.getY()- labelYOffset,drywetCSlider.getWidth(),labelHeight);
-    // feedback setting position
-    feedbackLSlider.setBounds(0+20,sliderPosY + 100,sliderWidth,sliderHeigth);
-    feedbackLLabel.setBounds(feedbackLSlider.getX()+20,feedbackLSlider.getY()- labelYOffset,feedbackLSlider.getWidth(),labelHeight);
-    feedbackRSlider.setBounds(200+20,sliderPosY + 100,sliderWidth,sliderHeigth);
-    feedbackRLabel.setBounds(feedbackRSlider.getX(),feedbackRSlider.getY()- labelYOffset,feedbackRSlider.getWidth(),labelHeight);
-    feedbackCSlider.setBounds(100+20,sliderPosY + 100,sliderWidth,sliderHeigth);
-    feedbackCLabel.setBounds(feedbackCSlider.getX()+20,feedbackCSlider.getY()- labelYOffset,feedbackCSlider.getWidth(),labelHeight);
-    //delaytime setting position
-    syncTogglebutton.setBounds(200,0,sliderWidth,sliderHeigth);
-    delayTimeLSlider.setBounds(8+20, sliderPosY + 200, sliderWidthsmall, sliderHeigthsmall);
-    delayTimeLLabel.setBounds(delayTimeLSlider.getX()+20, delayTimeLSlider.getY() - labelYOffset, delayTimeLSlider.getWidth(), labelHeightsmall);
-    delayTimeRSlider.setBounds(208+20, sliderPosY + 200, sliderWidthsmall, sliderHeigthsmall);
-    delayTimeRLabel.setBounds(delayTimeRSlider.getX()+20, delayTimeRSlider.getY() - labelYOffset, delayTimeRSlider.getWidth(), labelHeightsmall);
-    delayTimeCSlider.setBounds(108+20, sliderPosY + 200, sliderWidthsmall, sliderHeigthsmall);
-    delayTimeCLabel.setBounds(delayTimeCSlider.getX()+20, delayTimeCSlider.getY() - labelYOffset, delayTimeCSlider.getWidth(), labelHeightsmall);
+void DelayComponent::resized() {
 
-    divisionLSlider.setBounds(8+20, sliderPosY + 280, sliderWidthsmall, sliderHeigthsmall);
-    divisionLLabel.setBounds(divisionLSlider.getX()+20, divisionLSlider.getY() - labelYOffset, divisionLSlider.getWidth(), labelHeightsmall);
-    divisionRSlider.setBounds(208+20, sliderPosY + 280, sliderWidthsmall, sliderHeigthsmall);
-    divisionRLabel.setBounds(divisionRSlider.getX()+20, divisionRSlider.getY() - labelYOffset, divisionRSlider.getWidth(), labelHeightsmall);
-    divisionCSlider.setBounds(108+20, sliderPosY + 280, sliderWidthsmall, sliderHeigthsmall);
-    divisionCLabel.setBounds(divisionCSlider.getX()+20, divisionCSlider.getY() - labelYOffset, divisionCSlider.getWidth(), labelHeightsmall);
+    const int panelWidth = 336;
+    const int panelHeight = 397;
+    const int titleSpace = 20; // space reserved for title
+    const int sliderWidth = 85;
+    const int sliderHeight = 75;
+    const int labelYOffset = 22;
 
+// Define our nine center points
+    int centersX[3] = {panelWidth / 6, panelWidth / 2, 5 * panelWidth / 6};
+    int centersY[3] = {titleSpace + panelHeight / 4, titleSpace + panelHeight / 2, titleSpace + 3 * panelHeight / 4}; // Updated Y values
+
+// Position Sliders and Labels
+
+// Row 1
+    positionSliderAndLabel(drywetLSlider, drywetLLabel, centersX[0] - sliderWidth/2, centersY[0] - sliderHeight/2, sliderWidth, sliderHeight, labelYOffset);
+    positionSliderAndLabel(drywetCSlider, drywetCLabel, centersX[1] - sliderWidth/2, centersY[0] - sliderHeight/2, sliderWidth, sliderHeight, labelYOffset);
+    positionSliderAndLabel(drywetRSlider, drywetRLabel, centersX[2] - sliderWidth/2, centersY[0] - sliderHeight/2, sliderWidth, sliderHeight, labelYOffset);
+
+// Row 2
+    positionSliderAndLabel(feedbackLSlider, feedbackLLabel, centersX[0] - sliderWidth/2, centersY[1] - sliderHeight/2, sliderWidth, sliderHeight, labelYOffset);
+    positionSliderAndLabel(feedbackCSlider, feedbackCLabel, centersX[1] - sliderWidth/2, centersY[1] - sliderHeight/2, sliderWidth, sliderHeight, labelYOffset);
+    positionSliderAndLabel(feedbackRSlider, feedbackRLabel, centersX[2] - sliderWidth/2, centersY[1] - sliderHeight/2, sliderWidth, sliderHeight, labelYOffset);
+
+// Row 3 (Delay Sliders)
+    positionSliderAndLabel(delayTimeLSlider, delayTimeLLabel, centersX[0] - sliderWidth/2, centersY[2] - sliderHeight/2, sliderWidth, sliderHeight, labelYOffset);
+    positionSliderAndLabel(delayTimeCSlider, delayTimeCLabel, centersX[1] - sliderWidth/2, centersY[2] - sliderHeight/2, sliderWidth, sliderHeight, labelYOffset);
+    positionSliderAndLabel(delayTimeRSlider, delayTimeRLabel, centersX[2] - sliderWidth/2, centersY[2] - sliderHeight/2, sliderWidth, sliderHeight, labelYOffset);
+
+// Row 3 (Division Sliders)
+    positionSliderAndLabel(divisionLSlider, divisionLLabel, centersX[0] - sliderWidth/2, centersY[2] - sliderHeight/2, sliderWidth, sliderHeight, labelYOffset);
+    positionSliderAndLabel(divisionCSlider, divisionCLabel, centersX[1] - sliderWidth/2, centersY[2] - sliderHeight/2, sliderWidth, sliderHeight, labelYOffset);
+    positionSliderAndLabel(divisionRSlider, divisionRLabel, centersX[2] - sliderWidth/2, centersY[2] - sliderHeight/2, sliderWidth, sliderHeight, labelYOffset);
+
+// Toggle button at the bottom
+    syncTogglebutton.setBounds(20, 333, sliderWidth, sliderHeight);
 }
 
 void DelayComponent::setButton (juce::Button& button, juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<buttonAttachment>& attachment)
@@ -159,4 +157,43 @@ void DelayComponent::setButton (juce::Button& button, juce::AudioProcessorValueT
 
 
 
+void DelayComponent::buttonClicked(juce::Button* button) {
+    if (button == &syncTogglebutton) {
+        // If the sync is enabled
+        if (syncTogglebutton.getToggleState()) {
+            // Show the division sliders and labels
+            divisionLSlider.setVisible(true);
+            divisionRSlider.setVisible(true);
+            divisionCSlider.setVisible(true);
+            divisionLLabel.setVisible(true);
+            divisionRLabel.setVisible(true);
+            divisionCLabel.setVisible(true);
 
+            // Hide the other sliders and labels
+            delayTimeLSlider.setVisible(false);
+            delayTimeRSlider.setVisible(false);
+            delayTimeCSlider.setVisible(false);
+            delayTimeLLabel.setVisible(false);
+            delayTimeRLabel.setVisible(false);
+            delayTimeCLabel.setVisible(false);
+        } else {
+            // Show the other sliders and labels
+            delayTimeLSlider.setVisible(true);
+            delayTimeRSlider.setVisible(true);
+            delayTimeCSlider.setVisible(true);
+            delayTimeLLabel.setVisible(true);
+            delayTimeRLabel.setVisible(true);
+            delayTimeCLabel.setVisible(true);
+
+            // Hide the division sliders and labels
+            divisionLSlider.setVisible(false);
+            divisionRSlider.setVisible(false);
+            divisionCSlider.setVisible(false);
+            divisionLLabel.setVisible(false);
+            divisionRLabel.setVisible(false);
+            divisionCLabel.setVisible(false);
+        }
+        repaint();
+        resized();
+    }
+}

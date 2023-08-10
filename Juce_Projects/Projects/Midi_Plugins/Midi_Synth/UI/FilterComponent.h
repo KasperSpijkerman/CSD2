@@ -15,6 +15,8 @@ public:
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> filterTypeSelectorAttachment;
     // custom knobs
     knobsLookAndFeel knobsFilter;
+    labelLookAndFeel labelLookAndFeel;
+    boxLookAndFeel boxLookAndFeel;
     // cutoff & resonance
     juce::Slider filterCutoffSlider;
     juce::Slider filterResonanceSlider;

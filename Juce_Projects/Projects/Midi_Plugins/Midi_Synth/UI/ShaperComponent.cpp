@@ -4,11 +4,15 @@
 ShaperComponent::ShaperComponent(juce::AudioProcessorValueTreeState& apvts, juce::String ShaperDriveId, juce::String ShaperTrimId,juce::String ShaperDwId)
 :
 //drive
-        drivetrimknob("knobred.png")
+        drivetrimknob("knobdistortion.png")
 {
     ShaperDriveSlider.setLookAndFeel(&drivetrimknob);
     ShaperTrimSlider.setLookAndFeel(&drivetrimknob);
     ShaperDwSlider.setLookAndFeel(&drivetrimknob);
+
+    ShaperDrivelabel.setLookAndFeel(&labelLookAndFeel);
+    ShaperTrimlabel.setLookAndFeel(&labelLookAndFeel);
+    ShaperDwlabel.setLookAndFeel(&labelLookAndFeel);
     // making sliders, linking labels, setting text and colour in a function
     setSliderWithLabel(ShaperDriveSlider,ShaperDrivelabel,apvts,ShaperDriveId,ShaperDriveAttachment);
     setSliderWithLabel(ShaperTrimSlider,ShaperTrimlabel,apvts,ShaperTrimId,ShaperTrimAttachment);
@@ -33,7 +37,7 @@ void ShaperComponent::paint(juce::Graphics& g)
     g.drawFittedText("Distortion", getLocalBounds().translated(4, 4), juce::Justification::centredTop, 1);
 
     // Draw the title with the adjusted light blue color
-    g.setColour(juce::Colour::fromRGBA(173, 216, 255, 255)); // Lighter blue color
+    g.setColour(juce::Colours::cyan); // Lighter blue color
     g.setFont(34.0f);
     g.drawFittedText("Distortion", getLocalBounds(), juce::Justification::centredTop, 1);
 

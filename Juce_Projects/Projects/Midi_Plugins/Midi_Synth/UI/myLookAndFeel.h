@@ -36,3 +36,19 @@ public:
 
 
 };
+
+class boxLookAndFeel : public LookAndFeel_V4
+{
+public:
+    void drawComboBox(juce::Graphics& g, int width, int height, bool isButtonDown,
+                                      int buttonX, int buttonY, int buttonW, int buttonH, juce::ComboBox& box) override;
+
+    void drawLabel(juce::Graphics& g, juce::Label& label) override;
+    void drawPopupMenuBackground(juce::Graphics& g, int width, int height) override;
+    void drawPopupMenuItem(juce::Graphics& g, const juce::Rectangle<int>& area,
+    const bool isSeparator, const bool isActive, const bool isHighlighted,
+    const bool isTicked, const bool hasSubMenu, const juce::String& text,
+    const juce::String& shortcutKeyText, const juce::Drawable* icon,
+    const juce::Colour* const textColour) override;
+    void drawComboBoxTextWhenNothingSelected(juce::Graphics&, juce::ComboBox&, juce::Label&) override;
+};

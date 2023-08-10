@@ -33,4 +33,8 @@ private:
     //
     float delayBpm {120};
     float delayDivision {1};
+    // smooth delay change
+    float targetDelaySamples;   // Target delay samples after user changes slider
+    float delayTimeChangeRate;  // Rate of change of delay time per sample
+    bool isDelayTimeChanging;   // Flag to check if delay time is currently changing
 };

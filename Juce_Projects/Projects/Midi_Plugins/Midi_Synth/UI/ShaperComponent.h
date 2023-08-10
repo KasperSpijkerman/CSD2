@@ -13,6 +13,7 @@ public:
     void resized() override;
     // custom knobs
     knobsLookAndFeel drivetrimknob;
+    labelLookAndFeel labelLookAndFeel;
     // Drive & Trim
     juce::Slider ShaperDriveSlider;
     juce::Slider ShaperTrimSlider;

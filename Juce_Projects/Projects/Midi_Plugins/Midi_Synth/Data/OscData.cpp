@@ -11,7 +11,7 @@ void OscData::prepareToPlay(juce::dsp::ProcessSpec& spec)
 
 void OscData::setWaveType(const int choice)
 {
-   // making choices for the oscillators
+    // making choices for the oscillators
     switch(choice)
     {
         case 0:
@@ -28,15 +28,15 @@ void OscData::setWaveType(const int choice)
             // saw
             initialise([](float x) {return  x / MathConstants<float>::pi;});
             break;
-        // debug
+            // debug
         default:
             jassertfalse;
     }
 }
 
-void OscData::setWaveFrequency(const int midiNoteNumber,const float detune)
+void OscData::setWaveFrequency(const int midiNoteNumber,const float detune,const float offset)
 {
-    setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber) + fmMod *detune);
+    setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber+offset) + fmMod *detune);
     // remembering last midinote when pressed
     lastMidiNote = midiNoteNumber;
 }
